@@ -199,11 +199,11 @@ class TYouTube(object):
     def _CreateYOUTUBEObject (self, AURL: str, APlayList: str, ANumber: int, ACount: int) -> TYouTubeObject:
     #beginfunction
         LURL = AURL
-        self.APPLog.SetLogString (TTypeLogString.tlsInfo, 1, 'CreateObject...')
-        self.APPLog.SetLogString (TTypeLogString.tlsInfo, 1, AURL + ' новый.')
+        self.APPLog.AddLog (TTypeLogString.tlsINFO, 'CreateObject...')
+        self.APPLog.AddLog (TTypeLogString.tlsINFO, AURL + ' новый.')
         LObjectID: datetime = LUDateTime.Now()
         LObjectIDStr: str = LUDateTime.GenerateObjectIDStr (LObjectID)
-        self.APPLog.SetLogString (TTypeLogString.tlsInfo, 1, LObjectIDStr)
+        self.APPLog.AddLog (TTypeLogString.tlsINFO, LObjectIDStr)
 
         LYouTubeObject = TYouTubeObject()
         LYouTubeObject.ID = LObjectID
@@ -219,7 +219,7 @@ class TYouTube(object):
     def CreateURLs (self, AURL: str) -> list:
     #beginfunction
         LURI = urlparse (AURL)
-        if LURI.hostname.upper() == cYOUTUBE:
+        if LURI.hostname.upper() == cYOUTUBE_COM or LURI.hostname.upper() == cYOUTUBE_BE:
             if cYOUTUBE_PLAYLISTS in LURI.path.upper():
                 LURLs = self._CheckPlaylists (AURL)
                 return LURLs
