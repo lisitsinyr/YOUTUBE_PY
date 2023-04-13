@@ -139,9 +139,6 @@ class FormMainWindow(QMainWindow):
 
         self.__SetStatApplication (LUProc.TStatApplication.caBreak)
 
-
-
-
         # Splash = TSplash.Create (Self)
         # Splash.Name = 'Splash'
         # Splash.Height = StatusBar_P1_P2.Height
