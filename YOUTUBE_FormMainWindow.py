@@ -15,6 +15,9 @@
 #------------------------------------------
 # БИБЛИОТЕКИ python
 #------------------------------------------
+import os
+import sys
+import logging
 
 #------------------------------------------
 # БИБЛИОТЕКИ сторонние
@@ -26,24 +29,20 @@ from PySide6.QtCore import QFile, QIODevice
 #------------------------------------------
 # БИБЛИОТЕКИ LU
 #------------------------------------------
+import LULog
 import LUFile
-from LUObjects import *
-from LUObjectsYouTube import *
-from LULog import *
-from LUFile import *
 import LUProc
 import LUos
 
 #------------------------------------------
 # БИБЛИОТЕКИ PROJECT
 #------------------------------------------
-# from YOUTUBE_Params import *
 import YOUTUBE_Proc
 import YOUTUBE_Params
 import YOUTUBE_Consts
-
-# import YOUTUBE_test
 from ui_YOUTUBE_FormMain import Ui_FormMainWindow
+
+LULogger = logging.getLogger(__name__)
 
 #------------------------------------------
 #
@@ -72,15 +71,10 @@ class FormMainWindow(QMainWindow):
         self.__FLogDir: str = ''
         self.__FStopYouTube: bool = True
 
-        # Флаг, показывающий - участвует ли наше окно в цепи наблюдателей.
-        self.__FInChain: bool = False
-        # Хэндл окна, которое в цепи наблюдателей стоит за нами.
-        self.__FNextClipboardViewer = None # HWND;
-
         self.__FFlagIdle: bool = True
 
         # Журнал
-        self.APPLog: TFileMemoLog
+        self.APPLog: LULog.TFileMemoLog
 
     #--------------------------------------------------
     # destructor
@@ -107,9 +101,6 @@ class FormMainWindow(QMainWindow):
     def __FormCreate (self):
         """__FormCreate"""
     #beginfunction
-        # Application.HelpFile 
-        # Application.HelpFile = ProjectHELPFileName
-
         # Состояние программы
         self.__FStatApplication: LUProc.TStatApplication = LUProc.TStatApplication.caTest
 
@@ -145,11 +136,6 @@ class FormMainWindow(QMainWindow):
         # Splash.Width = StatusBar_P1_P2.Panels[0].Width
         # StatusBar_P1_P2.InsertControl (Splash)
     
-        # 01.Подключаемся к цепи наблюдателей.
-        # FNextClipboardViewer = 0
-        # FInChain = False
-        # EnableView
-
         #FFormMainWindow.ui.action_Youtube.triggered.connect (FFormMainWindow.CreateYUOTUBEObject(LUObjectsYoutube.link3))
         #self.ui.action_CreateYoutube.triggered(self.__CreateYUOTUBEObject(LUObjectsYoutube.link3))
         self.__FormActivate()
@@ -165,15 +151,10 @@ class FormMainWindow(QMainWindow):
         return self.__FParams
     #endfunction
 
-    # TFormMain.FormDestroy
-
     def __FormDestroy (self):
         """__FormDestroy"""
     #beginfunction
-        # del self.__FYOUTUBE
         self.__FormClose(LUProc.TStatApplication.caFree)
-        # 04.Отключиться от цепи наблюдателей.
-        # DisableView
         ...
     #endfunction
 
@@ -182,7 +163,7 @@ class FormMainWindow(QMainWindow):
     def __FormActivate (self):
         """__FormActivate"""
     #beginfunction
-        self.APPLog.AddLog(TTypeLogString.tlsINFO, 'Это информация')
+        self.APPLog.AddLog(LULog.TTypeLogString.tlsINFO, 'Это информация')
 
         # ToolButtonAPP.Caption = FormAbout.InternalName
         # Caption = FormAbout.ProductName
@@ -192,8 +173,8 @@ class FormMainWindow(QMainWindow):
         # Memo_Log.SelStart = Length (Memo_Log.Lines.Text)
         # Memo_Log.SelLength = 0
 
-        self.APPLog.AddLog (TTypeLogString.tlsINFO, self.__FParams.FileMemoLog.FileName)
-        self.APPLog.AddLog (TTypeLogString.tlsINFO, self.__FParams.FileNameINI)
+        self.APPLog.AddLog (LULog.TTypeLogString.tlsINFO, self.__FParams.FileMemoLog.FileName)
+        self.APPLog.AddLog (LULog.TTypeLogString.tlsINFO, self.__FParams.FileNameINI)
 
         # VersionInfo
         # VersionInfo = CreateVersion (ParamStr(0))
@@ -202,72 +183,12 @@ class FormMainWindow(QMainWindow):
         ...
     #endfunction
 
-    # TFormMain.FormClose
-
     def __FormClose (self, Action):
         """__FormClose"""
     #beginfunction
         # Action = caFree
         ...
     #endfunction
-
-    # 01.Подключение к цепи наблюдателей.
-
-    def __EnableView(self):
-    #beginfunction
-        """
-        # Если мы уже подключены к цепи - выходим.
-        if FInChain then
-        begin
-            APPLog.LogString[tlsInfo, 1] :=
-                '01.Окно уже участвует в цепи наблюдателей за буфером обмена.'
-            Exit
-        end
-        FNextClipboardViewer = SetClipboardViewer (Handle)
-        APPLog.LogString[tlsInfo, 1] :=
-            '01.Выполнено подключение к цепи наблюдателей за буфером обмена.'
-        FInChain = True
-        """
-        ...
-    #endfunction
-
-    # 02.Отслеживайте удаленные окна просмотра, обрабатывая сообщение WM_CHANGECBCHAIN
-    # и передавая его по цепочке или обновляя запись следующего окна в цепочке
-    # по мере необходимости.
-    # Вызывается в случае, если из цепи удаляется какой-то наблюдатель.
-
-    def __WMChangeCBChain (self, Msg):
-    #beginfunction
-        """
-        inherited
-        # mark message as done
-        Msg.Result = 0
-        # the chain has changed
-        if Msg.Remove = FNextClipboardViewer then
-        begin
-            # The next window in the clipboard viewer chain had been removed.
-            # We recreate it.
-            # Если из цепи наблюдателей удаляется некто не равный А4, то мы просто должны
-            # переслать сообщение следующему в цепи - т. е. А4.
-            APPLog.LogString[tlsInfo, 1] :=
-                '02.The next window in the clipboard viewer chain had been removed.'
-            FNextClipboardViewer = Msg.Next
-        end else begin
-            # Inform the next window in the clipboard viewer chain
-            # Новые окна добавляются в начало цепи - т. е. перед А1. Поэтому
-            # членам цепи не надо обрабатывать ситуации с добавлением.
-            APPLog.LogString[tlsInfo, 1] :=
-                '02.Inform the next window in the clipboard viewer chain.'
-            SendMessage (FNextClipboardViewer, WM_CHANGECBCHAIN, Msg.Remove,
-                Msg.Next)
-        end
-        """
-        ...
-    #endfunction
-
-    # 03.Отвечайте на изменения буфера обмена, обрабатывая сообщение WM_DRAWCLIPBOARD
-    # и передавая сообщение по цепочке.
-    # Вызывается в случае, если содержимое буфера обмена изменилось.
 
     def __WMDrawClipboard (self, Msg):
     #var
@@ -771,7 +692,7 @@ class FormMainWindow(QMainWindow):
     def __Main(self):
     #beginfunction
         LSaveCurrentDir = LUos.GetCurrentDir()
-        self.APPLog.SetLogString (TTypeLogString.tlsBegin, 0, LUProc.cProcessBegin)
+        self.APPLog.SetLogString (LULog.TTypeLogString.tlsBegin, 0, LUProc.cProcessBegin)
         # --------------------------------------------------
         # FSheduler.DeleteEvent (ShedulerName)
         # FSheduler.AddEvent (ShedulerName, TEMPLATE_RegIni.ShedulerTEMPLATE)
@@ -781,7 +702,7 @@ class FormMainWindow(QMainWindow):
             self.__ProcedureDeleteYUOTUBEObjects()
         #endif
         # --------------------------------------------------
-        self.APPLog.SetLogString (TTypeLogString.tlsEnd, 0, LUProc.cProcessEnd)
+        self.APPLog.SetLogString (LULog.TTypeLogString.tlsEnd, 0, LUProc.cProcessEnd)
         os.chdir(LSaveCurrentDir)
     #endfunction
 

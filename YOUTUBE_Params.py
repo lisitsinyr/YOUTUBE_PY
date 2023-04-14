@@ -15,7 +15,7 @@
 #------------------------------------------
 # БИБЛИОТЕКИ python
 #------------------------------------------
-# import distutils.util
+import sys
 
 #------------------------------------------
 # БИБЛИОТЕКИ сторонние
@@ -24,12 +24,14 @@
 #------------------------------------------
 # БИБЛИОТЕКИ LU
 #------------------------------------------
-from LUParserINI import *
-from LUParserREG import *
-from LUParserARG import *
+import LUParserINI
+import LUParserREG
+import LUParserARG
 import LUFile
 import LULog
 import LUDateTime
+import LUStrUtils
+import LUos
 
 #------------------------------------------
 # БИБЛИОТЕКИ PROJECT
@@ -99,14 +101,13 @@ class TParams(object):
     #beginfunction
         super ().__init__ (**kwargs)
         self.__FFileNameINI: str = ''
-        self.__FIniFile: TINIFile = TINIFile()
-        self.__FIniReg: TREGParser = TREGParser()
-        self.__FArgParser: TArgParser = TArgParser (description='Параметры', prefix_chars=YOUTUBE_Consts.cPrefixChars)
+        self.__FIniFile = LUParserINI.TINIFile()
+        self.__FIniReg = LUParserREG.TREGParser()
+        self.__FArgParser = LUParserARG.TArgParser (description='Параметры', prefix_chars=YOUTUBE_Consts.cPrefixChars)
         self.__FFileMemoLog: LULog.TFileMemoLog  = LULog.TFileMemoLog ()
 
         YOUTUBE_Consts.APPWorkDir = LUos.APPWorkDir ()
         YOUTUBE_Consts.APPWorkDir = LUos.GetCurrentDir ()
-        # print (self, 'sys.argv[0]=', sys.argv[0])
         YOUTUBE_Consts.APPWorkDir = LUFile.ExtractFileDir(sys.argv[0])
 
         # Параметры
@@ -344,7 +345,10 @@ class TParams(object):
     #beginfunction
         self.__FIniFile.SetOption (rkYoutube, rpCheckBoxSkipExists, str(AValue))
     #endfunction
+#endclass
 
+# ------------------------------------------
+#
 #------------------------------------------
 def main ():
 #beginfunction
@@ -358,7 +362,6 @@ def main ():
 if __name__ == "__main__":
     main ()
 #endif
-
 
 #endmodule
 
