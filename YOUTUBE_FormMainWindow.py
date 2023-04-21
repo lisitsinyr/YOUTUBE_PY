@@ -17,7 +17,6 @@
 #------------------------------------------
 import os
 import sys
-import logging
 
 #------------------------------------------
 # БИБЛИОТЕКИ сторонние
@@ -33,6 +32,7 @@ import LULog
 import LUFile
 import LUProc
 import LUos
+# import LUParserARG
 
 #------------------------------------------
 # БИБЛИОТЕКИ PROJECT
@@ -41,8 +41,6 @@ import YOUTUBE_Proc
 import YOUTUBE_Params
 import YOUTUBE_Consts
 from ui_YOUTUBE_FormMain import Ui_FormMainWindow
-
-LULogger = logging.getLogger(__name__)
 
 #------------------------------------------
 #
@@ -55,7 +53,6 @@ Lui_file_name2 = "D:/PROJECTS_LYR/CHECK_LIST/05_DESKTOP/02_Python/PROJECTS_PY/YU
 # ------------------------------------
 class FormMainWindow(QMainWindow):
     """FormMainWindow"""
-    __annotations__ = \
     luClassName = 'FormMainWindow'
 
     def __init__(self, parent=None):
@@ -74,7 +71,7 @@ class FormMainWindow(QMainWindow):
         self.__FFlagIdle: bool = True
 
         # Журнал
-        self.APPLog: LULog.TFileMemoLog
+        self.APPLog: LULog.TFileMemoLog = LULog.FileMemoLog
 
     #--------------------------------------------------
     # destructor
@@ -82,6 +79,7 @@ class FormMainWindow(QMainWindow):
     def __del__ (self):
         """destructor"""
     #beginfunction
+        super().__del__(self)
         self.__FormDestroy()
         LClassName = self.__class__.__name__
         print('{} уничтожен'.format(LClassName))
@@ -154,7 +152,7 @@ class FormMainWindow(QMainWindow):
     def __FormDestroy (self):
         """__FormDestroy"""
     #beginfunction
-        self.__FormClose(LUProc.TStatApplication.caFree)
+        self.__FormClose (LUProc.TStatApplication.caFree)
         ...
     #endfunction
 
@@ -175,6 +173,15 @@ class FormMainWindow(QMainWindow):
 
         self.APPLog.AddLog (LULog.TTypeLogString.tlsINFO, self.__FParams.FileMemoLog.FileName)
         self.APPLog.AddLog (LULog.TTypeLogString.tlsINFO, self.__FParams.FileNameINI)
+
+        LULog.FileMemoLog.AddLog (LULog.TTypeLogString.tlsINFO, 'LULog.FileMemoLog.AddLog')
+
+        LULog.LoggerAPPS.debug (self.__FParams.FileMemoLog.FileName)
+        LULog.LoggerAPPS.info (self.__FParams.FileNameINI)
+
+        LULog.LoggerTOOLS.info ('!!!!!!!!!!!!!!!!!!! LULog.LULogger.info')
+
+        LULog.LoggerTLogger.debug ('!!!!!!!!!!!!!!!!!!! LULog.GLogger.debug')
 
         # VersionInfo
         # VersionInfo = CreateVersion (ParamStr(0))
@@ -726,7 +733,6 @@ def Testfunction ():
 #beginmodule
 if __name__ == "__main__":
     Fapp = QApplication(sys.argv)
-
     FFormMainWindow = FormMainWindow()
     #FFormMainWindow.ui.action_Youtube.triggered.connect (Testfunction)
     #FFormMainWindow.ui.action_Youtube.triggered.connect (LFormMainWindow.Test)
@@ -735,7 +741,6 @@ if __name__ == "__main__":
     #FFormMainWindow.ui.action_Youtube.triggered.connect (FFormMainWindow.CreateYUOTUBEObject(LUObjectsYoutube.link3))
 
     FFormMainWindow.show()
-
     sys.exit(Fapp.exec())
 #endif
 

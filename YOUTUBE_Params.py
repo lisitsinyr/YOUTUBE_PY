@@ -24,11 +24,11 @@ import sys
 #------------------------------------------
 # БИБЛИОТЕКИ LU
 #------------------------------------------
+import LULog
 import LUParserINI
 import LUParserREG
 import LUParserARG
 import LUFile
-import LULog
 import LUDateTime
 import LUStrUtils
 import LUos
@@ -102,8 +102,6 @@ class TParams(object):
         super ().__init__ (**kwargs)
         self.__FFileNameINI: str = ''
         self.__FIniFile = LUParserINI.TINIFile()
-        self.__FIniReg = LUParserREG.TREGParser()
-        self.__FArgParser = LUParserARG.TArgParser (description='Параметры', prefix_chars=YOUTUBE_Consts.cPrefixChars)
         self.__FFileMemoLog: LULog.TFileMemoLog  = LULog.TFileMemoLog ()
 
         YOUTUBE_Consts.APPWorkDir = LUos.APPWorkDir ()
@@ -111,12 +109,10 @@ class TParams(object):
         YOUTUBE_Consts.APPWorkDir = LUFile.ExtractFileDir(sys.argv[0])
 
         # Параметры
-        LFileNameINIArg = self.__FArgParser.add_argument (YOUTUBE_Consts.cParamNameINIFileName, type = str, default='', help = 'DirINI')
-        LDirLogArg = self.__FArgParser.add_argument (YOUTUBE_Consts.cParamNameDirLOG, type = str, default = '', help = 'DirLog')
-        self.__Fargs = self.__FArgParser.parse_args ()
+        self.__GetARGS ()
 
         # FileINI
-        LDirINI = self.__Fargs.ini
+        LDirINI = LUParserARG.GArgParser.Args.ini
         if len (LDirINI) == 0:
             LDirINI = YOUTUBE_Consts.APPWorkDir
         else:
@@ -129,7 +125,7 @@ class TParams(object):
         self.FileNameINI = LFileNameINI
 
         # Журнал
-        LLogDir = self.__Fargs.log
+        LLogDir = LUParserARG.GArgParser.Args.log
         if len (LLogDir) == 0:
             LLogDir = LUFile.IncludeTrailingBackslash(YOUTUBE_Consts.APPWorkDir) + 'LOG'
         else:
@@ -147,11 +143,30 @@ class TParams(object):
         """ destructor """
     #beginfunction
         del self.__FIniFile
-        del self.__FIniReg
-        del self.__FArgParser
-        del self.__FFileMemoLog
+        # del self.__FFileMemoLog
         LClassName = self.__class__.__name__
-        print('{} уничтожен'.format(LClassName))
+        s = '{} уничтожен'.format(LClassName)
+        print('!!!!!!!!!!!!!!!'+s)
+    #endfunction
+
+    @staticmethod
+    def __GetARGS ():
+        """__GetARGS"""
+    #beginfunction
+        if not LUParserARG.GArgParser is None:
+            LUParserARG.GArgParser.Clear ()
+            if LUParserARG.GArgParser.Args is None:
+                LArg = LUParserARG.GArgParser.add_argument ('-log', type = str, default = '', help = 'log dir')
+                LArg = LUParserARG.GArgParser.add_argument ('-ini', type = str, default = '', help = 'INI')
+                LUParserARG.GArgParser.Args = LUParserARG.GArgParser.ArgParser.parse_args ()
+                print (LUParserARG.GArgParser.Args)
+                print (f'log = {LUParserARG.GArgParser.Args.log}')
+                print (f'ini = {LUParserARG.GArgParser.Args.ini}')
+            else:
+                print (LUParserARG.GArgParser.Args)
+            #endif
+        #endif
+
     #endfunction
 
     #--------------------------------------------------
@@ -162,16 +177,6 @@ class TParams(object):
     def FileMemoLog (self) -> LULog.TFileMemoLog:
     #beginfunction
         return self.__FFileMemoLog
-    #endfunction
-
-    #--------------------------------------------------
-    # @property LogDir
-    #--------------------------------------------------
-    # getter
-    @property
-    def LogDir (self) -> str:
-    #beginfunction
-        return self.__Fargs.log
     #endfunction
 
     #--------------------------------------------------

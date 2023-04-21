@@ -31,10 +31,6 @@
 AlignForm = None 
 ShedulerName: str = 'ShedulerName'
 
-cPrefixChars = '-/'          # Switch = ['-', '/']
-cParamNameINIFileName = '-ini'
-cParamNameDirLOG = '-log'
-
 cProjectNAME = 'YOUTUBE_PY'
 cProjectHELPFileName = 'YOUTUBE_PY.HLP'
 cProjectINIFileName = 'YOUTUBE.ini'
