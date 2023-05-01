@@ -146,7 +146,7 @@ class TParams(object):
         # del self.__FFileMemoLog
         LClassName = self.__class__.__name__
         s = '{} уничтожен'.format(LClassName)
-        print('!!!!!!!!!!!!!!!'+s)
+        #print (s)
     #endfunction
 
     @staticmethod
@@ -159,11 +159,12 @@ class TParams(object):
                 LArg = LUParserARG.GArgParser.add_argument ('-log', type = str, default = '', help = 'log dir')
                 LArg = LUParserARG.GArgParser.add_argument ('-ini', type = str, default = '', help = 'INI')
                 LUParserARG.GArgParser.Args = LUParserARG.GArgParser.ArgParser.parse_args ()
-                print (LUParserARG.GArgParser.Args)
-                print (f'log = {LUParserARG.GArgParser.Args.log}')
-                print (f'ini = {LUParserARG.GArgParser.Args.ini}')
+                #print (LUParserARG.GArgParser.Args)
+                #print (f'log = {LUParserARG.GArgParser.Args.log}')
+                #print (f'ini = {LUParserARG.GArgParser.Args.ini}')
             else:
-                print (LUParserARG.GArgParser.Args)
+                #print (LUParserARG.GArgParser.Args)
+                ...
             #endif
         #endif
 

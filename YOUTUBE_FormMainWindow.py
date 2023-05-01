@@ -21,9 +21,35 @@ import sys
 #------------------------------------------
 # БИБЛИОТЕКИ сторонние
 #------------------------------------------
-from PySide6.QtWidgets import QApplication, QMainWindow
-from PySide6.QtUiTools import QUiLoader
-from PySide6.QtCore import QFile, QIODevice
+# import PySide6.QtWidgets
+# import PySide6.QtGui
+# import PySide6.QtCore
+# from PySide6.QtGui import QPalette, QColor
+# from PySide6.QtWidgets import QStyle
+
+# from PySide6.QtWidgets import QApplication, QMainWindow
+# from PySide6.QtUiTools import QUiLoader
+# from PySide6.QtCore import QFile, QIODevice
+
+from PySide6.QtCore import (QCoreApplication, QDate, QDateTime, QLocale,
+    QMetaObject, QObject, QPoint, QRect,
+    QSize, QTime, QUrl, Qt,
+    QStringListModel, QModelIndex)
+from PySide6.QtGui import (QAction, QBrush, QColor, QConicalGradient,
+    QCursor, QFont, QFontDatabase, QGradient,
+    QIcon, QImage, QKeySequence, QLinearGradient,
+    QPainter, QPalette, QPixmap, QRadialGradient,
+    QTransform,
+    QClipboard)
+from PySide6.QtWidgets import (QAbstractScrollArea, QApplication, QFrame, QGridLayout,
+    QHBoxLayout, QListView, QMainWindow, QMenu,
+    QMenuBar, QPlainTextEdit, QScrollArea, QSizePolicy,
+    QSplitter, QStatusBar, QToolBar, QVBoxLayout,
+    QWidget,
+    QLabel)
+
+import pytube
+import pytube.exceptions
 
 #------------------------------------------
 # БИБЛИОТЕКИ LU
@@ -33,6 +59,9 @@ import LUFile
 import LUProc
 import LUos
 # import LUParserARG
+import LUYouTube
+from LUObjectsYT import *
+import LUThread
 
 #------------------------------------------
 # БИБЛИОТЕКИ PROJECT
@@ -45,8 +74,8 @@ from ui_YOUTUBE_FormMain import Ui_FormMainWindow
 #------------------------------------------
 #
 #------------------------------------------
-Lui_file_name1 = "YOUTUBE_FormMain.ui"
-Lui_file_name2 = "D:/PROJECTS_LYR/CHECK_LIST/05_DESKTOP/02_Python/PROJECTS_PY/YUOTUBE/YOUTUBE/YOUTUBE_FormMain.ui"
+# Lui_file_name1 = "YOUTUBE_FormMain.ui"
+# Lui_file_name2 = "D:/PROJECTS_LYR/CHECK_LIST/05_DESKTOP/02_Python/PROJECTS_PY/YUOTUBE/YOUTUBE/YOUTUBE_FormMain.ui"
 
 # ------------------------------------
 # FormMainWindow(QMainWindow)
@@ -56,22 +85,38 @@ class FormMainWindow(QMainWindow):
     luClassName = 'FormMainWindow'
 
     def __init__(self, parent=None):
+    #beginfunction
         super().__init__(parent)
         self.ui = Ui_FormMainWindow()
         self.ui.setupUi(self)
 
-        self.__FormCreate()
-
         self.__FSaveCurrentDir: str = ''
-        self.__FSaveStatApplication: int = 0 #TStatApplication
-        self.__FSheduler = None # TSheduler
+        self.__FSaveStatApplication: int = 0    # TStatApplication
+        self.__FSheduler = None                 # TSheduler
         self.__FLogDir: str = ''
         self.__FStopYouTube: bool = True
 
         self.__FFlagIdle: bool = True
 
-        # Журнал
-        self.APPLog: LULog.TFileMemoLog = LULog.FileMemoLog
+        # self.ui.action_Youtube.triggered.connect (Testfunction)
+        # self.ui.action_Youtube.triggered.connect (LFormMainWindow.Test)
+        # self.ui.action_Youtube.triggered.connect (FFormMainWindow.TestMain)
+        # self.ui.action_Youtube.triggered.connect (FFormMainWindow.CreateYUOTUBEObject(LUObjectsYoutube.link3))
+
+        # Состояние программы
+        self.__FStatApplication: LUProc.TStatApplication = LUProc.TStatApplication.caTest
+
+        # __FParams
+        self.__FParams: YOUTUBE_Params.TParams = YOUTUBE_Params.TParams ()
+        # self.APPLog = self.__FParams.FileMemoLog
+
+
+        # self.__FYOUTUBE: YOUTUBE_Proc.TYOUTUBE = YOUTUBE_Proc.TYOUTUBE()
+        #FFormMainWindow.ui.action_Youtube.triggered.connect (FFormMainWindow.CreateYUOTUBEObject(LUObjectsYoutube.link3))
+        #self.ui.action_CreateYoutube.triggered(self.__CreateYUOTUBEObject(LUObjectsYoutube.link3))
+
+        self.__FormCreate ()
+    #endfunction
 
     #--------------------------------------------------
     # destructor
@@ -79,44 +124,275 @@ class FormMainWindow(QMainWindow):
     def __del__ (self):
         """destructor"""
     #beginfunction
-        super().__del__(self)
         self.__FormDestroy()
         LClassName = self.__class__.__name__
-        print('{} уничтожен'.format(LClassName))
+        s = '{} уничтожен'.format(LClassName)
+        #print (s)
     #endfunction
 
-    @staticmethod
-    def Test ():
-        # YOUTUBE_test.print_hi('Test')
-        ...
-
-    @staticmethod
-    def TestMain ():
-        LURL = 'https:#www.youtube.com/watch?v=DCNtylTXgmM'
-        # YOUTUBE_test.Main()
-        ...
-
-    def __FormCreate (self):
-        """__FormCreate"""
+    def __ClearModel (self, Amodel: QStringListModel):
     #beginfunction
-        # Состояние программы
-        self.__FStatApplication: LUProc.TStatApplication = LUProc.TStatApplication.caTest
+        LULog.LoggerAPPS.info ('__ClearModel...')
+        # Вы можете либо использовать model.setStringList( QStringList{} )
+        # либо вручную удалить строки с помощью model.removeRows( 0, model.rowCount() ).
+        Amodel.removeRows (0, Amodel.rowCount())
+        # Amodel.setStringList (())
 
-        # __FParams
-        self.__FParams: YOUTUBE_Params.TParams = YOUTUBE_Params.TParams()
-        self.APPLog = self.__FParams.FileMemoLog
+        # Lindex = Amodelmodel.rowCount ()
+        # for i in range(Lindex):
+        #     # Amodelmodel.removeRow (i)
+        #     Amodelmodel.removeRows (self.ui.ListViewL.currentIndex().row(), 1)
+        #     Lindex = Amodelmodel.rowCount ()
+        # #enfor
+    #endfunction
 
-        # self.__FYOUTUBE: YOUTUBE_Proc.TYOUTUBE = YOUTUBE_Proc.TYOUTUBE()
+    def __job (self):
+    #beginfunction
+        LULog.LoggerAPPS.info ('__job...')
+        self.__ClearModel(self.__Fmodel)
 
-        #-------------------------------
-        # Panels
-        #-------------------------------
+        # Lindex = self.__Fmodel.rowCount ()
+        # self.__Fmodel.insertRow (0)
+        # self.__Fmodel.setData (self.__Fmodel.index (0), '1111111111111111')
+        # Lindex = self.__Fmodel.rowCount ()
+        # self.__Fmodel.removeRow (0)
+        # Lindex = self.__Fmodel.rowCount ()
+
+        last_copied = self.__FClipboard.text ()
+        if "www.youtube.com" in last_copied or "youtu.be" in last_copied:
+            LULog.LoggerAPPS.info (last_copied)
+            self.__FClipboardList.append (last_copied)
+            # YOUTUBE
+            LYOUTUBE = LUYouTube.TYouTube ()
+            Llist = LYOUTUBE.CreateURLs (last_copied)
+            for item in Llist:
+                LYouTubeObject: TYouTubeObject = item
+                s = LYouTubeObject.URL
+                LULog.LoggerAPPS.info (s)
+                Lindex = self.__Fmodel.rowCount ()
+                self.__Fmodel.insertRow (Lindex)
+                self.__Fmodel.setData (self.__Fmodel.index(Lindex), s)
+
+                try:
+                    LYouTubeObject.StartYouTubeThread ('d:\\work',
+                                                       cMaxRes480p, type = 'video', file_extension = 'mp4')
+                    #,skip_existing = True
+                except pytube.exceptions.VideoUnavailable as ERROR:
+                    s = 'Ошибка загрузки! ' + ERROR
+                    LULog.LoggerAPPS.exception (s, exc_info = True, stack_info = True)
+                #endtry
+            #endfor
+        #endif
+    #endfunction
+
+    def cliboard_changed(self, mode):
+    #beginfunction
+        # LULog.LoggerAPPS.info ('cliboard_changed...')
+        ...
+    #endfunction
+
+    def cliboard_findBufferChanged (self):
+    #beginfunction
+        # LULog.LoggerAPPS.info ('cliboard_findBufferChanged...')
+        ...
+    #endfunction
+
+    def cliboard_selectionChanged (self):
+    #beginfunction
+        # LULog.LoggerAPPS.info ('cliboard_selectionChanged...')
+        ...
+    #endfunction
+
+    def cliboard_dataChanged(self):
+    #beginfunction
+        LULog.LoggerAPPS.info ('cliboard_dataChanged...')
+        mimeData = self.__FClipboard.mimeData()
+        if mimeData.hasImage():
+            LULog.LoggerAPPS.info (' '*4+'mimeData.hasImage...')
+            # setPixmap(QPixmap(mimeData.imageData()))
+            ...
+        elif mimeData.hasHtml():
+            LULog.LoggerAPPS.info (' '*4+'mimeData.hasHtml...')
+            # setText(mimeData.html())
+            # setTextFormat(Qt.RichText)
+            ...
+        elif mimeData.hasText():
+            LULog.LoggerAPPS.info (' '*4+'mimeData.hasText...')
+            # setText(mimeData.text())
+            # setTextFormat(Qt.PlainText)
+            Ltext = self.__FClipboard.text ()
+            # self.ui.Memo_Log.insertPlainText (Ltext + '\n')
+            LULog.LoggerAPPS.info (Ltext)
+            self.__job()
+            ...
+        else:
+            LULog.LoggerAPPS.info (' '*4+'Cannot display data...')
+            # setText(tr("Cannot display data"))
+            ...
+        #endif
+    #endfunction
+
+    #------------------------------------------
+    # Testfunction ():
+    #------------------------------------------
+    @staticmethod
+    def Testfunction ():
+    #beginfunction
+        LULog.LoggerAPPS.info ('Testfunction...')
+    #endfunction
+
+    #--------------------------------------------------
+    # Clipboard
+    #--------------------------------------------------
+    def __SetClipboard (self):
+        """__SetClipboard"""
+    #beginfunction
+        LULog.LoggerAPPS.info ('__SetClipboard...')
+        self.__FClipboard = QApplication.clipboard ()
+        # Signals
+        self.__FClipboard.dataChanged.connect (self.cliboard_changed (QClipboard.Mode))
+        self.__FClipboard.dataChanged.connect (self.cliboard_dataChanged)
+        self.__FClipboard.dataChanged.connect (self.cliboard_findBufferChanged)
+        self.__FClipboard.dataChanged.connect (self.cliboard_selectionChanged)
+        # clipboard = QGuiApplication.clipboard ()
+        # originalText = self.clipboard.text ()
+        self.__FClipboardList = []
+
+    #endfunction
+
+    def __SetStylesheetsFor_ALL (self):
+        """__SetStylesheetsFor_ALL"""
+    #beginfunction
+        # LULog.LoggerAPPS.info ('__SetStylesheetsFor_ALL...')
+
+        # Create Stylesheets
+        self.style_light = """
+            * {font-family: 'Noto Sans';}  /* REMOVING THIS LINE AVOIDS THE ISSUE, BUT THEN FONTS ARE WRONG INITIALLY */
+            QMainWindow {background-color: white;}
+            """
+        # print (self.style_light)
+        self.style_dark = """
+            * {font-family: 'Noto Sans';} 
+            QMainWindow {background-color: gray;}
+            """
+        # print (self.style_dark)
+
+        # Create Stylesheets
+        self.style_light = """
+            * QPlainTextEdit {color: rgba(0, 0, 0, .5); background-color: rgb(157, 157, 157); font-weight: bold; font-size: 10px; font: 20pt "Courier New"}
+            QPlainTextEdit {color: blue; background-color: rgb(157, 157, 157); font-weight: bold; font-size: 10px; font: 10pt "Courier New"}
+            """
+        self.setStyleSheet (self.style_light)
+    #endfunction
+
+    def __SetColorFor_Memo_Log (self):
+        """__SetupColorFor_Memo_Log"""
+    #beginfunction
+        # LULog.LoggerAPPS.info ('__SetColorFor_Memo_Log...')
+
+        cg = QPalette.ColorGroup (QPalette.Active)
+        cg = QPalette.ColorGroup (QPalette.Disabled)
+        cg = QPalette.ColorGroup (QPalette.Inactive)
+
+        # foreground
+        palette_foreground = QPalette ()
+        palette_foreground = self.ui.Memo_Log.palette ()
+        fc = QColor('yellow')
+        fr = QPalette.ColorRole(QPalette.ColorRole.Text)
+        palette_foreground.setColor (fr, fc)
+        self.ui.Memo_Log.setPalette (palette_foreground)
+
+        # background
+        # gray = #808080 как более жесткий, холодный.
+        # grey = #D3D3D3 он более светлый.
+        palette_background = QPalette ()
+        palette_background = self.ui.Memo_Log.palette ()
+        bc = QColor('grey')
+        br = QPalette.ColorRole(QPalette.ColorRole.Base)
+        palette_background.setColor (br, bc)
+        self.ui.Memo_Log.setPalette (palette_background)
+    #endfunction
+
+    def __SetStylesheetsFor_Memo_Log (self):
+        """__SetupStylesheetsFor_Memo_Log"""
+    #beginfunction
+        # LULog.LoggerAPPS.info ('__SetStylesheetsFor_Memo_Log...')
+
+        # stylesheet
+        # color: rgb (0, 0, 0); background-color: rgb (157, 157, 157)
+        # RGBA расшифровывается как Red Green Blue Alpha.
+        # На W3C объясняется: «В этой спецификации цветовая модель RGB расширена
+        # и включает составляющую альфа, позволяющую задать непрозрачность цвета»
+        # Это значит, что можно добавить четвертое значение (от 1 до 0),
+        # чтобы задать уровень непрозрачности данного RGB-цвета.
+        # Для полной непрозрачности используется значение 1, для полной прозрачности - 0.
+        ss = 'color: red; background-color: grey; font-weight: bold'
+        ss = 'color: black; background-color: grey; font-weight: bold'
+        ss = 'color: rgba(0, 0, 0, .5); background-color: rgb(157, 157, 157); font-weight: bold; font-size: 10px; font: 10pt "Courier New"'
+        self.ui.Memo_Log.setStyleSheet (ss)
+    #endfunction
+
+    def __SetColorGroup (self):
+        """__SetColorGroup"""
+    #beginfunction
+        # LULog.LoggerAPPS.info ('__SetColorGroup...')
+
+        palette = self.ui.Memo_Log.palette ()
+        palette.setCurrentColorGroup (QPalette.Normal)
+        palette.setColorGroup (QPalette.Disabled,
+                               palette.windowText (), palette.button (),
+                               palette.light (), palette.dark (), palette.mid (),
+                               palette.text (), palette.brightText (),
+                               palette.base (), palette.window (),
+                               )
+        self.ui.Memo_Log.setPalette (palette)
+    #endfunction
+
+    #-------------------------------
+    # StatusBar_P1_P2
+    #-------------------------------
+    def __SetStatusBar_P1_P2 (self):
+        """__SetStatusBar_P1_P2"""
+    #beginfunction
+        LULog.LoggerAPPS.info ('__SetStatusBar_P1_P2...')
+        # self.ui.StatusBar_P1_P2.stasetStyleSheet (
+        #     "QStatusBar{padding-left:8px;background:rgba(255,0,0,255);color:black;font-weight:bold;}")
+
+        # display a message in 5 seconds
+        self.ui.StatusBar_P1_P2.showMessage ("Error Cannot determine filepath", 5000)
+
+        # display a message in 5 seconds
+        self.ui.StatusBar_P1_P2.showMessage('Ready', 5000)
+
         # for i = 0 to StatusBar_P1_P2.Panels.Count - 1 do
         #     StatusBar_P1_P2.Panels[i].Text = ''
-    
-        #-------------------------------
-        # Sheduler
-        #-------------------------------
+
+        # add a permanent widget to the status bar
+        self.P1 = QLabel('Length: 0')
+        s = self.P1.text()
+        self.P1.setText('!!!!!!!!!!!!!!!')
+        self.ui.StatusBar_P1_P2.addPermanentWidget(self.P1)
+
+        self.P2 = QLabel('Length: 0')
+        s = self.P2.text()
+        self.P2.setText('???????????')
+        self.ui.StatusBar_P1_P2.addPermanentWidget(self.P2)
+
+        # Splash = TSplash.Create (Self)
+        # Splash.Name = 'Splash'
+        # Splash.Height = StatusBar_P1_P2.Height
+        # Splash.Width = StatusBar_P1_P2.Panels[0].Width
+        # StatusBar_P1_P2.InsertControl (Splash)
+
+    #endfunction
+
+    #-------------------------------
+    # Sheduler
+    #-------------------------------
+    def __SetSheduler (self):
+        """__SetSheduler"""
+    #beginfunction
+        LULog.LoggerAPPS.info ('__SetSheduler...')
         # FSheduler = TSheduler.Create (Self)
         # with FSheduler do
         # begin
@@ -125,17 +401,83 @@ class FormMainWindow(QMainWindow):
         #     OnSheduler = Action_StartExecute
         #     AddEvent (ShedulerName, TEMPLATE_RegIni.ShedulerTEMPLATE)
         # end
+    #endfunction
 
+    #--------------------------------------------------
+    # Журнал
+    #--------------------------------------------------
+    def __SetLogs (self):
+        """__FormCreate"""
+    #beginfunction
+        # self.APPLog: LULog.TFileMemoLog = LULog.FileMemoLog
+        #----------------- Memo_Log --------------------------
+        self.ui.Memo_Log.setReadOnly (True)
+        self.__SetStylesheetsFor_ALL()
+        self.__SetStylesheetsFor_Memo_Log()
+        # self.__SetColorFor_Memo_Log()
+
+        LULog.PrintHandlers (LULog.LoggerAPPS)
+        LHandler: LULog.TStreamHandler = LULog.GetHandler (LULog.LoggerAPPS, 'CONSOLE')
+        LHandler.widget = self.ui.Memo_Log
+        # LULog.LoggerAPPS.info ('LULog.LoggerAPPS-> '+'TEST...')
+        # self.ui.Memo_Log.appendPlainText ('mhsdkjhfkjhsakjh'+'\n')
+
+        LULog.PrintHandlers (LULog.LoggerTOOLS)
+        LHandler: LULog.TStreamHandler = LULog.GetHandler (LULog.LoggerAPPS, 'CONSOLE')
+        LHandler.widget = self.ui.Memo_Log
+        # LULog.LoggerAPPS.info ('LULog.LoggerTOOLS-> '+'TEST...')
+
+        LULog.LoggerAPPS.info ('__SetLogs...')
+    #endfunction
+
+    #--------------------------------------------------
+    # ScrollAreaR
+    #--------------------------------------------------
+    def __SetScrollAreaR (self):
+        """__SetScrollAreaR"""
+    #beginfunction
+        LULog.LoggerAPPS.info ('__SetScrollAreaR...')
+        # self.ui.ScrollAreaR.se
+        ...
+    #endfunction
+
+    #--------------------------------------------------
+    # ScrollAreaR
+    #--------------------------------------------------
+    def __SetListViewL (self):
+        """__SetListViewL"""
+    #beginfunction
+        LULog.LoggerAPPS.info ('__SetListViewL...')
+        self.__Fmodel = QStringListModel ()
+        # self.__Fmodel = QStringListModel ([
+        #     "An element", "Another element", "Yay! Another one.", '????????????'
+        # ])
+        self.ui.ListViewL.setModel (self.__Fmodel)
+        # self.__Fmodel.setStringList(['!!!!!!!!!!!!!!'])
+
+        # self.ui.ListViewL.setViewMode (QListView.IconMode)
+        # self.ui.ListViewL.setMovement (QListView.Static)
+        # self.ui.ListViewL.setIconSize (QSize (64, 64))
+
+        ...
+    #endfunction
+
+    def __FormCreate (self):
+        """__FormCreate"""
+    #beginfunction
+        self.__SetLogs ()
+        self.__SetStatusBar_P1_P2()
+        self.__SetSheduler()
         self.__SetStatApplication (LUProc.TStatApplication.caBreak)
-
-        # Splash = TSplash.Create (Self)
-        # Splash.Name = 'Splash'
-        # Splash.Height = StatusBar_P1_P2.Height
-        # Splash.Width = StatusBar_P1_P2.Panels[0].Width
-        # StatusBar_P1_P2.InsertControl (Splash)
-    
-        #FFormMainWindow.ui.action_Youtube.triggered.connect (FFormMainWindow.CreateYUOTUBEObject(LUObjectsYoutube.link3))
-        #self.ui.action_CreateYoutube.triggered(self.__CreateYUOTUBEObject(LUObjectsYoutube.link3))
+        self.setWindowTitle(YOUTUBE_Consts.cProjectNAME)
+        #----------------- VersionInfo --------------------------
+        # VersionInfo = CreateVersion (ParamStr(0))
+        # LULog.LoggerAPPS.log (LULog.TEXT, ParamStr (0) + ' ' + VersionInfo.FileVersion+ ' ' + VersionInfo.FileDate)
+        # VersionInfo.Free
+        #-----------------------------------------------------------
+        self.__SetClipboard()
+        self.__SetScrollAreaR()
+        self.__SetListViewL()
         self.__FormActivate()
     #endfunction
 
@@ -157,37 +499,12 @@ class FormMainWindow(QMainWindow):
     #endfunction
 
     # TFormMain.FormActivate
-
     def __FormActivate (self):
         """__FormActivate"""
     #beginfunction
-        self.APPLog.AddLog(LULog.TTypeLogString.tlsINFO, 'Это информация')
-
-        # ToolButtonAPP.Caption = FormAbout.InternalName
-        # Caption = FormAbout.ProductName
-    
-        # Memo_Log
-        # Memo_Log.SetFocus
-        # Memo_Log.SelStart = Length (Memo_Log.Lines.Text)
-        # Memo_Log.SelLength = 0
-
-        self.APPLog.AddLog (LULog.TTypeLogString.tlsINFO, self.__FParams.FileMemoLog.FileName)
-        self.APPLog.AddLog (LULog.TTypeLogString.tlsINFO, self.__FParams.FileNameINI)
-
-        LULog.FileMemoLog.AddLog (LULog.TTypeLogString.tlsINFO, 'LULog.FileMemoLog.AddLog')
-
-        LULog.LoggerAPPS.debug (self.__FParams.FileMemoLog.FileName)
-        LULog.LoggerAPPS.info (self.__FParams.FileNameINI)
-
-        LULog.LoggerTOOLS.info ('!!!!!!!!!!!!!!!!!!! LULog.LULogger.info')
-
-        LULog.LoggerTLogger.debug ('!!!!!!!!!!!!!!!!!!! LULog.GLogger.debug')
-
-        # VersionInfo
-        # VersionInfo = CreateVersion (ParamStr(0))
-        # APPLog.LogString[tlsInfo, 1] = ParamStr (0) + ' ' + VersionInfo.FileVersion+ ' ' + VersionInfo.FileDate
-        # VersionInfo.Free
-        ...
+        LULog.LoggerAPPS.info ('__FormActivate...')
+        LULog.LoggerAPPS.log (LULog.TEXT, self.__FParams.FileMemoLog.FileName)
+        LULog.LoggerAPPS.log (LULog.TEXT, self.__FParams.FileNameINI)
     #endfunction
 
     def __FormClose (self, Action):
@@ -197,103 +514,7 @@ class FormMainWindow(QMainWindow):
         ...
     #endfunction
 
-    def __WMDrawClipboard (self, Msg):
-    #var
-        """
-        i: Integer
-        LIsMod: Boolean
-        LURL: string
-        LURI: IdURI.TIdURI
-        LisYUOTUBE: Boolean
-        LisYUOTUBEPlaylist: Boolean
-        LisYUOTUBEPlaylists: Boolean
-        """
-    #beginfunction
-        """
-        inherited
-        # Clipboard content has changed
-        APPLog.LogString[tlsInfo, 1] = '03.Clipboard content has changed!'
-        # Оповещаем об изменениях следующего за нами наблюдателя.
-        # Inform the next window in the clipboard viewer chain
-        if FNextClipboardViewer <> 0 then
-        begin
-            SendMessage (FNextClipboardViewer, WM_DRAWCLIPBOARD, 0, 0)
-            Msg.Result = 0
-        end
-        # ----------------------------------------
-        # Далее идёт код работы с буфером обмена.
-        # ----------------------------------------
-        # Проверяем, есть ли в буфере данные в интересующем нас формате.
-        # Интересующий нас формат - текстовые данные.
-        LIsMod = False
-        for i = 0 to Clipboard.FormatCount - 1 do
-            if Clipboard.HasFormat (CF_TEXT) then
-            begin
-                LIsMod = True
-                Break
-            end
-        # Если данные в требуемом формате есть, то обрабатываем их.
-        if LIsMod then
-        begin
-            APPLog.LogString[tlsInfo, 1] = '03.Данные типа CF_TEXT.'
-    
-            # LURI.Protocol, LURI.Username, LURI.Password, LURI.Host
-            # LURI.Port, LURI.Path, LURI.Params
-            LURL = Clipboard.AsText
-            LURI = TIdURI.Create ('')
-            try
-                LURI.URI = LURL
-                LisYUOTUBE = (UpperCase(LURI.Host) = cYUOTUBE)
-                LisYUOTUBEPlaylists = Pos (cYUOTUBEplaylists,
-                    UpperCase(LURI.Document)) > 0
-                LisYUOTUBEPlaylist = Pos (cYUOTUBEplaylist,
-                    UpperCase(LURI.Document)) > 0
-            finally
-                LURI.Free
-            end
-            if LisYUOTUBE then
-            begin
-                if LisYUOTUBEPlaylist then
-                    CreateYUOTUBEPlaylist (LURL)
-                else if FYouTubeObjectsCollection.FindYouTubeObjectsItemURL (LURL)
-                    <> nil then
-                    APPLog.LogString[tlsInfo, 1] = LURL + ' уже существует.'
-                else
-                    CreateYUOTUBEObject (LURL)
-            end
-        end else begin
-            APPLog.LogString[tlsInfo, 1] :=
-                '03.Буфер обмена не содержит данных типа CF_TEXT.'
-        end
-        """
-        ...
-    #endfunction
-
-    # ----------------------------------------------------
-    # 04.Перед закрытием приложения удалите окно просмотра из цепочки буфера обмена,
-    # вызвав API-функцию ChangeClipboardChain.
-    # 4. Remove from clipboard chain
-    # ----------------------------------------------------
-    # Отключение от цепи наблюдателей за буфером обмена.
-    # ----------------------------------------------------
-
-    def __DisableViewself(self):
-    #beginfunction
-        """
-        # Если мы уже отключены от цепи - выходим.
-        if not FInChain then
-            Exit
-        ChangeClipboardChain (Handle, FNextClipboardViewer)
-        FInChain = False
-        FNextClipboardViewer = 0
-        APPLog.LogString[tlsInfo, 1] :=
-            '04.Выполнено отключение от цепи наблюдателей за буфером обмена.'
-        """
-        ...
-    #endfunction
-
     # TFormMain.SetStatApplication
-
     def __SetStatApplication (self, AStatApplication):
     #beginfunction
         self.__FStatApplication = AStatApplication
@@ -346,7 +567,6 @@ class FormMainWindow(QMainWindow):
     #endfunction
 
     # TFormMain.ActionExitExecute
-
     def __Action_ExitExecute (self, Sender):
     #beginfunction
         """
@@ -356,7 +576,6 @@ class FormMainWindow(QMainWindow):
     #endfunction
 
     # TFormMain.ActionSetupExecute
-
     def __Action_SetupExecute (self, Sender):
     #beginfunction
         LSaveCurrentDir = LUos.GetCurrentDir()
@@ -371,14 +590,12 @@ class FormMainWindow(QMainWindow):
     #endfunction
 
     # TFormMain.ActionStopExecute
-
     def __Action_StopExecute (self, Sender):
     #beginfunction
         self.__SetStatApplication (LUProc.TStatApplication.caBreak)
     #endfunction
 
     # TFormMain.ActionAboutExecute
-
     def __Action_AboutExecute (self, Sender):
     #beginfunction
         LSaveStatApplication = self.__FStatApplication
@@ -388,7 +605,6 @@ class FormMainWindow(QMainWindow):
     #endfunction
 
     # TFormMain.DeleteYUOTUBEObject
-
     def __DeleteYUOTUBEObject (self, AObjectIDStr: str):
         """
         #var
@@ -408,7 +624,6 @@ class FormMainWindow(QMainWindow):
     #endfunction
 
     # TFormMain.DeleteYouTubeThread
-
     def __DeleteYouTubeThread (self, Sender):
     #beginfunction
         """
@@ -439,7 +654,6 @@ class FormMainWindow(QMainWindow):
     #endfunction
 
     # TFormMain.ButtonStartYouTubeClick
-
     def __ButtonStartYouTubeClick (self, Sender):
     #beginfunction
         """
@@ -461,7 +675,6 @@ class FormMainWindow(QMainWindow):
     #endfunction
 
     # TFormMain.ButtonStopYouTubeClick
-
     def __ButtonStopYouTubeClick (self, Sender):
     #beginfunction
         """
@@ -481,12 +694,14 @@ class FormMainWindow(QMainWindow):
     # TFormMain.CreateYUOTUBEPlaylist
     def __CreateYUOTUBEPlaylist (self, AURL: str):
     #beginfunction
+        LULog.LoggerAPPS.info ('__CreateYUOTUBEPlaylist...')
         ...
     #endfunction
 
     # TFormMain.CreateYUOTUBEObject
     def __CreateYUOTUBEObject (self, AURL: str):
     #beginfunction
+        LULog.LoggerAPPS.info ('__CreateYUOTUBEObject...')
         """
         # LLUPanel
         LLUPanel = TLUPanel.Create (Self)
@@ -561,7 +776,6 @@ class FormMainWindow(QMainWindow):
     #endfunction
 
     # TFormMain.ActionHelpExecute
-
     def __Action_HelpExecute (self, Sender):
     #beginfunction
         # Application.HelpContext (6)
@@ -584,7 +798,6 @@ class FormMainWindow(QMainWindow):
     #endfunction
 
     # TFormMain.ActionViewLogsExecute
-
     def __ActionViewLogsExecute (self, Sender):
     #beginfunction
         """
@@ -598,7 +811,6 @@ class FormMainWindow(QMainWindow):
     #endfunction
 
     # TFormMain.ActionViewLogFileExecute
-
     def __Action_ViewLogFileExecute (self, Sender):
     #beginfunction
         """
@@ -612,7 +824,6 @@ class FormMainWindow(QMainWindow):
     #endfunction
 
     # TFormMain.ProcedureDeleteYUOTUBEObjects
-
     def __ProcedureDeleteYUOTUBEObjects(self):
         """
         #var
@@ -655,7 +866,6 @@ class FormMainWindow(QMainWindow):
     #endfunction
 
     # TFormMain.ProcedureDeleteYUOTUBEObjects
-
     def __DeleteLUPanel (self, AObjectIDStr: str):
     #beginfunction
         """
@@ -678,7 +888,6 @@ class FormMainWindow(QMainWindow):
     #endfunction
 
     # TFormMain.Procedure_01
-
     def __Procedure_01(self):
         """
         #var
@@ -695,11 +904,10 @@ class FormMainWindow(QMainWindow):
     #endfunction
 
     # TFormMain.Main
-
     def __Main(self):
     #beginfunction
         LSaveCurrentDir = LUos.GetCurrentDir()
-        self.APPLog.SetLogString (LULog.TTypeLogString.tlsBegin, 0, LUProc.cProcessBegin)
+        LULog.LoggerAPPS.log( LULog.BEGIN, LUProc.cProcessBegin)
         # --------------------------------------------------
         # FSheduler.DeleteEvent (ShedulerName)
         # FSheduler.AddEvent (ShedulerName, TEMPLATE_RegIni.ShedulerTEMPLATE)
@@ -709,22 +917,19 @@ class FormMainWindow(QMainWindow):
             self.__ProcedureDeleteYUOTUBEObjects()
         #endif
         # --------------------------------------------------
-        self.APPLog.SetLogString (LULog.TTypeLogString.tlsEnd, 0, LUProc.cProcessEnd)
+        LULog.LoggerAPPS.log( LULog.BEGIN, LUProc.cProcessEnd)
         os.chdir(LSaveCurrentDir)
     #endfunction
 
 #------------------------------------------
 #
 #------------------------------------------
-Fapp: QApplication
-FFormMainWindow: FormMainWindow
-
-#------------------------------------------
-# Testfunction ():
-#------------------------------------------
-def Testfunction ():
+def main ():
 #beginfunction
-    print ("The 'function' has been called!")
+    GAPP = QApplication(sys.argv)
+    GFormMainWindow = FormMainWindow()
+    GFormMainWindow.show()
+    sys.exit(GAPP.exec())
 #endfunction
 
 #------------------------------------------
@@ -732,16 +937,7 @@ def Testfunction ():
 #------------------------------------------
 #beginmodule
 if __name__ == "__main__":
-    Fapp = QApplication(sys.argv)
-    FFormMainWindow = FormMainWindow()
-    #FFormMainWindow.ui.action_Youtube.triggered.connect (Testfunction)
-    #FFormMainWindow.ui.action_Youtube.triggered.connect (LFormMainWindow.Test)
-    #FFormMainWindow.ui.action_Youtube.triggered.connect (FFormMainWindow.TestMain)
-
-    #FFormMainWindow.ui.action_Youtube.triggered.connect (FFormMainWindow.CreateYUOTUBEObject(LUObjectsYoutube.link3))
-
-    FFormMainWindow.show()
-    sys.exit(Fapp.exec())
+    main()
 #endif
 
 #endmodule
