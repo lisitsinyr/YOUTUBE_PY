@@ -1,6 +1,42 @@
 <RCC>
-    <qresource prefix="/test">
-        <file>icons8-обслуживание-48.png</file>
-        <file>sign_out_32px.png</file>
+    <qresource prefix="/">
+        <file>ICONS/add-column-xl.png</file>
+        <file>ICONS/add-file-xl.png</file>
+        <file>ICONS/add-folder-xl.png</file>
+        <file>ICONS/add-image-xl.png</file>
+        <file>ICONS/add-link-xl.png</file>
+        <file>ICONS/add-list-xl.png</file>
+        <file>ICONS/add-row-xl.png</file>
+        <file>ICONS/add-user-3-xl.png</file>
+        <file>ICONS/add-xl.png</file>
+        <file>ICONS/copy-xl.png</file>
+        <file>ICONS/cut-xl.png</file>
+        <file>ICONS/exit-xl.png</file>
+        <file>ICONS/favorite-7-xl.png</file>
+        <file>ICONS/favorite-9-xl.png</file>
+        <file>ICONS/gear-2-xl.png</file>
+        <file>ICONS/gear-xl.png</file>
+        <file>ICONS/help-xl.png</file>
+        <file>ICONS/icons8-обслуживание-48.png</file>
+        <file>ICONS/info-xl.png</file>
+        <file>ICONS/settings-10-xl.png</file>
+        <file>ICONS/settings-11-xl.png</file>
+        <file>ICONS/settings-12-xl.png</file>
+        <file>ICONS/settings-13-xl.png</file>
+        <file>ICONS/settings-17-xl.png</file>
+        <file>ICONS/settings-18-xl.png</file>
+        <file>ICONS/settings-19-xl.png</file>
+        <file>ICONS/settings-2-xl.png</file>
+        <file>ICONS/settings-21-xl.png</file>
+        <file>ICONS/settings-23-xl.png</file>
+        <file>ICONS/settings-3-xl.png</file>
+        <file>ICONS/settings-4-xl.png</file>
+        <file>ICONS/settings-5-xl.png</file>
+        <file>ICONS/settings-6-xl.png</file>
+        <file>ICONS/settings-8-xl.png</file>
+        <file>ICONS/settings-xl.png</file>
+        <file>ICONS/sign_out_32px.png</file>
+        <file>ICONS/video-add-xl.png</file>
+        <file>ICONS/window-add-xl.png</file>
     </qresource>
 </RCC>

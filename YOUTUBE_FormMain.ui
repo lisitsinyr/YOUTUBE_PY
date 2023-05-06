@@ -29,8 +29,8 @@
    <set>Qt::ImhNone</set>
   </property>
   <widget class="QWidget" name="centralwidget">
-   <layout class="QGridLayout" name="gridLayout">
-    <item row="1" column="0">
+   <layout class="QVBoxLayout" name="verticalLayout_2">
+    <item>
      <widget class="QSplitter" name="splitter_2">
       <property name="sizePolicy">
        <sizepolicy hsizetype="MinimumExpanding" vsizetype="MinimumExpanding">
@@ -86,65 +86,78 @@
          </size>
         </property>
        </widget>
-       <widget class="QScrollArea" name="ScrollAreaR">
-        <property name="sizePolicy">
-         <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
-          <horstretch>0</horstretch>
-          <verstretch>0</verstretch>
-         </sizepolicy>
+       <widget class="QFrame" name="FrameR">
+        <property name="frameShape">
+         <enum>QFrame::StyledPanel</enum>
         </property>
-        <property name="maximumSize">
-         <size>
-          <width>16777215</width>
-          <height>500</height>
-         </size>
+        <property name="frameShadow">
+         <enum>QFrame::Raised</enum>
         </property>
-        <property name="layoutDirection">
-         <enum>Qt::LeftToRight</enum>
-        </property>
-        <property name="widgetResizable">
-         <bool>true</bool>
-        </property>
-        <property name="alignment">
-         <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignTop</set>
-        </property>
-        <widget class="QWidget" name="scrollAreaWidgetContents">
-         <property name="geometry">
-          <rect>
-           <x>0</x>
-           <y>0</y>
-           <width>475</width>
-           <height>369</height>
-          </rect>
-         </property>
-         <property name="layoutDirection">
-          <enum>Qt::LeftToRight</enum>
-         </property>
-         <layout class="QVBoxLayout" name="verticalLayout">
-          <property name="sizeConstraint">
-           <enum>QLayout::SetFixedSize</enum>
-          </property>
-          <item>
-           <widget class="YOUTUBEwidget" name="widget" native="true">
-            <property name="minimumSize">
-             <size>
-              <width>0</width>
-              <height>50</height>
-             </size>
+        <layout class="QVBoxLayout" name="verticalLayout">
+         <item>
+          <widget class="QScrollArea" name="ScrollAreaR">
+           <property name="verticalScrollBarPolicy">
+            <enum>Qt::ScrollBarAlwaysOn</enum>
+           </property>
+           <property name="horizontalScrollBarPolicy">
+            <enum>Qt::ScrollBarAlwaysOn</enum>
+           </property>
+           <property name="widgetResizable">
+            <bool>true</bool>
+           </property>
+           <widget class="QWidget" name="scrollAreaWidgetContents">
+            <property name="geometry">
+             <rect>
+              <x>0</x>
+              <y>0</y>
+              <width>438</width>
+              <height>368</height>
+             </rect>
             </property>
-            <property name="maximumSize">
-             <size>
-              <width>550</width>
-              <height>50</height>
-             </size>
-            </property>
-            <property name="styleSheet">
-             <string notr="true">background-color: rgb(85, 0, 255);</string>
-            </property>
+            <layout class="QVBoxLayout" name="verticalLayout_3">
+             <item>
+              <widget class="QTextEdit" name="TextEditR">
+               <property name="enabled">
+                <bool>false</bool>
+               </property>
+               <property name="sizePolicy">
+                <sizepolicy hsizetype="Maximum" vsizetype="Expanding">
+                 <horstretch>0</horstretch>
+                 <verstretch>0</verstretch>
+                </sizepolicy>
+               </property>
+               <property name="minimumSize">
+                <size>
+                 <width>0</width>
+                 <height>0</height>
+                </size>
+               </property>
+               <property name="maximumSize">
+                <size>
+                 <width>500</width>
+                 <height>900</height>
+                </size>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <spacer name="VerticalSpacerR">
+               <property name="orientation">
+                <enum>Qt::Vertical</enum>
+               </property>
+               <property name="sizeHint" stdset="0">
+                <size>
+                 <width>20</width>
+                 <height>40</height>
+                </size>
+               </property>
+              </spacer>
+             </item>
+            </layout>
            </widget>
-          </item>
-         </layout>
-        </widget>
+          </widget>
+         </item>
+        </layout>
        </widget>
       </widget>
       <widget class="QPlainTextEdit" name="Memo_Log">
@@ -236,6 +249,7 @@
      <string>File</string>
     </property>
     <addaction name="action_CreateYoutube"/>
+    <addaction name="separator"/>
     <addaction name="action_Exit"/>
    </widget>
    <widget class="QMenu" name="menu_Edit">
@@ -245,17 +259,24 @@
     <addaction name="action_Action_Cut"/>
     <addaction name="action_Action_Copy"/>
     <addaction name="action_Action_Paste"/>
+    <addaction name="separator"/>
    </widget>
    <widget class="QMenu" name="menu">
     <property name="title">
      <string>Настройка</string>
     </property>
     <addaction name="action_Setup"/>
+    <addaction name="separator"/>
    </widget>
    <widget class="QMenu" name="menu_Help">
     <property name="title">
      <string>Справка по программе</string>
     </property>
+    <property name="icon">
+     <iconset resource="YOUTUBE_images.qrc">
+      <normaloff>:/ICONS/info-xl.png</normaloff>:/ICONS/info-xl.png</iconset>
+    </property>
+    <addaction name="separator"/>
    </widget>
    <addaction name="menu_File"/>
    <addaction name="menu_Edit"/>
@@ -285,8 +306,9 @@
     <bool>true</bool>
    </property>
    <property name="icon">
-    <iconset>
-     <normaloff>icons8-обслуживание-48.png</normaloff>icons8-обслуживание-48.png</iconset>
+    <iconset resource="YOUTUBE_images.qrc">
+     <normaloff>:/ICONS/add-link-xl.png</normaloff>
+     <normalon>:/ICONS/add-link-xl.png</normalon>:/ICONS/add-link-xl.png</iconset>
    </property>
    <property name="text">
     <string>Создать Youtube</string>
@@ -301,7 +323,8 @@
    </property>
    <property name="icon">
     <iconset resource="YOUTUBE_images.qrc">
-     <normaloff>:/test/sign_out_32px.png</normaloff>:/test/sign_out_32px.png</iconset>
+     <normaloff>:/ICONS/exit-xl.png</normaloff>
+     <normalon>:/ICONS/exit-xl.png</normalon>:/ICONS/exit-xl.png</iconset>
    </property>
    <property name="text">
     <string>Выход</string>
@@ -311,11 +334,19 @@
    </property>
   </action>
   <action name="action_Action_Cut">
+   <property name="icon">
+    <iconset resource="YOUTUBE_images.qrc">
+     <normaloff>:/ICONS/cut-xl.png</normaloff>:/ICONS/cut-xl.png</iconset>
+   </property>
    <property name="text">
     <string>Action_Cut</string>
    </property>
   </action>
   <action name="action_Action_Copy">
+   <property name="icon">
+    <iconset resource="YOUTUBE_images.qrc">
+     <normaloff>:/ICONS/copy-xl.png</normaloff>:/ICONS/copy-xl.png</iconset>
+   </property>
    <property name="text">
     <string>Action_Copy</string>
    </property>
@@ -328,7 +359,7 @@
   <action name="action_Setup">
    <property name="icon">
     <iconset theme="applications-engineering">
-     <normalon>:/test/sign_out_32px.png</normalon>
+     <normalon>:/ICONS/settings-5-xl.png</normalon>
     </iconset>
    </property>
    <property name="text">
@@ -339,14 +370,6 @@
    </property>
   </action>
  </widget>
- <customwidgets>
-  <customwidget>
-   <class>YOUTUBEwidget</class>
-   <extends>QWidget</extends>
-   <header location="global">youtubewidget.h</header>
-   <container>1</container>
-  </customwidget>
- </customwidgets>
  <tabstops>
   <tabstop>ListViewL</tabstop>
   <tabstop>Memo_Log</tabstop>

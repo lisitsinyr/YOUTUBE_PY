@@ -1,6 +1,0 @@
-<RCC>
-    <qresource prefix="/test">
-        <file>icons8-обслуживание-48.png</file>
-        <file>sign_out_32px.png</file>
-    </qresource>
-</RCC>

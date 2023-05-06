@@ -1,3 +1,3 @@
 {
-    "files": ["YOUTUBE_test.py","YoutubeObject.py","YOUTUBE_images.qrc","YOUTUBE_FormMainWindow.py","YOUTUBE_FormMain.ui","YOUTUBEwidget.py","YOUTUBEwidget.ui"]
+    "files": ["YoutubeObject.py","YOUTUBE_images.qrc","YOUTUBE_widget.ui","YOUTUBE_FormMain.ui","YOUTUBE_test.py"]
 }
