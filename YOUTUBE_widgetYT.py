@@ -96,7 +96,7 @@ class YOUTUBEwidget(QWidget):
         self.ui.setupUi(self)
         self.FA = worker_YOUTUBE(None)
 
-        self.FA.moveToThread()
+        # self.FA.moveToThread()
 #endclass
 
 #------------------------------------------

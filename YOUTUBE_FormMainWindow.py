@@ -18,6 +18,7 @@
 import os
 import sys
 import time
+import datetime
 
 #------------------------------------------
 # БИБЛИОТЕКИ сторонние
@@ -63,8 +64,8 @@ import LUFile
 import LUProc
 import LUos
 import LUYouTube
-from LUObjectsYT import *
-# import LUThreadQ
+import LUObjectsYT
+import LUDateTime
 
 #------------------------------------------
 # БИБЛИОТЕКИ PROJECT
@@ -149,7 +150,7 @@ class FormMainWindow(QMainWindow):
         #endfor
         AWidget.clear()
     #endfunction
-    def __AddWidget (self, AWidget: list, AYouTubeObject: TYouTubeObject):
+    def __AddWidget (self, AWidget: list, AYouTubeObject: LUObjectsYT.TYouTubeObject):
     #beginfunction
         LULog.LoggerAPPS.info ('__AddWidget...')
         self.widget_X = YOUTUBEwidget(self.ui.scrollAreaWidgetContents)
@@ -171,9 +172,25 @@ class FormMainWindow(QMainWindow):
 
         # self.ui.verticalLayout_3.addWidget(self.widget_X, 0)
 
-        self.__FWidget.mo
-
         self.__FWidget.append(self.widget_X)
+
+        # for i in range(101):
+        #     self.widget_X.ui.YT_ProgressBar.setValue (i)
+        # #endfor
+        # self.start_thread()
+
+        LPATH = 'd:\\work'
+        try:
+            Lfilename_prefix = 'test'
+            Lfilename_prefix = ''
+            AYouTubeObject.StartYouTubeThread (LPATH, ADownload = True, Achunk = True,
+                                               filename_prefix = Lfilename_prefix)
+
+        except BaseException as ERROR:
+            s = 'Ошибка загрузки!'
+            LULog.LoggerAPPS.exception (s, exc_info = True, stack_info = True)
+        #endtry
+
     #endfunction
 
     def __ClearModel (self, Amodel: QStringListModel):
@@ -262,35 +279,35 @@ class FormMainWindow(QMainWindow):
         if "www.youtube.com" in last_copied or "youtu.be" in last_copied:
             LULog.LoggerAPPS.info (last_copied)
             self.__FClipboardList.append (last_copied)
-            # YOUTUBE
-            LYOUTUBE = LUYouTube.TYouTube ()
-            Llist = LYOUTUBE.CreateURLs (last_copied)
-            for item in Llist:
-                LYouTubeObject: TYouTubeObject = item
-                s = LYouTubeObject.URL
-                LULog.LoggerAPPS.info (s)
 
+            LURLs = dict ()
+            LURL = last_copied
+            LUObjectsYT.CheckURLs (LURL, LURLs)
+            for LURL, value in LURLs.items ():
+                s = 'CreateObject...'
+                LULog.LoggerTOOLS.log (LULog.PROCESS, s)
+                LULog.LoggerTOOLS.log (LULog.PROCESS, LURL)
                 # Добавить self.__Fmodel
-                self.__AddModel (self.__Fmodel, s)
+                self.__AddModel (self.__Fmodel, LURL)
+
+                # LYouTubeObject
+                LObjectID: datetime = LUDateTime.Now ()
+                s = LUDateTime.GenerateObjectIDStr (LObjectID)
+                LULog.LoggerTOOLS.log (LULog.PROCESS, s)
+                LYouTubeObject = LUObjectsYT.TYouTubeObject ()
+                LYouTubeObject.ID = LObjectID
+                LMaxRes = LUObjectsYT.cMaxRes1080p
+                LMaxRes = LUObjectsYT.cMaxRes480p
+                LYouTubeObject.SetURL (LURL, LMaxRes, value ['PlayListName'],value ['NN'], value ['N'])
+                # LYouTubeObject.FONcomplete = ONcomplete
+                # LYouTubeObject.FONprogress = ONprogress
+                # LYouTubeObject.FONcomplete = complete_func
+                # LYouTubeObject.FONprogress = progress_func
+                Lfilename_prefix = 'test'
+                Lfilename_prefix = ''
 
                 # Добавить self.__FWiget
                 self.__AddWidget (self.__FWidget, LYouTubeObject)
-
-                # for i in range(101):
-                #     self.widget_X.ui.YT_ProgressBar.setValue (i)
-                # #endfor
-
-                # self.start_thread()
-
-                try:
-                    LYouTubeObject.StartYouTubeQThread ('d:\\work',
-                                                       cMaxRes480p, type = 'video', file_extension = 'mp4')
-                    #,skip_existing = True
-                except BaseException as ERROR:
-                    s = 'Ошибка загрузки!'
-                    LULog.LoggerAPPS.exception (s, exc_info = True, stack_info = True)
-                #endtry
-
             #endfor
         #endif
     #endfunction
