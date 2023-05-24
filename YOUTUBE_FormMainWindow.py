@@ -23,14 +23,6 @@ import datetime
 #------------------------------------------
 # БИБЛИОТЕКИ сторонние
 #------------------------------------------
-# import PySide6.QtWidgets
-# import PySide6.QtGui
-# from PySide6.QtGui import QPalette, QColor
-# from PySide6.QtWidgets import QStyle
-# from PySide6.QtWidgets import QApplication, QMainWindow
-# from PySide6.QtUiTools import QUiLoader
-# from PySide6.QtCore import QFile, QIODevice
-
 from  PySide6 import QtCore
 
 from PySide6.QtCore import (QCoreApplication, QDate, QDateTime, QLocale,
@@ -53,9 +45,6 @@ from PySide6.QtWidgets import (
     QSizePolicy, QPushButton,
     QWidget, QLabel)
 
-import pytube
-import pytube.exceptions
-
 #------------------------------------------
 # БИБЛИОТЕКИ LU
 #------------------------------------------
@@ -63,7 +52,6 @@ import LULog
 import LUFile
 import LUProc
 import LUos
-import LUYouTube
 import LUObjectsYT
 import LUDateTime
 import LUStrUtils
@@ -94,20 +82,29 @@ class FormMainWindow(QMainWindow):
     """FormMainWindow"""
     luClassName = 'FormMainWindow'
 
+    #----------------------------------------------
+    # СИГНАЛ
+    #----------------------------------------------
     log_event = QtCore.Signal(str)
-    def signalHandlerlog_event(self, text):
+
+    #----------------------------------------------
+    # Коннектор - сюда приходит СИГНАЛ log_event
+    #----------------------------------------------
+    def signalHandler_log_event(self, text):
+        """signalHandler_log_event"""
     #beginfunction
+        s = 'signalHandler_log_event...'
         # print(text)
         self.P1.setText (text)
     #endfunction
 
     #----------------------------------------------
-    # Коннектор - сюда приходит signalHandlerCaptionText(str)
+    # Коннектор - сюда приходит СИГНАЛ
     #----------------------------------------------
-    def signalHandlerDownloadURL(self, text):
+    def signalHandler_DownloadURL(self, text):
+        """signalHandler_DownloadURL"""
     #beginfunction
-        s = 'signalHandlerDownloadURL...'
-        print(s)
+        s = 'signalHandler_DownloadURL...'
         # LULog.LoggerAPPS.debug (s)
         LURL = text
         # print(LURL)
@@ -130,30 +127,24 @@ class FormMainWindow(QMainWindow):
         super().__init__(parent)
         self.ui = Ui_FormMainWindow()
         self.ui.setupUi(self)
-        self.__FSaveCurrentDir: str = ''
         self.__FLogDir: str = ''
         self.__FStopYouTube: bool = True
-        self.__FFlagIdle: bool = True
+
+        self.idle = True
         # Состояние программы
         self.__FStatApplication: LUProc.TStatApplication = LUProc.TStatApplication.caTest
-        self.__FSaveStatApplication: LUProc.TStatApplication = LUProc.TStatApplication.caBreak
         # __FParams
         self.__FParams: YOUTUBE_Params.TParams = YOUTUBE_Params.TParams ()
         # self.APPLog = self.__FParams.FileMemoLog
 
         self.__FSheduler = None
+
         self.__FormCreate ()
         self.__FormActivate ()
 
-        self.idle = True
+        self.__FMaxThread: int = 5
 
-        self.timer = QtCore.QTimer ()
-        self.timer.setInterval (1)
-        # self.timer.timeout.connect (self.recurring_timer)
-        self.timer.timeout.connect (self.run_idle)
-        self.timer.start ()
-
-        self.log_event.connect(self.signalHandlerlog_event)
+        self.ui.TEST_widget.hide()
     #endfunction
 
     #--------------------------------------------------
@@ -168,260 +159,24 @@ class FormMainWindow(QMainWindow):
         #print (s)
     #endfunction
 
-    def recurring_timer(self):
-        """recurring_timer"""
+    def __SetColorGroup (self):
+        """__SetColorGroup"""
     #beginfunction
-        # self.counter +=1
-        # self.l.setText("Counter: %d" % self.counter)
-        print('test')
-        QCoreApplication.processEvents ()
-    #endfunction
-
-    def run_idle(self):
-    #beginfunction
-        self.idle = True
-        self.log_event.emit('running idle... ')
-        while self.idle:
-            time.sleep(0.00001)
-            # print ('test')
-            # self.P1.setText ('test')
-            QCoreApplication.processEvents ()
-        #endwhile
-    #endfunction
-    def process_single(self):
-    #beginfunction
-        self.log_event.emit('Processing item...')
-        self.run_idle()
-    #endfunction
-
-    #------------------------------------------
-    # Testfunction ():
-    #------------------------------------------
-    @staticmethod
-    def Testfunction ():
-        """Testfunction"""
-    #beginfunction
-        LULog.LoggerAPPS.info ('Testfunction...')
-    #endfunction
-
-    def __ClearWidgets (self):
-    #beginfunction
-        self.ui.TextEditR.hide ()
-        LULog.LoggerAPPS.debug ('__ClearWidgets...')
-        for i in reversed (range (self.ui.verticalLayout_3.count ())):
-            item = self.ui.verticalLayout_3.itemAt (i).widget ()
-            if type(item) is YOUTUBEwidget:
-                item.setParent (None)
-            #endif
-        #endfor
-        self.__FListWidgets.clear()
-    #endfunction
-    #--------------------------------------------------
-    # __DelListWidget
-    #--------------------------------------------------
-    def __DelListWidget (self, AURL: str):
-        """__DelListWidget"""
-    #beginfunction
-        # LULog.LoggerAPPS.debug ('__DelListWidget...')
-        for LItem in self.__FListWidgets:
-            Lwidget_X: YOUTUBEwidget = LItem
-            if Lwidget_X.FYouTubeObject.URL == AURL:
-                self.__FListWidgets.remove (Lwidget_X)
-                #-------------????????????????????----------------------
-                # i = self.ui.verticalLayout.indexOf (Lwidget_X)
-                # self.ui.verticalLayout.takeAt (i)
-                #----------------------------------------------------
-                Lwidget_X.deleteLater ()
-            #endif
-        #endfor
-    #endfunction
-    #--------------------------------------------------
-    # __GetListWidget
-    #--------------------------------------------------
-    def __GetListWidget (self, AURL: str) -> YOUTUBEwidget:
-        """__GetListWidget"""
-    #beginfunction
-        LResult = None
-        # LULog.LoggerAPPS.debug ('__GetListWidget...')
-        for LItem in self.__FListWidgets:
-            Lwidget_X: YOUTUBEwidget = LItem
-            if Lwidget_X.FYouTubeObject.URL == AURL:
-                return Lwidget_X
-            #endif
-        #endfor
-        return LResult
-    #endfunction
-    def __AddListWidget (self, AYouTubeObject: LUObjectsYT.TYouTubeObject) -> YOUTUBE_widgetYT.YOUTUBEwidget:
-    #beginfunction
-        LULog.LoggerAPPS.debug ('__AddWidget...')
-        LMaxRes = LUObjectsYT.cMaxRes480p
-        Lwidget_X = YOUTUBEwidget(AYouTubeObject, LMaxRes, self.ui.scrollAreaWidgetContents)
-        # сигналы
-        Lwidget_X.SDownloadURL.connect (self.signalHandlerDownloadURL)
-        self.ui.verticalLayout_3.insertWidget (0, Lwidget_X)
-        # self.ui.verticalLayout_3.addWidget(self.widget_X, 0)
-        self.__FListWidgets.append(Lwidget_X)
-        return Lwidget_X
-    #endfunction
-
-    def __ClearListYouTubeObject (self):
-    #beginfunction
-        LULog.LoggerAPPS.debug ('__ClearListYouTubeObject...')
-        self.__FListYouTubeObject.clear()
-    #endfunction
-    #--------------------------------------------------
-    # __DelListYouTubeObject
-    #--------------------------------------------------
-    def __DelListYouTubeObject (self, AURL: str):
-        """__DelListYouTubeObject"""
-    #beginfunction
-        # LULog.LoggerAPPS.debug ('__DelListYouTubeObject...')
-        for LItem in self.__FListYouTubeObject:
-            LYouTubeObject:LUObjectsYT.TYouTubeObject = LItem
-            if LYouTubeObject.URL == AURL:
-                self.__FListYouTubeObject.remove (LYouTubeObject)
-            #endif
-        #endfor
-    #endfunction
-    #--------------------------------------------------
-    # __GetListYouTubeObject
-    #--------------------------------------------------
-    def __GetListYouTubeObject (self, AURL: str) -> LUObjectsYT.TYouTubeObject:
-        """__GetListYouTubeObject"""
-    #beginfunction
-        LResult = None
-        # LULog.LoggerAPPS.debug ('__GetListYouTubeObject...')
-        for LItem in self.__FListYouTubeObject:
-            LYouTubeObject: LUObjectsYT.TYouTubeObject = LItem
-            if LYouTubeObject.URL == AURL:
-                return LYouTubeObject
-            #endif
-        #endfor
-        return LResult
-    #endfunction
-
-    def __AddListYouTubeObject (self, AURL: str, value: dict) -> LUObjectsYT.TYouTubeObject:
-    #beginfunction
-        LULog.LoggerAPPS.debug ('__AddListYouTubeObject...')
-        # LYouTubeObject
-        LObjectID: datetime = LUDateTime.Now ()
-        s = LUDateTime.GenerateObjectIDStr (LObjectID)
-        # LULog.LoggerTOOLS.log (LULog.PROCESS, s)
-        LYouTubeObject = LUObjectsYT.TYouTubeObject ()
-        LYouTubeObject.ID = LObjectID
-        LMaxRes = LUObjectsYT.cMaxRes480p
-        LYouTubeObject.SetURL (AURL, LMaxRes, value ['PlayListName'], value ['NN'], value ['N'])
-        # LYouTubeObject.FONprogress = LUObjectsYT.progress_func
-        # LYouTubeObject.FONcomplete = self.__ONcomplete
-        self.__FListYouTubeObject.append(LYouTubeObject)
-        return LYouTubeObject
-    #endfunction
-
-    def __ClearModel (self):
-    #beginfunction
-        LULog.LoggerAPPS.debug ('__ClearModel...')
-        # Вы можете либо использовать model.setStringList( QStringList{} )
-        # либо вручную удалить строки с помощью model.removeRows( 0, model.rowCount() ).
-        self.__FModel.removeRows (0, self.__FModel.rowCount())
-        # self.__FModel.setStringList (())
-
-        # for i in reversed(range(Amodelmodel.rowCount ())):
-        #     # self.__FModel.removeRow (i)
-        #     self.__FModel.removeRows (self.ui.ListViewL.currentIndex().row(), 1)
-        # #enfor
-    #endfunction
-    def __AddModel (self, AURL: str):
-    #beginfunction
-        LULog.LoggerAPPS.debug ('__AddModel...')
-        Lindex = self.__FModel.rowCount ()
-        self.__FModel.insertRow (Lindex)
-        self.__FModel.setData (self.__FModel.index (Lindex), AURL)
-    #endfunction
-    #--------------------------------------------------
-    # __DelModel
-    #--------------------------------------------------
-    def __DelModel (self, AURL: str):
-        """__DelModel"""
-    #beginfunction
-        # LULog.LoggerAPPS.debug ('__DelModel...')
-        for i in reversed (range (self.__FModel.rowCount ())):
-            # print (self.__FModel.stringList()[i])
-            if self.__FModel.stringList()[i] == AURL:
-                self.__FModel.removeRow (i)
-                break
-            #endif
-        #enfor
-    #endfunction
-    #--------------------------------------------------
-    # __GetModel
-    #--------------------------------------------------
-    def __GetModel (self, AURL: str) -> str:
-        """__GetModel"""
-    #beginfunction
-        LResult = ''
-        # LULog.LoggerAPPS.debug ('__GetModel...')
-        for i in reversed (range (self.__FModel.rowCount ())):
-            # print (self.__FModel.stringList()[i])
-            if self.__FModel.stringList()[i] == AURL:
-                return self.__FModel.stringList()[i]
-            #endif
-        #enfor
-        return LResult
+        LULog.LoggerAPPS.debug ('__SetColorGroup...')
+        Lpalette = self.ui.Memo_Log.palette ()
+        Lpalette.setCurrentColorGroup (QPalette.Normal)
+        Lpalette.setColorGroup (QPalette.Disabled,
+                               Lpalette.windowText (), Lpalette.button (),
+                               Lpalette.light (), Lpalette.dark (), Lpalette.mid (),
+                               Lpalette.text (), Lpalette.brightText (),
+                               Lpalette.base (), Lpalette.window (),
+                               )
+        self.ui.Memo_Log.setPalette (Lpalette)
     #endfunction
 
     #--------------------------------------------------
-    # 05.__SetListViewL
+    # 01.__SetStylesheetsFor_ALL
     #--------------------------------------------------
-    def __SetListViewL (self):
-        """__SetListViewL"""
-    #beginfunction
-        LULog.LoggerAPPS.info ('05.__SetListViewL...')
-
-        self.__FModel = QStringListModel ()
-
-        # self.__FModel = QStringListModel ([
-        #     "An element", "Another element", "Yay! Another one.", '????????????'
-        # ])
-        self.ui.ListViewL.setModel (self.__FModel)
-        # self.__FModel.setStringList(['!!!!!!!!!!!!!!'])
-
-        # self.ui.ListViewL.setViewMode (QListView.IconMode)
-        # self.ui.ListViewL.setMovement (QListView.Static)
-        # self.ui.ListViewL.setIconSize (QSize (64, 64))
-
-        self.__ClearModel ()
-    #endfunction
-
-    #--------------------------------------------------
-    # 06.__SetScrollAreaR
-    #--------------------------------------------------
-    def __SetScrollAreaR (self):
-        """__SetScrollAreaR"""
-    #beginfunction
-        LULog.LoggerAPPS.info ('06.__SetScrollAreaR...')
-        self.__FListWidgets = list()
-        self.ui.TextEditR.setText ('self.ui.TextEditR.setText')
-        # self.ui.textEdit1 = QTextEdit(self.ui.scrollAreaWidgetContents)
-        # self.ui.textEdit1.setObjectName(u"textEdit1")
-        # self.ui.textEdit1.hide()
-        # self.ui.textEdit1.setEnabled(False)
-        # self.ui.textEdit1.setText('self.ui.textEdit1')
-        # self.ui.verticalLayout_3.addWidget (self.ui.textEdit1)
-        # self.ui.verticalLayout_3.addStretch()
-        self.__ClearWidgets()
-    #endfunction
-
-    #--------------------------------------------------
-    # 07.__SetListYouTubeObject
-    #--------------------------------------------------
-    def __SetListYouTubeObject (self):
-        """__SetListYouTubeObject"""
-    #beginfunction
-        LULog.LoggerAPPS.info ('07.__SetListYouTubeObject...')
-        self.__FListYouTubeObject = list()
-        self.__ClearListYouTubeObject()
-    #endfunction
-
     def __SetStylesheetsFor_ALL (self):
         """__SetStylesheetsFor_ALL"""
     #beginfunction
@@ -443,7 +198,9 @@ class FormMainWindow(QMainWindow):
             """
         self.setStyleSheet (self.style_light)
     #endfunction
-
+    #--------------------------------------------------
+    # 01.__SetColorFor_Memo_Log
+    #--------------------------------------------------
     def __SetColorFor_Memo_Log (self):
         """__SetupColorFor_Memo_Log"""
     #beginfunction
@@ -470,7 +227,9 @@ class FormMainWindow(QMainWindow):
         palette_background.setColor (br, bc)
         self.ui.Memo_Log.setPalette (palette_background)
     #endfunction
-
+    #--------------------------------------------
+    # 01.__SetStylesheetsFor_Memo_Log
+    #--------------------------------------------
     def __SetStylesheetsFor_Memo_Log (self):
         """__SetupStylesheetsFor_Memo_Log"""
     #beginfunction
@@ -488,22 +247,6 @@ class FormMainWindow(QMainWindow):
         ss = 'color: rgba(0, 0, 0, .5); background-color: rgb(157, 157, 157); font-weight: bold; font-size: 10px; font: 10pt "Courier New"'
         self.ui.Memo_Log.setStyleSheet (ss)
     #endfunction
-
-    def __SetColorGroup (self):
-        """__SetColorGroup"""
-    #beginfunction
-        LULog.LoggerAPPS.debug ('__SetColorGroup...')
-        Lpalette = self.ui.Memo_Log.palette ()
-        Lpalette.setCurrentColorGroup (QPalette.Normal)
-        Lpalette.setColorGroup (QPalette.Disabled,
-                               Lpalette.windowText (), Lpalette.button (),
-                               Lpalette.light (), Lpalette.dark (), Lpalette.mid (),
-                               Lpalette.text (), Lpalette.brightText (),
-                               Lpalette.base (), Lpalette.window (),
-                               )
-        self.ui.Memo_Log.setPalette (Lpalette)
-    #endfunction
-
     #--------------------------------------------------
     # 01.__SetLogs
     #--------------------------------------------------
@@ -584,92 +327,6 @@ class FormMainWindow(QMainWindow):
         # end
     #endfunction
 
-    def __CliboardJob (self, AText: str):
-    #beginfunction
-        LULog.LoggerAPPS.debug ('__CliboardJob...')
-        if self.Flast_copied != AText:
-            self.Flast_copied = AText
-            if "www.youtube.com" in self.Flast_copied or "youtu.be" in self.Flast_copied:
-                # LULog.LoggerAPPS.info (self.Flast_copied)
-                self.__FClipboardList.append (self.Flast_copied)
-                LURLs = dict ()
-                LURL = self.Flast_copied
-                LUObjectsYT.CheckURLs (LURL, LURLs)
-                for LURL, Lvalue in LURLs.items ():
-                    QCoreApplication.processEvents ()
-                    s = 'CreateObject...'
-                    # LULog.LoggerTOOLS.log (LULog.PROCESS, s)
-                    LULog.LoggerTOOLS.log (LULog.PROCESS, LURL)
-                    if self.__GetListYouTubeObject(LURL) is None:
-                        # Добавить LURL в self.__FListYouTubeObject
-                        LYouTubeObject = self.__AddListYouTubeObject (LURL, Lvalue)
-                        # Добавить LURL в self.__FModel
-                        self.__AddModel (LURL)
-                        # Добавить виджет в self.__FWidgets
-                        Lwidget_X = self.__AddListWidget (LYouTubeObject)
-
-                        Lwidget_X.run()
-                    else:
-                        # # s = self.__GetModel(LURL)
-                        # self.__DelModel (LURL)
-                        # # s = self.__GetListWidget(LURL)
-                        # self.__DelListWidget (LURL)
-                        # self.__DelListYouTubeObject (LURL)
-                        ...
-                    #endif
-                #endfor
-            #endif
-        #endif
-    #endfunction
-
-    def cliboard_changed(self, mode):
-    #beginfunction
-        # LULog.LoggerAPPS.info ('cliboard_changed...')
-        ...
-    #endfunction
-    def cliboard_findBufferChanged (self):
-    #beginfunction
-        # LULog.LoggerAPPS.info ('cliboard_findBufferChanged...')
-        ...
-    #endfunction
-    def cliboard_selectionChanged (self):
-    #beginfunction
-        # LULog.LoggerAPPS.info ('cliboard_selectionChanged...')
-        ...
-    #endfunction
-    def cliboard_dataChanged(self):
-    #beginfunction
-        # LULog.LoggerAPPS.debug ('cliboard_dataChanged...')
-        mimeData = self.__FClipboard.mimeData()
-        if mimeData.hasImage():
-            # LULog.LoggerAPPS.info (' '*4+'mimeData.hasImage...')
-            # setPixmap(QPixmap(mimeData.imageData()))
-            ...
-        elif mimeData.hasHtml():
-            # LULog.LoggerAPPS.info (' '*4+'mimeData.hasHtml...')
-            # setText(mimeData.html())
-            # setTextFormat(Qt.RichText)
-            ...
-        elif mimeData.hasText():
-            # LULog.LoggerAPPS.info (' '*4+'mimeData.hasText...')
-            # setText(mimeData.text())
-            # setTextFormat(Qt.PlainText)
-
-            # LText = self.__FClipboard.text ()
-            LText = mimeData.text()
-
-            # self.ui.Memo_Log.insertPlainText (LText + '\n')
-            LULog.LoggerAPPS.debug (LText)
-            self.__CliboardJob (LText)
-        else:
-            LULog.LoggerAPPS.info (' '*4+'Cannot display data...')
-            # QClipboard.Mode.Clipboard - указывает, что данные должны сохраняться и извлекаться из глобального буфера обмена.
-            # QClipboard.Selection - ?????
-            # QClipboard.FindBuffer - ?????
-            # setText("Cannot display data", mode=QClipboard.Mode.Clipboard)
-        #endif
-    #endfunction
-
     #--------------------------------------------------
     # 04.__SetClipboard
     #--------------------------------------------------
@@ -687,18 +344,116 @@ class FormMainWindow(QMainWindow):
         self.Flast_copied = ''
     #endfunction
 
+    #--------------------------------------------------
+    # 05.__SetListViewL
+    #--------------------------------------------------
+    def __SetListViewL (self):
+        """__SetListViewL"""
+    #beginfunction
+        LULog.LoggerAPPS.info ('05.__SetListViewL...')
+
+        self.__FModel = QStringListModel ()
+
+        # self.__FModel = QStringListModel ([
+        #     "An element", "Another element", "Yay! Another one.", '????????????'
+        # ])
+        self.ui.ListViewL.setModel (self.__FModel)
+        # self.__FModel.setStringList(['!!!!!!!!!!!!!!'])
+
+        # self.ui.ListViewL.setViewMode (QListView.IconMode)
+        # self.ui.ListViewL.setMovement (QListView.Static)
+        # self.ui.ListViewL.setIconSize (QSize (64, 64))
+
+        self.__ClearModel ()
+    #endfunction
+
+    #--------------------------------------------------
+    # 06.__SetScrollAreaR
+    #--------------------------------------------------
+    def __SetScrollAreaR (self):
+        """__SetScrollAreaR"""
+        def LoadFile(AFileName: str) -> str:
+        #beginfunction
+            if AFileName:
+                Lfile = QtCore.QFile (AFileName)
+                if Lfile.open (QtCore.QIODevice.ReadOnly):
+                    Lstream = QtCore.QTextStream (Lfile)
+                    LText = Lstream.readAll ()
+                    # info = QtCore.QFileInfo (AFileName)
+                    # if info.completeSuffix () == 'html':
+                    #     self.editor_text.setHtml (text)
+                    # else:
+                    #     self.editor_text.setPlainText (text)
+                    # #endif
+                    Lfile.close ()
+                    return LText
+                #endif
+            #endif
+        #endfunction
+
+    #beginfunction
+        LULog.LoggerAPPS.info ('06.__SetScrollAreaR...')
+        self.__FListWidgets = list()
+
+        LFileName = os.path.join (LUos.GetCurrentDir(), 'YOUTUBE.txt')
+
+        # self.ui.TextEditR.setText ('self.ui.TextEditR.setText')
+        self.ui.TextEditR.setText (LoadFile (LFileName))
+        # self.ui.TextEditR.insertPlainText(LoadFile (LFileName))
+        self.ui.TextEditR.setSizePolicy (QSizePolicy.Expanding, QSizePolicy.Expanding)
+
+        # self.__AQMimeData = QtCore.QMimeData()
+        # self.ui.TextEditR.insertFromMimeData ('self.ui.TextEditR.setText')
+
+        self.__ClearWidgets()
+    #endfunction
+
+    #--------------------------------------------------
+    # 07.__SetListYouTubeObject
+    #--------------------------------------------------
+    def __SetListYouTubeObject (self):
+        """__SetListYouTubeObject"""
+    #beginfunction
+        LULog.LoggerAPPS.info ('07.__SetListYouTubeObject...')
+        self.__FListYouTubeObject = list()
+        self.__ClearListYouTubeObject()
+    #endfunction
+    #--------------------------------------------------
+    # 08.__SetTimer
+    #--------------------------------------------------
+    def __SetTimer (self):
+        """__SetTimer"""
+    #beginfunction
+        LULog.LoggerAPPS.info ('08.__SetTimer...')
+        self.timer = QtCore.QTimer ()
+        self.timer.setInterval (1)
+        # self.timer.timeout.connect (self.recurring_timer)
+        self.timer.timeout.connect (self.__run_idle)
+        self.timer.start ()
+        self.log_event.connect (self.signalHandler_log_event)
+    #endfunction
+
     def __FormCreate (self):
         """__FormCreate"""
     #beginfunction
         LULog.LoggerAPPS.info ('__FormCreate...')
         self.setWindowTitle(YOUTUBE_Consts.cProjectNAME)
+        # 01.__SetLogs
         self.__SetLogs ()
+        # 02.__SetStatusBar_P1_P2
         self.__SetStatusBar_P1_P2()
+        # 03.__SetSheduler
         self.__SetSheduler()
+        # 04.__SetClipboard
         self.__SetClipboard()
+        # 05.__SetListViewL
         self.__SetListViewL()
+        # 06.__SetScrollAreaR
         self.__SetScrollAreaR()
+        # 07.__SetListYouTubeObject
         self.__SetListYouTubeObject()
+        # 08.__SetTimer
+        self.__SetTimer()
         #----------------- VersionInfo --------------------------
         # VersionInfo = CreateVersion (ParamStr(0))
         # LULog.LoggerAPPS.log (LULog.TEXT, ParamStr (0) + ' ' + VersionInfo.FileVersion+ ' ' + VersionInfo.FileDate)
@@ -720,11 +475,9 @@ class FormMainWindow(QMainWindow):
     def __FormDestroy (self):
         """__FormDestroy"""
     #beginfunction
-        self.__FormClose (LUProc.TStatApplication.caFree)
-        ...
+        self.__FormClose ()
     #endfunction
 
-    # TFormMain.FormActivate
     def __FormActivate (self):
         """__FormActivate"""
     #beginfunction
@@ -733,10 +486,11 @@ class FormMainWindow(QMainWindow):
         LULog.LoggerAPPS.log (LULog.TEXT, self.__FParams.FileNameINI)
     #endfunction
 
-    def __FormClose (self, Action):
+    def __FormClose (self):
         """__FormClose"""
     #beginfunction
-        # Action = caFree
+        # RuntimeError: Internal C++ object (FormMainWindow) already deleted.
+        # self.close()
         ...
     #endfunction
 
@@ -781,70 +535,281 @@ class FormMainWindow(QMainWindow):
         # StatusBar_P1_P2.Panels[1].Text = ''
     #endfunction
 
-    # TFormMain.ActionStartExecute
-
-    def __Action_StartExecute (self):
+    def cliboard_changed(self, mode):
     #beginfunction
-        LSaveCurrentDir = LUos.GetCurrentDir()
-        self.__SetStatApplication (LUProc.TStatApplication.caMain)
-        self.__Main()
-        self.__SetStatApplication (LUProc.TStatApplication.caSheduler)
-        os.chdir(LSaveCurrentDir)
+        s = 'cliboard_changed...'
+        # LULog.LoggerAPPS.info (s)
+        ...
     #endfunction
-
-    # TFormMain.ActionExitExecute
-    def __Action_ExitExecute (self):
+    def cliboard_findBufferChanged (self):
     #beginfunction
-        self.C
+        s = 'cliboard_findBufferChanged...'
+        # LULog.LoggerAPPS.info (s)
+        ...
     #endfunction
-
-    # TFormMain.ActionSetupExecute
-    def __Action_SetupExecute (self):
+    def cliboard_selectionChanged (self):
     #beginfunction
-        LSaveCurrentDir = LUos.GetCurrentDir()
-        LSaveStatApplication = self.__FStatApplication
-        self.__SetStatApplication (LUProc.TStatApplication.caSetup)
-        # if ExecSetup = mrOk then
-        #    FSheduler.DeleteEvent (ShedulerName)
-        #    FSheduler.AddEvent (ShedulerName, TEMPLATE_RegIni.ShedulerTEMPLATE)
-        # end
-        self.__SetStatApplication (LSaveStatApplication)
-        os.chdir(LSaveCurrentDir)
-    #endfunction
-
-    # TFormMain.ActionStopExecute
-    def __Action_StopExecute (self, Sender):
-    #beginfunction
-        self.__SetStatApplication (LUProc.TStatApplication.caBreak)
-    #endfunction
-
-    # TFormMain.ActionAboutExecute
-    def __Action_AboutExecute (self, Sender):
-    #beginfunction
-        LSaveStatApplication = self.__FStatApplication
-        self.__SetStatApplication (LUProc.TStatApplication.caAbout)
-        # ExecAbout
-        self.__SetStatApplication (LSaveStatApplication)
-    #endfunction
-
-    def __Action_CreateObjectExecute (self, Sender):
-    #beginfunction
+        s = 'cliboard_selectionChanged...'
+        # LULog.LoggerAPPS.info (s)
         ...
     #endfunction
 
-    # TFormMain.ActionHelpExecute
-    def __Action_HelpExecute (self, Sender):
+    def cliboard_dataChanged(self):
     #beginfunction
-        # Application.HelpContext (6)
-        ...
+        s = 'cliboard_dataChanged...'
+        # LULog.LoggerAPPS.debug (s)
+        mimeData = self.__FClipboard.mimeData()
+        if mimeData.hasImage():
+            s = ' '*4+'mimeData.hasImage...'
+            # LULog.LoggerAPPS.info (s)
+            # setPixmap(QPixmap(mimeData.imageData()))
+        elif mimeData.hasHtml():
+            s = ' '*4+'mimeData.hasHtml...'
+            # LULog.LoggerAPPS.info (s)
+            # setText(mimeData.html())
+            # setTextFormat(Qt.RichText)
+        elif mimeData.hasText():
+            s = ' '*4+'mimeData.hasText...'
+            # LULog.LoggerAPPS.info (s)
+            # setText(mimeData.text())
+            # setTextFormat(Qt.PlainText)
+
+            # LText = self.__FClipboard.text ()
+            LText: str = mimeData.text()
+            # self.ui.Memo_Log.insertPlainText (LText + '\n')
+            # LULog.LoggerAPPS.debug (LText)
+            self.__Action_CreateObjectExecute (LText)
+        else:
+            s = ' '*4+'Cannot display data...'
+            LULog.LoggerAPPS.info (s)
+            # QClipboard.Mode.Clipboard - указывает, что данные должны сохраняться и извлекаться из глобального буфера обмена.
+            # QClipboard.Selection - ?????
+            # QClipboard.FindBuffer - ?????
+            # setText("Cannot display data", mode=QClipboard.Mode.Clipboard)
+        #endif
     #endfunction
 
-    def __Action_PasteExecute (self, Sender):
+    def __ClearWidgets (self):
     #beginfunction
-        ...
+        s = '__ClearWidgets...'
+        # LULog.LoggerAPPS.debug (s)
+        for i in reversed (range (self.ui.verticalLayout_3.count ())):
+            item = self.ui.verticalLayout_3.itemAt (i).widget ()
+            if type(item) is YOUTUBEwidget:
+                item.setParent (None)
+            #endif
+        #endfor
+        self.__FListWidgets.clear()
+    #endfunction
+    #--------------------------------------------------
+    # __DelListWidget
+    #--------------------------------------------------
+    def __DelListWidget (self, AURL: str):
+        """__DelListWidget"""
+    #beginfunction
+        s = '__DelListWidget...'
+        # LULog.LoggerAPPS.debug (s)
+        for LItem in self.__FListWidgets:
+            Lwidget_X: YOUTUBEwidget = LItem
+            if Lwidget_X.FYouTubeObject.URL == AURL:
+                self.__FListWidgets.remove (Lwidget_X)
+                #-------------????????????????????----------------------
+                # i = self.ui.verticalLayout.indexOf (Lwidget_X)
+                # self.ui.verticalLayout.takeAt (i)
+                #----------------------------------------------------
+                Lwidget_X.deleteLater ()
+            #endif
+        #endfor
+    #endfunction
+    #--------------------------------------------------
+    # __GetListWidget
+    #--------------------------------------------------
+    def __GetListWidget (self, AURL: str) -> YOUTUBEwidget:
+        """__GetListWidget"""
+    #beginfunction
+        s = '__GetListWidget...'
+        # LULog.LoggerAPPS.debug (s)
+        LResult = None
+        for LItem in self.__FListWidgets:
+            Lwidget_X: YOUTUBEwidget = LItem
+            if Lwidget_X.FYouTubeObject.URL == AURL:
+                return Lwidget_X
+            #endif
+        #endfor
+        return LResult
+    #endfunction
+    #--------------------------------------------------
+    # __GetListWidgetStat
+    #--------------------------------------------------
+    def __GetListWidgetStat (self, AStatWidget: YOUTUBE_widgetYT.TStatWidget) -> YOUTUBEwidget:
+        """__GetListWidget"""
+    #beginfunction
+        s  = '__GetListWidget...'
+        # LULog.LoggerAPPS.debug (s)
+        LResult = None
+        for LItem in self.__FListWidgets:
+            Lwidget_X: YOUTUBEwidget = LItem
+            if Lwidget_X.FStatWidget.value == AStatWidget.value:
+                return Lwidget_X
+            #endif
+        #endfor
+        return LResult
+    #endfunction
+    #--------------------------------------------------
+    # __GetListWidgetCount
+    #--------------------------------------------------
+    def __GetListWidgetCount (self, AStatWidget: YOUTUBE_widgetYT.TStatWidget) -> int:
+        """__GetListWidgetCount"""
+    #beginfunction
+        s = '__GetListWidgetCount...'
+        # LULog.LoggerAPPS.debug (s)
+        LResult = 0
+        for LItem in self.__FListWidgets:
+            Lwidget_X: YOUTUBEwidget = LItem
+            if Lwidget_X.FStatWidget.value == AStatWidget.value:
+                LResult = LResult + 1
+            #endif
+        #endfor
+        return LResult
+    #endfunction
+    def __AddListWidget (self, AYouTubeObject: LUObjectsYT.TYouTubeObject) -> YOUTUBE_widgetYT.YOUTUBEwidget:
+    #beginfunction
+        s = '__AddWidget...'
+        # LULog.LoggerAPPS.debug (s)
+        LMaxRes = LUObjectsYT.cMaxRes480p
+        Lwidget_X = YOUTUBEwidget(AYouTubeObject, LMaxRes, self.ui.scrollAreaWidgetContents)
+        Lwidget_X.FStatWidget = YOUTUBE_widgetYT.TStatWidget.swNew
+        # сигналы
+        Lwidget_X.SDownloadURL.connect (self.signalHandler_DownloadURL)
+        self.ui.verticalLayout_3.insertWidget (0, Lwidget_X)
+        # self.ui.verticalLayout_3.addWidget(Lwidget_X, stretch = 0)
+
+        # self.__FListWidgets.append(Lwidget_X)
+        self.__FListWidgets.insert(0, Lwidget_X)
+        return Lwidget_X
     #endfunction
 
-    # TFormMain.Procedure_01
+    def __ClearListYouTubeObject (self):
+    #beginfunction
+        s = '__ClearListYouTubeObject...'
+        # LULog.LoggerAPPS.debug (s)
+        self.__FListYouTubeObject.clear()
+    #endfunction
+    #--------------------------------------------------
+    # __DelListYouTubeObject
+    #--------------------------------------------------
+    def __DelListYouTubeObject (self, AURL: str):
+        """__DelListYouTubeObject"""
+    #beginfunction
+        s = '__DelListYouTubeObject...'
+        # LULog.LoggerAPPS.debug (s)
+        for LItem in self.__FListYouTubeObject:
+            LYouTubeObject:LUObjectsYT.TYouTubeObject = LItem
+            if LYouTubeObject.URL == AURL:
+                self.__FListYouTubeObject.remove (LYouTubeObject)
+            #endif
+        #endfor
+    #endfunction
+    #--------------------------------------------------
+    # __GetListYouTubeObject
+    #--------------------------------------------------
+    def __GetListYouTubeObject (self, AURL: str) -> LUObjectsYT.TYouTubeObject:
+        """__GetListYouTubeObject"""
+    #beginfunction
+        LResult = None
+        s = '__GetListYouTubeObject...'
+        # LULog.LoggerAPPS.debug (s)
+        for LItem in self.__FListYouTubeObject:
+            LYouTubeObject: LUObjectsYT.TYouTubeObject = LItem
+            if LYouTubeObject.URL == AURL:
+                return LYouTubeObject
+            #endif
+        #endfor
+        return LResult
+    #endfunction
+    def __AddListYouTubeObject (self, AURL: str, value: dict) -> LUObjectsYT.TYouTubeObject:
+    #beginfunction
+        s = '__AddListYouTubeObject...'
+        # LULog.LoggerAPPS.debug (s)
+        # LYouTubeObject
+        LObjectID: datetime = LUDateTime.Now ()
+        s = LUDateTime.GenerateObjectIDStr (LObjectID)
+        # LULog.LoggerTOOLS.log (LULog.PROCESS, s)
+        LYouTubeObject = LUObjectsYT.TYouTubeObject ()
+        LYouTubeObject.ID = LObjectID
+        LMaxRes = LUObjectsYT.cMaxRes480p
+        LYouTubeObject.SetURL (AURL, LMaxRes, value ['PlayListName'], value ['NN'], value ['N'])
+        self.__FListYouTubeObject.append(LYouTubeObject)
+        return LYouTubeObject
+    #endfunction
+
+    def __ClearModel (self):
+    #beginfunction
+        s = '__ClearModel...'
+        # LULog.LoggerAPPS.debug (s)
+        # Вы можете либо использовать model.setStringList( QStringList{} )
+        # либо вручную удалить строки с помощью model.removeRows( 0, model.rowCount() ).
+        self.__FModel.removeRows (0, self.__FModel.rowCount())
+        # self.__FModel.setStringList (())
+
+        # for i in reversed(range(Amodelmodel.rowCount ())):
+        #     # self.__FModel.removeRow (i)
+        #     self.__FModel.removeRows (self.ui.ListViewL.currentIndex().row(), 1)
+        # #enfor
+    #endfunction
+    def __AddModel (self, AURL: str):
+    #beginfunction
+        s = '__AddModel...'
+        # LULog.LoggerAPPS.debug (s)
+        Lindex = self.__FModel.rowCount ()
+        self.__FModel.insertRow (Lindex)
+        self.__FModel.setData (self.__FModel.index (Lindex), AURL)
+    #endfunction
+    #--------------------------------------------------
+    # __DelModel
+    #--------------------------------------------------
+    def __DelModel (self, AURL: str):
+        """__DelModel"""
+    #beginfunction
+        s = '__DelModel...'
+        # LULog.LoggerAPPS.debug (s)
+        for i in reversed (range (self.__FModel.rowCount ())):
+            # print (self.__FModel.stringList()[i])
+            if self.__FModel.stringList()[i] == AURL:
+                self.__FModel.removeRow (i)
+                break
+            #endif
+        #enfor
+    #endfunction
+    #--------------------------------------------------
+    # __GetModel
+    #--------------------------------------------------
+    def __GetModel (self, AURL: str) -> str:
+        """__GetModel"""
+    #beginfunction
+        s = '__GetModel...'
+        # LULog.LoggerAPPS.debug (s)
+        LResult = ''
+        for i in reversed (range (self.__FModel.rowCount ())):
+            # print (self.__FModel.stringList()[i])
+            if self.__FModel.stringList()[i] == AURL:
+                return self.__FModel.stringList()[i]
+            #endif
+        #enfor
+        return LResult
+    #endfunction
+
+    #------------------------------------------
+    # Testfunction ():
+    #------------------------------------------
+    @staticmethod
+    def Testfunction ():
+        """Testfunction"""
+    #beginfunction
+        s = 'Testfunction...'
+        LULog.LoggerAPPS.info (s)
+    #endfunction
+
     def __Procedure_01(self):
     #beginfunction
         ...
@@ -858,7 +823,7 @@ class FormMainWindow(QMainWindow):
         # --------------------------------------------------
         # FSheduler.DeleteEvent (ShedulerName)
         # FSheduler.AddEvent (ShedulerName, TEMPLATE_RegIni.ShedulerTEMPLATE)
-
+        # --------------------------------------------------
         if self.Params.Stop:
             self.__Procedure_01()
         #endif
@@ -866,6 +831,199 @@ class FormMainWindow(QMainWindow):
         LULog.LoggerAPPS.log( LULog.BEGIN, LUProc.cProcessEnd)
         os.chdir(LSaveCurrentDir)
     #endfunction
+
+    def __Action_StartExecute (self):
+    #beginfunction
+        LSaveStatApplication = self.__FStatApplication
+        LSaveCurrentDir = LUos.GetCurrentDir()
+        self.__SetStatApplication (LUProc.TStatApplication.caMain)
+        self.__Main()
+        os.chdir(LSaveCurrentDir)
+        self.__SetStatApplication (LSaveStatApplication)
+    #endfunction
+
+    def __Action_ExitExecute (self):
+    #beginfunction
+        ...
+    #endfunction
+
+    def __Action_SetupExecute (self):
+    #beginfunction
+        LSaveStatApplication = self.__FStatApplication
+        LSaveCurrentDir = LUos.GetCurrentDir()
+        self.__SetStatApplication (LUProc.TStatApplication.caSetup)
+        # if ExecSetup = mrOk then
+        #    FSheduler.DeleteEvent (ShedulerName)
+        #    FSheduler.AddEvent (ShedulerName, TEMPLATE_RegIni.ShedulerTEMPLATE)
+        # end
+        os.chdir(LSaveCurrentDir)
+        self.__SetStatApplication (LSaveStatApplication)
+    #endfunction
+
+    def __Action_StopExecute (self, Sender):
+    #beginfunction
+        self.__SetStatApplication (LUProc.TStatApplication.caBreak)
+    #endfunction
+
+    def __Action_AboutExecute (self, Sender):
+    #beginfunction
+        LSaveStatApplication = self.__FStatApplication
+        self.__SetStatApplication (LUProc.TStatApplication.caAbout)
+        # ExecAbout
+        self.__SetStatApplication (LSaveStatApplication)
+    #endfunction
+
+    def __Action_CreateObjectExecute (self, AText: str):
+    #beginfunction
+        LSaveStatApplication = self.__FStatApplication
+        self.__SetStatApplication (LUProc.TStatApplication.caAddWidget)
+        if self.Flast_copied != AText:
+            self.Flast_copied = AText
+            if "www.youtube.com" in self.Flast_copied or "youtu.be" in self.Flast_copied:
+                # LULog.LoggerAPPS.info (self.Flast_copied)
+                self.__FClipboardList.append (self.Flast_copied)
+                LURLs = dict ()
+                LURL = self.Flast_copied
+                LUObjectsYT.CheckURLs (LURL, LURLs)
+
+                for LURL, Lvalue in LURLs.items ():
+                    s = 'CreateObject...'
+                    # LULog.LoggerTOOLS.log (LULog.PROCESS, s)
+                    LULog.LoggerTOOLS.log (LULog.PROCESS, LURL)
+                    if self.__GetListYouTubeObject (LURL) is None:
+                        # Добавить LURL в self.__FListYouTubeObject
+                        LYouTubeObject = self.__AddListYouTubeObject (LURL, Lvalue)
+                        # Добавить LURL в self.__FModel
+                        self.__AddModel (LURL)
+                        # Добавить виджет в self.__FWidgets
+                        self.__AddListWidget (LYouTubeObject)
+                    else:
+                        s = LURL+' существует ...'
+                        LULog.LoggerTOOLS.log (LULog.PROCESS, s)
+
+                        # # s = self.__GetModel(LURL)
+                        # self.__DelModel (LURL)
+                        # # s = self.__GetListWidget(LURL)
+                        # self.__DelListWidget (LURL)
+                        # self.__DelListYouTubeObject (LURL)
+                        ...
+                    #endif
+                    QCoreApplication.processEvents ()
+                #endfor
+            #endif
+        else:
+            s = AText + ' дубликат cliboard ...'
+            LULog.LoggerTOOLS.log (LULog.PROCESS, s)
+        #endif
+
+        self.Flast_copied = ''
+
+        self.__SetStatApplication (LSaveStatApplication)
+    #endfunction
+
+    def __Action_HelpExecute (self, Sender):
+    #beginfunction
+        LSaveStatApplication = self.__FStatApplication
+        self.__SetStatApplication (LUProc.TStatApplication.caHelp)
+        # Application.HelpContext (6)
+        self.__SetStatApplication (LSaveStatApplication)
+    #endfunction
+
+    def __runProcess(self):
+        """__runProcess"""
+    #beginfunction
+        NswNew = self.__GetListWidgetCount (YOUTUBE_widgetYT.TStatWidget.swNew)
+        NswGetInfo = self.__GetListWidgetCount (YOUTUBE_widgetYT.TStatWidget.swGetInfo)
+        if NswNew > 0 and NswGetInfo < self.__FMaxThread:
+            LWidget_X = self.__GetListWidgetStat (YOUTUBE_widgetYT.TStatWidget.swNew)
+            if not LWidget_X is None:
+                if not LWidget_X.FGetInfoStream_YOUTUBE.FStartThread:
+                    s = YOUTUBE_widgetYT.CStatWidget [LWidget_X.FStatWidget]
+                    s = 'Получение информации о потоке ...'
+                    LWidget_X.S1_YT_StatWidget.emit (s)
+                    LWidget_X.run_GetInfoStream ()
+                #endif
+            #endif
+        #endif
+
+        NswGetInfo = self.__GetListWidgetCount (YOUTUBE_widgetYT.TStatWidget.swGetInfo)
+        NswDownload = self.__GetListWidgetCount (YOUTUBE_widgetYT.TStatWidget.swDownload)
+        if NswGetInfo > 0 and NswDownload < self.__FMaxThread:
+            LWidget_X = self.__GetListWidgetStat (YOUTUBE_widgetYT.TStatWidget.swGetInfo)
+            if not LWidget_X is None:
+                LWidget_X.FStatWidget = YOUTUBE_widgetYT.TStatWidget.swDownload
+
+                if not LWidget_X.FDownloader_YOUTUBE.FStartThread:
+
+                    s = YOUTUBE_widgetYT.CStatWidget [LWidget_X.FStatWidget]
+                    s = 'Загрузка потока ...'
+                    LWidget_X.S1_YT_StatWidget.emit (s)
+                    LWidget_X.run_Downloader ()
+                #endif
+            #endif
+        else:
+            LWidget_X = self.__GetListWidgetStat (YOUTUBE_widgetYT.TStatWidget.swGetInfo)
+            if not LWidget_X is None:
+                LWidget_X.FStatWidget = YOUTUBE_widgetYT.TStatWidget.swQueue
+                s = YOUTUBE_widgetYT.CStatWidget [LWidget_X.FStatWidget]
+                s = 'Поток в очереди ...'
+                LWidget_X.S1_YT_StatWidget.emit (s)
+            #endif
+        #endif
+
+        NswQueue = self.__GetListWidgetCount (YOUTUBE_widgetYT.TStatWidget.swQueue)
+        NswDownload = self.__GetListWidgetCount (YOUTUBE_widgetYT.TStatWidget.swDownload)
+        if NswQueue > 0 and NswDownload < self.__FMaxThread:
+            LWidget_X = self.__GetListWidgetStat (YOUTUBE_widgetYT.TStatWidget.swQueue)
+            if not LWidget_X is None:
+                LWidget_X.FStatWidget = YOUTUBE_widgetYT.TStatWidget.swDownload
+
+                if not LWidget_X.FDownloader_YOUTUBE.FStartThread:
+
+                    s = YOUTUBE_widgetYT.CStatWidget [LWidget_X.FStatWidget]
+                    LWidget_X.S1_YT_StatWidget.emit (s)
+                    s = 'Загрузка потока ...'
+                    LWidget_X.run_Downloader ()
+                #endif
+            #endif
+        #endif
+    #endfunction
+
+    #--------------------------------------------------
+    # __run_idle
+    #--------------------------------------------------
+    @QtCore.Slot (str, name = '__run_idle')
+    def __run_idle(self):
+        """__run_idle"""
+    #beginfunction
+        self.idle = True
+        self.log_event.emit('running idle... ')
+        while self.idle:
+            if self.__FStatApplication != LUProc.TStatApplication.caAddWidget:
+                self.__runProcess()
+            #endif
+            if len (self.__FListWidgets) > 0:
+                self.ui.TextEditR.hide ()
+            else:
+                self.ui.TextEditR.show ()
+            #endif
+
+            # time.sleep(0.00001)
+            QCoreApplication.processEvents ()
+        #endwhile
+    #endfunction
+
+    #--------------------------------------------------
+    # __process_single
+    #--------------------------------------------------
+    @QtCore.Slot (str, name = '__process_single')
+    def __process_single(self):
+        """__process_single"""
+    #beginfunction
+        self.log_event.emit('Processing item...')
+        self.__run_idle()
+    #endfunction
+
 #endclass
 
 #------------------------------------------
@@ -876,7 +1034,7 @@ def main ():
     GAPP = QApplication(sys.argv)
     GFormMainWindow = FormMainWindow()
     GFormMainWindow.show()
-    sys.exit(GAPP.exec_())
+    sys.exit(GAPP.exec())
 #endfunction
 
 #------------------------------------------

@@ -1,0 +1,76 @@
+# -*- coding: utf-8 -*-
+
+################################################################################
+## Form generated from reading UI file 'YOUTUBE_widget.ui'
+##
+## Created by: Qt User Interface Compiler version 6.5.0
+##
+## WARNING! All changes made in this file will be lost when recompiling UI file!
+################################################################################
+
+from PySide6.QtCore import (QCoreApplication, QDate, QDateTime, QLocale,
+    QMetaObject, QObject, QPoint, QRect,
+    QSize, QTime, QUrl, Qt)
+from PySide6.QtGui import (QBrush, QColor, QConicalGradient, QCursor,
+    QFont, QFontDatabase, QGradient, QIcon,
+    QImage, QKeySequence, QLinearGradient, QPainter,
+    QPalette, QPixmap, QRadialGradient, QTransform)
+from PySide6.QtWidgets import (QApplication, QFrame, QHBoxLayout, QLabel,
+    QProgressBar, QSizePolicy, QSplitter, QWidget)
+
+class Ui_YT_widget(object):
+    def setupUi(self, YT_widget):
+        if not YT_widget.objectName():
+            YT_widget.setObjectName(u"YT_widget")
+        YT_widget.resize(800, 110)
+        sizePolicy = QSizePolicy(QSizePolicy.Preferred, QSizePolicy.Preferred)
+        sizePolicy.setHorizontalStretch(0)
+        sizePolicy.setVerticalStretch(0)
+        sizePolicy.setHeightForWidth(YT_widget.sizePolicy().hasHeightForWidth())
+        YT_widget.setSizePolicy(sizePolicy)
+        YT_widget.setMinimumSize(QSize(800, 110))
+        YT_widget.setMaximumSize(QSize(800, 110))
+        YT_widget.setStyleSheet(u"background-color: rgb(255, 235, 135);")
+        self.frame = QFrame(YT_widget)
+        self.frame.setObjectName(u"frame")
+        self.frame.setGeometry(QRect(0, 0, 822, 110))
+        sizePolicy.setHeightForWidth(self.frame.sizePolicy().hasHeightForWidth())
+        self.frame.setSizePolicy(sizePolicy)
+        self.frame.setMinimumSize(QSize(800, 110))
+        self.frame.setFrameShape(QFrame.Box)
+        self.frame.setFrameShadow(QFrame.Raised)
+        self.horizontalLayout = QHBoxLayout(self.frame)
+        self.horizontalLayout.setObjectName(u"horizontalLayout")
+        self.splitter = QSplitter(self.frame)
+        self.splitter.setObjectName(u"splitter")
+        sizePolicy.setHeightForWidth(self.splitter.sizePolicy().hasHeightForWidth())
+        self.splitter.setSizePolicy(sizePolicy)
+        self.splitter.setOrientation(Qt.Vertical)
+        self.YT_Caption = QLabel(self.splitter)
+        self.YT_Caption.setObjectName(u"YT_Caption")
+        sizePolicy.setHeightForWidth(self.YT_Caption.sizePolicy().hasHeightForWidth())
+        self.YT_Caption.setSizePolicy(sizePolicy)
+        self.YT_Caption.setMinimumSize(QSize(300, 20))
+        self.YT_Caption.setTextFormat(Qt.RichText)
+        self.splitter.addWidget(self.YT_Caption)
+        self.YT_ProgressBar = QProgressBar(self.splitter)
+        self.YT_ProgressBar.setObjectName(u"YT_ProgressBar")
+        sizePolicy.setHeightForWidth(self.YT_ProgressBar.sizePolicy().hasHeightForWidth())
+        self.YT_ProgressBar.setSizePolicy(sizePolicy)
+        self.YT_ProgressBar.setMinimumSize(QSize(800, 20))
+        self.YT_ProgressBar.setValue(24)
+        self.splitter.addWidget(self.YT_ProgressBar)
+
+        self.horizontalLayout.addWidget(self.splitter)
+
+
+        self.retranslateUi(YT_widget)
+
+        QMetaObject.connectSlotsByName(YT_widget)
+    # setupUi
+
+    def retranslateUi(self, YT_widget):
+        YT_widget.setWindowTitle(QCoreApplication.translate("YT_widget", u"Form", None))
+        self.YT_Caption.setText(QCoreApplication.translate("YT_widget", u"TextLabel", None))
+    # retranslateUi
+
