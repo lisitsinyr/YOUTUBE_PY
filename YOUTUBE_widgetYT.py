@@ -182,7 +182,7 @@ class Downloader_YOUTUBE (QThread):
         #endtry
         CPATH = 'd:\\work'
         Lfilename_prefix = ''
-        self.FYouTubeObject.DownloadURL (CPATH, ADownload = True, Achunk = False, skip_existing = False)
+        self.FYouTubeObject.DownloadURL (CPATH, ADownload = True, Achunk = True, skip_existing = False)
     #endfunction
 
 #endclass
@@ -380,17 +380,17 @@ class YOUTUBEwidget(QWidget):
         self.FGetInfoStream_YOUTUBE.finished.connect (self.qthreadFinished_GetInfoStream_YOUTUBE)
 
 
-
-
         self.S1_YT_StatWidget.connect (self.signalHandler_YT_StatWidget)
-
         self.signalHandler_YT_Caption (AYouTubeObject.URL)
         # self.ui.YT_Caption.setText (AYouTubeObject.URL)
         s = CStatWidget[self.FStatWidget]
         self.signalHandler_YT_StatWidget (s)
-        # self.ui.YT_StatWidget.setText (AYouTubeObject.URL)
-
+            # self.ui.YT_StatWidget.setText (AYouTubeObject.URL)
         self.ui.YT_StatWidget.show ()
+
+        icon = QIcon ()
+        icon.addFile (u":/ICONS/run.png", QSize (), QIcon.Normal, QIcon.Off)
+        self.ui.pushButton_Stop.setIcon (icon)
 
     #endfunction
     def ONcomplete (self, AStream: pytube.Stream, AFilePath: str):
@@ -448,6 +448,10 @@ class YOUTUBEwidget(QWidget):
         """
         self.FQThread.start ()
         """
+
+        icon = QIcon()
+        icon.addFile(u":/ICONS/stop.png", QSize(), QIcon.Normal, QIcon.Off)
+        self.ui.pushButton_Stop.setIcon(icon)
 
         self.ui.YT_StatWidget.hide ()
 

@@ -38,5 +38,7 @@
         <file>ICONS/sign_out_32px.png</file>
         <file>ICONS/video-add-xl.png</file>
         <file>ICONS/window-add-xl.png</file>
+        <file>ICONS/run.png</file>
+        <file>ICONS/stop.png</file>
     </qresource>
 </RCC>

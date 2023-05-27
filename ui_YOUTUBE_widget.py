@@ -18,12 +18,13 @@ from PySide6.QtGui import (QBrush, QColor, QConicalGradient, QCursor,
 from PySide6.QtWidgets import (QApplication, QFrame, QGraphicsView, QHBoxLayout,
     QLabel, QProgressBar, QPushButton, QSizePolicy,
     QVBoxLayout, QWidget)
+import YOUTUBE_images_rc
 
 class Ui_YT_widget(object):
     def setupUi(self, YT_widget):
         if not YT_widget.objectName():
             YT_widget.setObjectName(u"YT_widget")
-        YT_widget.resize(716, 76)
+        YT_widget.resize(558, 76)
         sizePolicy = QSizePolicy(QSizePolicy.Preferred, QSizePolicy.Preferred)
         sizePolicy.setHorizontalStretch(0)
         sizePolicy.setVerticalStretch(0)
@@ -55,6 +56,35 @@ class Ui_YT_widget(object):
 
         self.horizontalLayout.addWidget(self.frame_L)
 
+        self.frame_R = QFrame(YT_widget)
+        self.frame_R.setObjectName(u"frame_R")
+        self.frame_R.setMaximumSize(QSize(30, 16777215))
+        self.frame_R.setFrameShape(QFrame.StyledPanel)
+        self.frame_R.setFrameShadow(QFrame.Raised)
+        self.verticalLayout = QVBoxLayout(self.frame_R)
+        self.verticalLayout.setSpacing(5)
+        self.verticalLayout.setObjectName(u"verticalLayout")
+        self.verticalLayout.setContentsMargins(0, 0, 0, 0)
+        self.pushButton_Delete = QPushButton(self.frame_R)
+        self.pushButton_Delete.setObjectName(u"pushButton_Delete")
+        self.pushButton_Delete.setMinimumSize(QSize(25, 25))
+        self.pushButton_Delete.setMaximumSize(QSize(25, 25))
+
+        self.verticalLayout.addWidget(self.pushButton_Delete)
+
+        self.pushButton_Stop = QPushButton(self.frame_R)
+        self.pushButton_Stop.setObjectName(u"pushButton_Stop")
+        self.pushButton_Stop.setMinimumSize(QSize(25, 25))
+        self.pushButton_Stop.setMaximumSize(QSize(25, 25))
+        icon = QIcon()
+        icon.addFile(u":/ICONS/stop.png", QSize(), QIcon.Normal, QIcon.Off)
+        self.pushButton_Stop.setIcon(icon)
+
+        self.verticalLayout.addWidget(self.pushButton_Stop)
+
+
+        self.horizontalLayout.addWidget(self.frame_R)
+
         self.frame = QFrame(YT_widget)
         self.frame.setObjectName(u"frame")
         sizePolicy.setHeightForWidth(self.frame.sizePolicy().hasHeightForWidth())
@@ -71,12 +101,14 @@ class Ui_YT_widget(object):
         self.YT_Caption.setObjectName(u"YT_Caption")
         sizePolicy.setHeightForWidth(self.YT_Caption.sizePolicy().hasHeightForWidth())
         self.YT_Caption.setSizePolicy(sizePolicy)
-        self.YT_Caption.setMinimumSize(QSize(0, 15))
+        self.YT_Caption.setMinimumSize(QSize(250, 15))
         self.YT_Caption.setMaximumSize(QSize(16777215, 15))
         font1 = QFont()
         font1.setPointSize(8)
+        font1.setBold(True)
         self.YT_Caption.setFont(font1)
         self.YT_Caption.setTextFormat(Qt.RichText)
+        self.YT_Caption.setWordWrap(True)
 
         self.verticalLayout_2.addWidget(self.YT_Caption)
 
@@ -105,32 +137,6 @@ class Ui_YT_widget(object):
 
         self.horizontalLayout.addWidget(self.frame)
 
-        self.frame_R = QFrame(YT_widget)
-        self.frame_R.setObjectName(u"frame_R")
-        self.frame_R.setMaximumSize(QSize(30, 16777215))
-        self.frame_R.setFrameShape(QFrame.StyledPanel)
-        self.frame_R.setFrameShadow(QFrame.Raised)
-        self.verticalLayout = QVBoxLayout(self.frame_R)
-        self.verticalLayout.setSpacing(5)
-        self.verticalLayout.setObjectName(u"verticalLayout")
-        self.verticalLayout.setContentsMargins(0, 0, 0, 0)
-        self.pushButton_Delete = QPushButton(self.frame_R)
-        self.pushButton_Delete.setObjectName(u"pushButton_Delete")
-        self.pushButton_Delete.setMinimumSize(QSize(25, 25))
-        self.pushButton_Delete.setMaximumSize(QSize(25, 25))
-
-        self.verticalLayout.addWidget(self.pushButton_Delete)
-
-        self.pushButton_Stop = QPushButton(self.frame_R)
-        self.pushButton_Stop.setObjectName(u"pushButton_Stop")
-        self.pushButton_Stop.setMinimumSize(QSize(25, 25))
-        self.pushButton_Stop.setMaximumSize(QSize(25, 25))
-
-        self.verticalLayout.addWidget(self.pushButton_Stop)
-
-
-        self.horizontalLayout.addWidget(self.frame_R)
-
 
         self.retranslateUi(YT_widget)
 
@@ -139,9 +145,9 @@ class Ui_YT_widget(object):
 
     def retranslateUi(self, YT_widget):
         YT_widget.setWindowTitle(QCoreApplication.translate("YT_widget", u"Form", None))
-        self.YT_Caption.setText(QCoreApplication.translate("YT_widget", u"YT_Caption", None))
-        self.YT_StatWidget.setText(QCoreApplication.translate("YT_widget", u"YT_StatWidget", None))
         self.pushButton_Delete.setText("")
         self.pushButton_Stop.setText("")
+        self.YT_Caption.setText(QCoreApplication.translate("YT_widget", u"YT_Caption", None))
+        self.YT_StatWidget.setText(QCoreApplication.translate("YT_widget", u"YT_StatWidget", None))
     # retranslateUi
 
