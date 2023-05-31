@@ -475,7 +475,7 @@
    <addaction name="action_About"/>
    <addaction name="action_Help"/>
    <addaction name="separator"/>
-   <addaction name="action_ExitProgramm"/>
+   <addaction name="action_ExitProgram"/>
   </widget>
   <action name="action_CreateYoutube">
    <property name="checked">
@@ -575,7 +575,7 @@
     <string>Помощь</string>
    </property>
   </action>
-  <action name="action_ExitProgramm">
+  <action name="action_ExitProgram">
    <property name="text">
     <string>Выход из программы</string>
    </property>
@@ -590,7 +590,7 @@
  </resources>
  <connections>
   <connection>
-   <sender>action_ExitProgramm</sender>
+   <sender>action_ExitProgram</sender>
    <signal>triggered()</signal>
    <receiver>FormMainWindow</receiver>
    <slot>close()</slot>

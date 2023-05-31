@@ -81,8 +81,8 @@ class Ui_FormMainWindow(object):
         icon6 = QIcon()
         icon6.addFile(u":/ICONS/help-xl.png", QSize(), QIcon.Normal, QIcon.Off)
         self.action_Help.setIcon(icon6)
-        self.action_ExitProgramm = QAction(FormMainWindow)
-        self.action_ExitProgramm.setObjectName(u"action_ExitProgramm")
+        self.action_ExitProgram = QAction(FormMainWindow)
+        self.action_ExitProgram.setObjectName(u"action_ExitProgram")
         self.centralwidget = QWidget(FormMainWindow)
         self.centralwidget.setObjectName(u"centralwidget")
         self.layoutWidget = QWidget(self.centralwidget)
@@ -288,10 +288,10 @@ class Ui_FormMainWindow(object):
         self.toolBar.addAction(self.action_About)
         self.toolBar.addAction(self.action_Help)
         self.toolBar.addSeparator()
-        self.toolBar.addAction(self.action_ExitProgramm)
+        self.toolBar.addAction(self.action_ExitProgram)
 
         self.retranslateUi(FormMainWindow)
-        self.action_ExitProgramm.triggered.connect(FormMainWindow.close)
+        self.action_ExitProgram.triggered.connect(FormMainWindow.close)
 
         QMetaObject.connectSlotsByName(FormMainWindow)
     # setupUi
@@ -315,7 +315,7 @@ class Ui_FormMainWindow(object):
 #endif // QT_CONFIG(tooltip)
         self.action_About.setText(QCoreApplication.translate("FormMainWindow", u"\u041e \u043f\u0440\u043e\u0433\u0440\u0430\u043c\u043c\u0435", None))
         self.action_Help.setText(QCoreApplication.translate("FormMainWindow", u"\u041f\u043e\u043c\u043e\u0449\u044c", None))
-        self.action_ExitProgramm.setText(QCoreApplication.translate("FormMainWindow", u"\u0412\u044b\u0445\u043e\u0434 \u0438\u0437 \u043f\u0440\u043e\u0433\u0440\u0430\u043c\u043c\u044b", None))
+        self.action_ExitProgram.setText(QCoreApplication.translate("FormMainWindow", u"\u0412\u044b\u0445\u043e\u0434 \u0438\u0437 \u043f\u0440\u043e\u0433\u0440\u0430\u043c\u043c\u044b", None))
         self.menu_File.setTitle(QCoreApplication.translate("FormMainWindow", u"File", None))
         self.menu_Edit.setTitle(QCoreApplication.translate("FormMainWindow", u"Edit", None))
         self.menu.setTitle(QCoreApplication.translate("FormMainWindow", u"\u041d\u0430\u0441\u0442\u0440\u043e\u0439\u043a\u0430", None))

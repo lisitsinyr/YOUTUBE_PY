@@ -1,0 +1,9 @@
+def closeEvent(self, evnt): 
+    if self._closable: 
+        super(App, self).closeEvent(evnt) 
+    else: 
+        evnt.ignore()
+@pyqtSlot() 
+def on_click(self): 
+    self._closable = True 
+    self.close()

@@ -57,6 +57,7 @@ import LUDateTime
 import LUStrUtils
 import LUDecotators
 import LUSheduler
+import LUConsole
 
 #------------------------------------------
 # БИБЛИОТЕКИ PROJECT
@@ -70,14 +71,45 @@ from ui_YOUTUBE_FormMain import Ui_FormMainWindow
 from ui_YOUTUBE_widget import Ui_YT_widget
 from YOUTUBE_widgetYT import YOUTUBEwidget
 
-GAPP = QApplication (sys.argv)
-
 class CustomButton_01 (QPushButton):
     def mousePressEvent (self, event):
+    #beginfunction
         event.accept ()
+    #endfunction
+#endclass
+
 class CustomButton_02 (QPushButton):
     def event (self, event):
+    #beginfunction
         event.ignore ()
+    #endfunction
+#endclass
+
+class TQThread(QtCore.QThread):
+    def __init__ (self, parent = None):
+    #beginfunction
+        super ().__init__ (parent)
+        self.__Fstopped = False
+    #endfunction
+
+    def stop(self):
+    #beginfunction
+        self.__Fstopped = True
+        print('STOPPING LOOP')
+
+    #endfunction
+    def run(self):
+    #beginfunction
+        self.__Fstopped = False
+        counter = 0
+        while not self.__Fstopped:
+            # counter += 1
+            # print(counter)
+            # # do some more work...
+            self.msleep(1)
+        #endwhile
+    #endfunction
+#endclass
 
 # ------------------------------------
 # FormMainWindow(QMainWindow)
@@ -89,9 +121,21 @@ class FormMainWindow(QMainWindow):
     #----------------------------------------------
     # СИГНАЛ
     #----------------------------------------------
+    StopApplication_event = QtCore.Signal(bool)
+
     StatApplication_event = QtCore.Signal(str)
 
-    closed = QtCore.Signal ()
+    closed = QtCore.Signal (bool)
+
+    #----------------------------------------------
+    # Коннектор - сюда приходит СИГНАЛ StopApplication
+    #----------------------------------------------
+    def signalHandler_StopApplication(self, Abool):
+        """signalHandler_StopApplication"""
+    #beginfunction
+        s = 'signalHandler_StopApplication...'
+        self.__FStopApplicationMain = Abool
+    #endfunction
 
     #----------------------------------------------
     # Коннектор - сюда приходит СИГНАЛ StatApplication_event
@@ -119,28 +163,20 @@ class FormMainWindow(QMainWindow):
 
     def __init__(self, parent=None):
     #beginfunction
-        super().__init__()
+        super().__init__(parent=parent)
         self.ui = Ui_FormMainWindow()
         self.ui.setupUi(self)
-
-        self.__FLogDir: str = ''
-        self.__FStopYouTube: bool = True
-
+        self.__FStopApplicationMain: bool = True
+        self.__FMaxThread: int = 5
         self.idle = False
-
         # Состояние программы
         self.__FStatApplication: LUProc.TStatApplication = LUProc.TStatApplication.saRunning
         # __FParams
         self.__FParams: YOUTUBE_Params.TParams = YOUTUBE_Params.TParams ()
         # self.APPLog = self.__FParams.FileMemoLog
-
-        self.__FSheduler = None
-
+        self.__FSheduler:LUSheduler.TSheduler = None
         self.__FormCreate ()
         self.__FormActivate ()
-
-        self.__FMaxThread: int = 5
-
         self.ui.TEST_widget.hide()
     #endfunction
 
@@ -150,7 +186,6 @@ class FormMainWindow(QMainWindow):
     def __del__ (self):
         """__del__"""
     #beginfunction
-        # self.__FormDestroy()
         LClassName = self.__class__.__name__
         s = '{} уничтожен'.format(LClassName)
         #print (s)
@@ -159,10 +194,13 @@ class FormMainWindow(QMainWindow):
     def closeEvent(self, event):
         """closeEvent"""
     #beginfunction
-        self.closed.emit()
         super().closeEvent(event)
-        # QCoreApplication.instance ().quit()
-        QApplication.quit()
+        # event.ignore()
+        event.accept ()
+        self.closed.emit(True)
+
+        # self.StopApplication()
+        # self.__Action_Exit()
     #endfunction
 
     """
@@ -351,16 +389,11 @@ class FormMainWindow(QMainWindow):
         self.__SetStylesheetsFor_Memo_Log()
         # self.__SetColorFor_Memo_Log()
 
-        LULog.PrintHandlers (LULog.LoggerAPPS)
-        LHandler: LULog.TStreamHandler = LULog.GetHandler (LULog.LoggerAPPS, 'CONSOLE')
-        LHandler.widget = self.ui.Memo_Log
-        # LULog.LoggerAPPS.info ('LULog.LoggerAPPS-> '+'TEST...')
         # self.ui.Memo_Log.appendPlainText ('mhsdkjhfkjhsakjh'+'\n')
 
-        LULog.PrintHandlers (LULog.LoggerTOOLS)
-        LHandler: LULog.TStreamHandler = LULog.GetHandler (LULog.LoggerAPPS, 'CONSOLE')
-        LHandler.widget = self.ui.Memo_Log
-        # LULog.LoggerAPPS.info ('LULog.LoggerTOOLS-> '+'TEST...')
+        LULog.LoggerAPPS.log (LULog.TEXT, self.__FParams.FileMemoLog.FileName)
+        LULog.LoggerAPPS.log (LULog.TEXT, self.__FParams.FileNameINI)
+
     #endfunction
 
     #-------------------------------
@@ -438,15 +471,6 @@ class FormMainWindow(QMainWindow):
         if LEvent is not None:
             self.__FSheduler.PrintEvent (LEvent)
         #endif
-        self.__FSheduler.Enable = True
-        self.__FSheduler.start()
-
-        # FSheduler = TSheduler.Create (Self)
-        # with FSheduler do begin
-        #     Enabled = False
-        #     OnSheduler = Action_Start
-        #     AddEvent (ShedulerName, TEMPLATE_RegIni.ShedulerTEMPLATE)
-        # end
     #endfunction
 
     #--------------------------------------------------
@@ -500,6 +524,7 @@ class FormMainWindow(QMainWindow):
         #beginfunction
             if AFileName:
                 Lfile = QtCore.QFile (AFileName)
+
                 if Lfile.open (QtCore.QIODevice.ReadOnly):
                     Lstream = QtCore.QTextStream (Lfile)
                     LText = Lstream.readAll ()
@@ -553,11 +578,17 @@ class FormMainWindow(QMainWindow):
     #beginfunction
         s = '08.__SetTimer...'
         LULog.LoggerAPPS.info (s)
-        self.__FTimer = QtCore.QTimer ()
-        self.__FTimer.setInterval (1)
-        # self.__FTimer.timeout.connect (self.recurring_timer)
-        self.__FTimer.timeout.connect (self.__run_idle)
-        self.__FTimer.start ()
+
+        # self.__FQTimer = QtCore.QTimer ()
+        self.__FQTimer = QtCore.QTimer ()
+        # msec
+        self.__FQTimer.setInterval (1)
+
+        # self.__FQThread = TQThread ()
+        # self.__FQThread.finished.connect (app.quit)
+        # self.__FQTimer = QtCore.QTimer.singleShot (1, self.__FQThread.stop)
+        # self.__FQThread.start ()
+
         self.StatApplication_event.connect (self.signalHandler_StatApplication)
     #endfunction
     #--------------------------------------------------
@@ -571,6 +602,11 @@ class FormMainWindow(QMainWindow):
 
         self.ui.action_CreateYoutube.triggered.connect (self.__Action_CreateYoutube)
         self.ui.action_Exit.triggered.connect(self.__Action_Exit)
+
+        self.ui.action_Exit.setProperty("clicked()", False)
+
+        self.ui.action_ExitProgram.triggered.connect(self.__Action_Exit)
+        # self.ui.action_Exit.triggered.connect(self.close)
         self.ui.action_Cut.triggered.connect(self.__Action_Cut)
         self.ui.action_Copy.triggered.connect(self.__Action_Copy)
         self.ui.action_Paste.triggered.connect(self.__Action_Paste)
@@ -584,12 +620,26 @@ class FormMainWindow(QMainWindow):
         self.FiconStart.addFile(u":/ICONS/run.png", QSize(), QIcon.Normal, QIcon.Off)
         self.FiconStop = QIcon()
         self.FiconStop.addFile(u":/ICONS/stop.png", QSize(), QIcon.Normal, QIcon.Off)
+
+        self.StopApplication_event.connect (self.signalHandler_StopApplication)
     #endfunction
 
     @LUDecotators.TIMING
     def __FormCreate (self):
         """__FormCreate"""
     #beginfunction
+        # LULog.PrintHandlers (LULog.LoggerTOOLS)
+        LHandler: LULog.TStreamHandler = LULog.GetHandler (LULog.LoggerTOOLS, 'CONSOLE')
+        LHandler.FAPPGUI = True
+        LHandler.Widget = self.ui.Memo_Log
+        # LULog.LoggerTOOLS.info ('LULog.LoggerTOOLS-> '+'TEST...')
+
+        # LULog.PrintHandlers (LULog.LoggerAPPS)
+        LHandler: LULog.TStreamHandler = LULog.GetHandler (LULog.LoggerAPPS, 'CONSOLE')
+        LHandler.FAPPGUI = True
+        LHandler.Widget = self.ui.Memo_Log
+        # LULog.LoggerAPPS.info ('LULog.LoggerAPPS-> '+'TEST...')
+
         s = '__FormCreate...'
         LULog.LoggerAPPS.info (s)
         self.setWindowTitle(YOUTUBE_Consts.cProjectNAME)
@@ -628,23 +678,11 @@ class FormMainWindow(QMainWindow):
         return self.__FParams
     #endfunction
 
-    # def __FormDestroy (self):
-    #     """__FormDestroy"""
-    # #beginfunction
-    #     s = '__FormDestroy...'
-    #     LULog.LoggerAPPS.info (s)
-    #     self.__FormClose ()
-    # #endfunction
-
     def __FormActivate (self):
         """__FormActivate"""
     #beginfunction
         s = '__FormActivate...'
         LULog.LoggerAPPS.info (s)
-        LULog.LoggerAPPS.log (LULog.TEXT, self.__FParams.FileMemoLog.FileName)
-        LULog.LoggerAPPS.log (LULog.TEXT, self.__FParams.FileNameINI)
-        self.__SetStatApplication (LUProc.TStatApplication.saRunning)
-        self.__Main ()
     #endfunction
 
     def __FormClose (self):
@@ -653,13 +691,10 @@ class FormMainWindow(QMainWindow):
         s = '__FormClose...'
         LULog.LoggerAPPS.info (s)
 
-        self.__FTimer.timeout.disconnect()
-        self.__FTimer.stop()
+        self.StopApplication()
 
-        self.close()
     #endfunction
 
-    # TFormMain.SetStatApplication
     def __SetStatApplication (self, AStatApplication):
     #beginfunction
         self.__FStatApplication = AStatApplication
@@ -668,23 +703,25 @@ class FormMainWindow(QMainWindow):
 
         if self.__FStatApplication == LUProc.TStatApplication.saRunning:
             self.ui.action_Start_Stop.setIcon (self.FiconStop)
-            # Sheduler
-            self.__FSheduler.Enable = True
         #endif
 
         if self.__FStatApplication == LUProc.TStatApplication.saBreak:
             self.ui.action_Start_Stop.setIcon (self.FiconStart)
-            # Sheduler
-            self.__FSheduler.Enable = False
         #endif
 
-        if self.__FSheduler.Enable:
-            s = 'Следующий сеанс: ' + str (self.__FSheduler.DTEvents)
-            self.P_StatSheduler.setText (s)
-        else:
-            s = 'Следующий сеанс: '
-            self.P_StatSheduler.setText (s)
-        #endif
+        bMain = self.__FStatApplication == LUProc.TStatApplication.saMain
+        self.ui.action_CreateYoutube.setEnabled (not bMain)
+        self.ui.action_Exit.setEnabled (not bMain)
+        self.ui.action_ExitProgram.setEnabled (not bMain)
+        self.ui.action_Cut.setEnabled (not bMain)
+        self.ui.action_Copy.setEnabled (not bMain)
+        self.ui.action_Paste.setEnabled (not bMain)
+        self.ui.action_Start_Stop.setEnabled (not bMain)
+        self.ui.action_Setup.setEnabled (not bMain)
+        self.ui.action_About.setEnabled (not bMain)
+        self.ui.action_Help.setEnabled (not bMain)
+        self.ui.action_DeleteAll.setEnabled (not bMain)
+
         self.StatApplication_event.emit (LUProc.CStatApplication [self.__FStatApplication])
     #endfunction
 
@@ -966,25 +1003,36 @@ class FormMainWindow(QMainWindow):
         LULog.LoggerAPPS.info (s)
     #endfunction
 
-    def __Main(self):
-        """__Main"""
+    def Main(self):
+        """Main"""
     #beginfunction
-        s = '__Main...'
+        s = 'Main...'
         LULog.LoggerAPPS.info (s)
+        self.StopApplication()
+        self.__SetStatApplication (LUProc.TStatApplication.saMain)
         LSaveCurrentDir = LUos.GetCurrentDir()
         LULog.LoggerAPPS.log (LULog.BEGIN, LUProc.cProcessBegin)
         self.P_StatMain.setText(LUProc.cProcessWork)
 
-        self.__FSheduler.Enable = False
-
+        self.__FStopApplicationMain = False
         if self.Params.Stop:
             self.__Procedure_01()
         #endif
+        i = 0
+        iMax = 9
+        while not self.__FStopApplicationMain and i < iMax:
+            i += 1
+            s = 'Main...'
+            LULog.LoggerAPPS.info (str(i)+'. '+s)
+            time.sleep(1)
+            QCoreApplication.processEvents ()
+        #endwhile
+        self.__FStopApplicationMain = True
 
-        self.__FSheduler.Enable = True
         self.P_StatMain.setText(LUProc.cProcessStop)
         LULog.LoggerAPPS.log( LULog.END, LUProc.cProcessEnd)
         os.chdir(LSaveCurrentDir)
+        self.StartApplication()
     #endfunction
 
     @LUDecotators.TIMING
@@ -1047,17 +1095,10 @@ class FormMainWindow(QMainWindow):
     #beginfunction
         s = '__Action_Exit...'
         LULog.LoggerAPPS.info (s)
-        self.__SetStatApplication (LUProc.TStatApplication.saBreak)
+
         self.__FormClose()
 
-        QCoreApplication.instance().exit()
-
-
-
-        GAPP.exit()
-        GAPP.quit()
-
-
+        # raise NameError ('HiThere')
 
     #endfunction
     @QtCore.Slot (name = '__Action_Cut')
@@ -1086,9 +1127,59 @@ class FormMainWindow(QMainWindow):
     #beginfunction
         s = '__Action_Sheduler...'
         LULog.LoggerAPPS.info (s)
-        # self.__SetStatApplication (LUProc.TStatApplication.saRunning)
-        self.__Main ()
+
+        self.StartApplication ()
+        self.Main ()
     #endfunction
+
+    def StartApplication (self):
+        """__StartApplication"""
+    #beginfunction
+        s = 'StartApplication...'
+        LULog.LoggerAPPS.info (s)
+
+        # FSheduler
+        self.__FSheduler.Enable = True
+        s = 'Следующий сеанс: ' + str (self.__FSheduler.DTEvents)
+        self.P_StatSheduler.setText (s)
+
+        # FQTimer
+        self.idle = True
+        # Signals
+        self.__FQTimer.timeout.connect (self.run_idle)
+        # self.__FQTimer.timeout.disconnect(self.run_idle)
+        # self.__FQTimer.timeout.emit('AP1')
+
+        s = '__StartFQTimer...'
+        LULog.LoggerAPPS.debug (s)
+        self.idle = True
+        self.__FQTimer.start ()
+
+        self.__SetStatApplication (LUProc.TStatApplication.saRunning)
+
+    #endfunction
+    def StopApplication (self):
+        """__StopApplication"""
+    #beginfunction
+        s = 'StopApplication...'
+        LULog.LoggerAPPS.info (s)
+
+        # FSheduler
+        self.__FSheduler.Enable = False
+        s = 'Следующий сеанс:'
+        self.P_StatSheduler.setText (s)
+
+        # FQTimer
+        s = '__StopFQTimer...'
+        LULog.LoggerAPPS.debug (s)
+        self.idle = False
+        self.__FQTimer.stop()
+        self.__FQTimer.timeout.disconnect(self.run_idle)
+
+        self.__SetStatApplication (LUProc.TStatApplication.saBreak)
+
+    #endfunction
+
     @QtCore.Slot (name = '__Action_Start_Stop')
     def __Action_Start_Stop (self):
         """__Action_Start"""
@@ -1096,10 +1187,11 @@ class FormMainWindow(QMainWindow):
         s = '__Action_Start_Stop...'
         LULog.LoggerAPPS.info (s)
         if self.__FStatApplication == LUProc.TStatApplication.saBreak:
-            self.__SetStatApplication (LUProc.TStatApplication.saRunning)
-            self.__Main ()
+            self.StartApplication()
+            self.Main()
         else:
-            self.__SetStatApplication (LUProc.TStatApplication.saBreak)
+            self.StopApplication_event.emit (True)
+            self.StopApplication()
     #endfunction
     @QtCore.Slot (name = '__Action_Setup')
     def __Action_Setup (self):
@@ -1238,15 +1330,14 @@ class FormMainWindow(QMainWindow):
     # __run_idle
     #--------------------------------------------------
     @QtCore.Slot (str, name = '__run_idle')
-    def __run_idle(self):
+    def run_idle(self):
         """__run_idle"""
     #beginfunction
-        self.idle = True
         # self.StatApplication_event.emit(LUProc.CStatApplication[self.__FStatApplication])
         while self.idle:
             if self.__FStatApplication == LUProc.TStatApplication.saRunning:
                 self.__runProcess()
-                ...
+                self.__FSheduler.run_Function ()
             #endif
             if len (self.__FListWidgets) > 0:
                 self.ui.TextEditR.hide ()
@@ -1265,35 +1356,27 @@ class FormMainWindow(QMainWindow):
         """__process_single"""
     #beginfunction
         self.StatApplication_event.emit('Processing item...')
-        self.__run_idle()
+        self.run_idle()
     #endfunction
 #endclass
+
 
 #------------------------------------------
 #
 #------------------------------------------
 def main ():
 #beginfunction
-    try:
-        GFormMainWindow = FormMainWindow()
-        GFormMainWindow.show()
-        LResult = GAPP.exec ()
-        GAPP.quit()
-        sys.exit(LResult)
+    GAPP = QApplication (sys.argv)
+    GFormMainWindow = FormMainWindow()
+    GFormMainWindow.show()
 
-        #   clean up and exit code
-        # for model in main_view.models:
-        #     model.submitAll ()  # commit all pending changes to all models
-        # app.quit ()
-        # sys.exit (0)
+    GFormMainWindow.StartApplication ()
+    GFormMainWindow.Main()
 
-        s = 'Exit...'
-        LULog.LoggerAPPS.info (s)
-
-    except SystemExit:
-        print ("Closing Window...")
-    except Exception as e:
-        print (str (e))
+    LResult = GAPP.exec ()
+    s = 'ExitProgram...'
+    LULog.LoggerAPPS.info (s)
+    sys.exit(LResult)
 #endfunction
 
 #------------------------------------------
