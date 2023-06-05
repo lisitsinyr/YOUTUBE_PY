@@ -124,10 +124,14 @@
         <property name="text">
          <string/>
         </property>
+        <property name="icon">
+         <iconset resource="YOUTUBE_images.qrc">
+          <normaloff>:/ICONS/delete.png</normaloff>:/ICONS/delete.png</iconset>
+        </property>
        </widget>
       </item>
       <item>
-       <widget class="QPushButton" name="pushButton_Stop">
+       <widget class="QPushButton" name="pushButton_Start_Stop">
         <property name="minimumSize">
          <size>
           <width>25</width>
@@ -273,6 +277,30 @@
     </widget>
    </item>
   </layout>
+  <action name="action_Start_Stop">
+   <property name="icon">
+    <iconset resource="YOUTUBE_images.qrc">
+     <normaloff>:/ICONS/stop.png</normaloff>:/ICONS/stop.png</iconset>
+   </property>
+   <property name="text">
+    <string>Старт Стоп</string>
+   </property>
+   <property name="toolTip">
+    <string>Старт Стоп</string>
+   </property>
+  </action>
+  <action name="action_Delete">
+   <property name="icon">
+    <iconset resource="YOUTUBE_images.qrc">
+     <normaloff>:/ICONS/sign_out_32px.png</normaloff>:/ICONS/sign_out_32px.png</iconset>
+   </property>
+   <property name="text">
+    <string>Удалить</string>
+   </property>
+   <property name="toolTip">
+    <string>Удалить</string>
+   </property>
+  </action>
  </widget>
  <resources>
   <include location="YOUTUBE_images.qrc"/>

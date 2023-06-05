@@ -336,7 +336,7 @@
        <property name="minimumSize">
         <size>
          <width>300</width>
-         <height>0</height>
+         <height>150</height>
         </size>
        </property>
        <property name="maximumSize">
@@ -576,6 +576,9 @@
    </property>
   </action>
   <action name="action_ExitProgram">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
    <property name="text">
     <string>Выход из программы</string>
    </property>

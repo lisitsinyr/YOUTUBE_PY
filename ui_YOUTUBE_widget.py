@@ -11,10 +11,11 @@
 from PySide6.QtCore import (QCoreApplication, QDate, QDateTime, QLocale,
     QMetaObject, QObject, QPoint, QRect,
     QSize, QTime, QUrl, Qt)
-from PySide6.QtGui import (QBrush, QColor, QConicalGradient, QCursor,
-    QFont, QFontDatabase, QGradient, QIcon,
-    QImage, QKeySequence, QLinearGradient, QPainter,
-    QPalette, QPixmap, QRadialGradient, QTransform)
+from PySide6.QtGui import (QAction, QBrush, QColor, QConicalGradient,
+    QCursor, QFont, QFontDatabase, QGradient,
+    QIcon, QImage, QKeySequence, QLinearGradient,
+    QPainter, QPalette, QPixmap, QRadialGradient,
+    QTransform)
 from PySide6.QtWidgets import (QApplication, QFrame, QGraphicsView, QHBoxLayout,
     QLabel, QProgressBar, QPushButton, QSizePolicy,
     QVBoxLayout, QWidget)
@@ -37,6 +38,16 @@ class Ui_YT_widget(object):
         font.setBold(True)
         YT_widget.setFont(font)
         YT_widget.setStyleSheet(u"")
+        self.action_Start_Stop = QAction(YT_widget)
+        self.action_Start_Stop.setObjectName(u"action_Start_Stop")
+        icon = QIcon()
+        icon.addFile(u":/ICONS/stop.png", QSize(), QIcon.Normal, QIcon.Off)
+        self.action_Start_Stop.setIcon(icon)
+        self.action_Delete = QAction(YT_widget)
+        self.action_Delete.setObjectName(u"action_Delete")
+        icon1 = QIcon()
+        icon1.addFile(u":/ICONS/sign_out_32px.png", QSize(), QIcon.Normal, QIcon.Off)
+        self.action_Delete.setIcon(icon1)
         self.horizontalLayout = QHBoxLayout(YT_widget)
         self.horizontalLayout.setObjectName(u"horizontalLayout")
         self.frame_L = QFrame(YT_widget)
@@ -69,18 +80,19 @@ class Ui_YT_widget(object):
         self.pushButton_Delete.setObjectName(u"pushButton_Delete")
         self.pushButton_Delete.setMinimumSize(QSize(25, 25))
         self.pushButton_Delete.setMaximumSize(QSize(25, 25))
+        icon2 = QIcon()
+        icon2.addFile(u":/ICONS/delete.png", QSize(), QIcon.Normal, QIcon.Off)
+        self.pushButton_Delete.setIcon(icon2)
 
         self.verticalLayout.addWidget(self.pushButton_Delete)
 
-        self.pushButton_Stop = QPushButton(self.frame_R)
-        self.pushButton_Stop.setObjectName(u"pushButton_Stop")
-        self.pushButton_Stop.setMinimumSize(QSize(25, 25))
-        self.pushButton_Stop.setMaximumSize(QSize(25, 25))
-        icon = QIcon()
-        icon.addFile(u":/ICONS/stop.png", QSize(), QIcon.Normal, QIcon.Off)
-        self.pushButton_Stop.setIcon(icon)
+        self.pushButton_Start_Stop = QPushButton(self.frame_R)
+        self.pushButton_Start_Stop.setObjectName(u"pushButton_Start_Stop")
+        self.pushButton_Start_Stop.setMinimumSize(QSize(25, 25))
+        self.pushButton_Start_Stop.setMaximumSize(QSize(25, 25))
+        self.pushButton_Start_Stop.setIcon(icon)
 
-        self.verticalLayout.addWidget(self.pushButton_Stop)
+        self.verticalLayout.addWidget(self.pushButton_Start_Stop)
 
 
         self.horizontalLayout.addWidget(self.frame_R)
@@ -145,8 +157,16 @@ class Ui_YT_widget(object):
 
     def retranslateUi(self, YT_widget):
         YT_widget.setWindowTitle(QCoreApplication.translate("YT_widget", u"Form", None))
+        self.action_Start_Stop.setText(QCoreApplication.translate("YT_widget", u"\u0421\u0442\u0430\u0440\u0442 \u0421\u0442\u043e\u043f", None))
+#if QT_CONFIG(tooltip)
+        self.action_Start_Stop.setToolTip(QCoreApplication.translate("YT_widget", u"\u0421\u0442\u0430\u0440\u0442 \u0421\u0442\u043e\u043f", None))
+#endif // QT_CONFIG(tooltip)
+        self.action_Delete.setText(QCoreApplication.translate("YT_widget", u"\u0423\u0434\u0430\u043b\u0438\u0442\u044c", None))
+#if QT_CONFIG(tooltip)
+        self.action_Delete.setToolTip(QCoreApplication.translate("YT_widget", u"\u0423\u0434\u0430\u043b\u0438\u0442\u044c", None))
+#endif // QT_CONFIG(tooltip)
         self.pushButton_Delete.setText("")
-        self.pushButton_Stop.setText("")
+        self.pushButton_Start_Stop.setText("")
         self.YT_Caption.setText(QCoreApplication.translate("YT_widget", u"YT_Caption", None))
         self.YT_StatWidget.setText(QCoreApplication.translate("YT_widget", u"YT_StatWidget", None))
     # retranslateUi
