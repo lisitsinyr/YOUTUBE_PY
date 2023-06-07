@@ -927,12 +927,13 @@ class FormMainWindow(QMainWindow):
         # LULog.LoggerAPPS.debug (s)
         LMaxRes = LUObjectsYT.cMaxRes480p
         LWidget_X = YOUTUBEwidget(AYouTubeObject, LMaxRes, self.ui.scrollAreaWidgetContents)
-        LWidget_X.StatWidgetObject = YOUTUBE_widgetYT.TStatWidgetObject.swNew
-        self.__ChangeCountStatWidgetObject (LWidget_X.StatWidgetObject, 1)
-
         if self.__FStatApplication == LUProc.TStatApplication.saBreak:
             LWidget_X.StopWidget()
         #endif
+
+        # swNew + 1
+        # LWidget_X.StatWidgetObject = YOUTUBE_widgetYT.TStatWidgetObject.swNew
+        self.__ChangeCountStatWidgetObject (LWidget_X.StatWidgetObject, 1)
 
         # сигналы
         LWidget_X.YOUTUBEwidgetSignals.signal_DownloadedURL.connect (self.signalHandler_DownloadedURL)
@@ -1008,7 +1009,13 @@ class FormMainWindow(QMainWindow):
         LYouTubeObject.ID = LObjectID
         LMaxRes = LUObjectsYT.cMaxRes480p
         LYouTubeObject.SetURL (AURL, LMaxRes, value ['PlayListName'], value ['NN'], value ['N'])
+
         LYouTubeObject.FChunk = True
+        LYouTubeObject.FChunk = self.__FParams.Chunck
+
+        LYouTubeObject.Fskip_existing = False
+        LYouTubeObject.Fskip_existing = self.__FParams.CheckBoxSkipExists
+
         self.__FListYouTubeObject.append(LYouTubeObject)
         return LYouTubeObject
     #endfunction
@@ -1458,7 +1465,28 @@ class FormMainWindow(QMainWindow):
                 NswGetInfo = self.__GetListWidgetCount (YOUTUBE_widgetYT.TStatWidgetObject.swGetInfo)
                 NswDownload = self.__GetListWidgetCount (YOUTUBE_widgetYT.TStatWidgetObject.swDownload)
                 if (NswGetInfo+NswDownload) < self.__FMaxThread:
-                    LWidget_X.run_Downloader ()
+                    LFileName = LWidget_X.YouTubeObject.FileNameDownload
+                    if not LUFile.FileExists (LFileName):
+                        LWidget_X.run_Downloader ()
+                    else:
+                        s = 'Файл ' + LFileName + ' существует...'
+                        LULog.LoggerTOOLS.debug (s)
+                        if not self.__FParams.CheckBoxSkipExists:
+                            s = 'Файл ' + LFileName + ' будет загружен повторно...'
+                            LULog.LoggerTOOLS.debug (s)
+                            # LUFile.FileDelete (LFileName)
+                            LWidget_X.run_Downloader ()
+                        else:
+                            s = 'Файл ' + LFileName + ' не будет загружен...'
+                            LULog.LoggerTOOLS.debug (s)
+                            # swQueue - 1
+                            self.__ChangeCountStatWidgetObject (LWidget_X.StatWidgetObject, -1)
+                            LWidget_X.StopWidget ()
+                            # Удаление Widget
+                            LURL = LWidget_X.YouTubeObject.URL
+                            self.signalHandler_DownloadedURL (LURL)
+                        #endif
+                    #endif
                 #endif
             #endif
         #endif

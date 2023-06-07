@@ -127,15 +127,13 @@ class GetInfoStream_YOUTUBE(QThread):
         self.__FStartDownload = Value
     #endfunction
 
-    @QtCore.Slot (int, str, name = 'run')
+    @QtCore.Slot (int, str, name = 'GetInfoStream_YOUTUBE.run')
     def run(self):
     #beginfunction
         s = 'GetInfoStream_YOUTUBE.run...'
         # LULog.LoggerTOOLS.debug (s)
         self.__FStartDownload = True
         self.__FYouTubeObject.SetStream (self.__FMaxRes)
-
-        # self.S1_YT_Caption_InfoStream.emit (self.FYouTubeObject.StreamInfo['default_filename'])
         self.signal_YT_Caption.emit (s)
     #endfunction
 #endclass
@@ -164,14 +162,9 @@ class Downloader_YOUTUBE (QThread):
         QThread.__init__ (self, parent = parent)
         self.__FYouTubeObject = AYouTubeObject
         self.__FMaxRes = AMaxRes
-
         self.__FYouTubeObject.ONprogress = self.ONprogress
         # self.__FYouTubeObject.ONcomplete = self.ONcomplete
-
         self.__FStartDownload_01 = False
-        self.__FChunck = False
-        self.__FChunck = True
-
         self.__FDownloader_YOUTUBE_Signals = TDownloader_YOUTUBE_Signals()
     #endfunction
 
@@ -222,7 +215,7 @@ class Downloader_YOUTUBE (QThread):
         #endif
     #endfunction
 
-    @QtCore.Slot (int, str, name = 'run')
+    @QtCore.Slot (int, str, name = 'Downloader_YOUTUBE.run')
     def run (self):
         """run"""
     #beginfunction
@@ -238,7 +231,7 @@ class Downloader_YOUTUBE (QThread):
         except:
             self.Downloader_YOUTUBE_Signals.signal_ProgressMax.emit (0)
         #endtry
-        self.__FYouTubeObject.DownloadURL (ADownload = True, skip_existing = True)
+        self.__FYouTubeObject.DownloadURL (ADownload = True, skip_existing = self.__FYouTubeObject.Fskip_existing)
     #endfunction
 #endclass
 
@@ -248,7 +241,6 @@ class Downloader_YOUTUBE (QThread):
 class TYOUTUBEwidgetSignals(QObject):
     signal_DownloadedURL = QtCore.Signal (str)
     signal_YT_StatWidget = QtCore.Signal (str)
-
     signal_ChangeStatWidgetObject = QtCore.Signal (TStatWidgetObject, int)
 #endclass
 
@@ -299,23 +291,20 @@ class YOUTUBEwidget(QWidget):
         self.ui.setupUi(self)
         #
         self.__FYOUTUBEwidgetSignals = TYOUTUBEwidgetSignals()
-        #
-        self.__FStatWidgetObject: TStatWidgetObject = TStatWidgetObject.swNew
 
-        self.YOUTUBEwidgetSignals.signal_ChangeStatWidgetObject.emit (self.__FStatWidgetObject, 1)
+        self.__FStatWidgetObject: TStatWidgetObject = TStatWidgetObject.swNew
+        # swNew + 1
+        # self.YOUTUBEwidgetSignals.signal_ChangeStatWidgetObject.emit (self.__FStatWidgetObject, 1)
 
         # Состояние Widget
         self.__FStatWidget: LUProc.TStatWidget = LUProc.TStatWidget.swRunning
         # FYouTubeObject
         self.__FYouTubeObject = AYouTubeObject
-
         # self.__FYouTubeObject.ONprogress = self.ONprogress
         self.__FYouTubeObject.ONcomplete = self.ONcomplete
-
         s = AYouTubeObject.URLInfo ['thumbnail_url']
         s = AYouTubeObject.URLInfo ['author']
         self.__FMaxRes = AMaxRes
-
         # self.setObjectName (u"widget_X")
         # self.setMinimumSize (QSize (400, 40))
         # self.setMaximumSize (QSize (400, 40))
@@ -497,14 +486,12 @@ class YOUTUBEwidget(QWidget):
 
         self.YOUTUBEwidgetSignals.signal_ChangeStatWidgetObject.emit (self.__FStatWidgetObject, -1)
 
-        if self.__FStatWidgetObject == TStatWidgetObject.swDownload:
-            self.YouTubeObject.Fis_cancelled = True
-        else:
+        self.YouTubeObject.Fis_cancelled = True
+
+        if not self.__FStatWidgetObject == TStatWidgetObject.swDownload:
             # Удаление Widget
             LURL = self.__FYouTubeObject.URL
-            self.YOUTUBEwidgetSignals.signal_DownloadedURL.emit (self.__FYouTubeObject.URL)
-
-            # self.qthreadFinished_Downloader_YOUTUBE()
+            self.YOUTUBEwidgetSignals.signal_DownloadedURL.emit (LURL)
         #endif
     #endfunction
 
@@ -602,10 +589,11 @@ class YOUTUBEwidget(QWidget):
     def qthreadFinished_Downloader_YOUTUBE(self):
     #beginfunction
         s = 'YOUTUBEwidget.qthreadFinished_Downloader_YOUTUBE...'
-        # LULog.LoggerTOOLS.debug (s)
+        LULog.LoggerTOOLS.debug (s)
 
         # Приостановить загрузку
-        self.__FYouTubeObject.Fis_paused = True
+        # self.__FYouTubeObject.Fis_paused = True
+
         self.StopWidget ()
 
         # swDownload - 1
@@ -619,14 +607,13 @@ class YOUTUBEwidget(QWidget):
         else:
             s = 'is_cancelled ...'
             self.YOUTUBEwidgetSignals.signal_YT_StatWidget.emit (s)
-            ...
         #endif
 
         # Удаление Widget
-        s = self.__FYouTubeObject.URL
-        self.YOUTUBEwidgetSignals.signal_DownloadedURL.emit (self.__FYouTubeObject.URL)
+        LURL = self.__FYouTubeObject.URL
+        self.YOUTUBEwidgetSignals.signal_DownloadedURL.emit (LURL)
 
-        # Удаление потока после его использования.
+        # Удаление потока, после его использования.
         del self.FDownloader_YOUTUBE
     #endfunction
 
@@ -644,62 +631,40 @@ class YOUTUBEwidget(QWidget):
         """run_Downloader"""
     #beginfunction
         s = 'YOUTUBEwidget.run_Downloader...'
-        # LULog.LoggerTOOLS.debug (s)
-
+        LULog.LoggerTOOLS.debug (s)
         self.ui.YT_StatWidget.hide ()
         self.ui.YT_ProgressBar.show()
         s = 'Загрузка потока ... (swDownload)'
         self.YOUTUBEwidgetSignals.signal_YT_StatWidget.emit (s)
-
         self.run_Downloader_01()
-
         self.StartWidget ()
-
-        if LUFile.FileExists(self.__FYouTubeObject.FileNameDownload):
-            s = 'Файл '+self.__FYouTubeObject.FileNameDownload+' существует...'
-            LULog.LoggerTOOLS.debug (s)
-            LUFile.FileDelete(self.__FYouTubeObject.FileNameDownload)
-        #endif
-
-        if not LUFile.FileExists (self.__FYouTubeObject.FileNameDownload):
-            self.FDownloader_YOUTUBE.start ()
-        else:
-            # s = 'Файл ' + self.__FYouTubeObject.FileNameDownload + ' существует...'
-            # LULog.LoggerTOOLS.debug (s)
-            self.qthreadFinished_Downloader_YOUTUBE ()
-        #endif
+        self.FDownloader_YOUTUBE.start ()
     #endfunction
 
     @QtCore.Slot (str, name = 'qthreadFinished_GetInfoStream_YOUTUBE')
     def qthreadFinished_GetInfoStream_YOUTUBE (self):
     #beginfunction
         s = 'YOUTUBEwidget.qthreadFinished_GetInfoStream_YOUTUBE...'
-        # LULog.LoggerTOOLS.debug (s)
-        s = self.__FYouTubeObject.URL
-        # self.SDownloadURL.emit (s)
-
+        LULog.LoggerTOOLS.debug (s)
         self.StopWidget ()
-
-        # swNew - 1
+        # swGetInfo - 1
         self.YOUTUBEwidgetSignals.signal_ChangeStatWidgetObject.emit (self.__FStatWidgetObject, -1)
         # swQueue + 1
         self.__FStatWidgetObject = TStatWidgetObject.swQueue
         self.YOUTUBEwidgetSignals.signal_ChangeStatWidgetObject.emit (self.__FStatWidgetObject, 1)
-
         s = 'Получена информация... (swQueue)'
         self.YOUTUBEwidgetSignals.signal_YT_StatWidget.emit (s)
-
         # Удаление потока, после его использования.
         del self.FGetInfoStream_YOUTUBE
     #endfunction
 
     def run_GetInfoStream_01(self):
-        """run_GetInfoStream"""
+        """run_GetInfoStream_01"""
     #beginfunction
         # swNew - 1
         self.YOUTUBEwidgetSignals.signal_ChangeStatWidgetObject.emit (self.__FStatWidgetObject, -1)
-        self.__FStatWidgetObject = TStatWidgetObject.swGetInfo
         # swGetInfo + 1
+        self.__FStatWidgetObject = TStatWidgetObject.swGetInfo
         self.YOUTUBEwidgetSignals.signal_ChangeStatWidgetObject.emit (self.__FStatWidgetObject, 1)
     #endfunction
 
@@ -707,15 +672,12 @@ class YOUTUBEwidget(QWidget):
         """run_GetInfoStream"""
     #beginfunction
         s = 'YOUTUBEwidget.run_GetInfoStream...'
-        # LULog.LoggerTOOLS.debug (s)
+        LULog.LoggerTOOLS.debug (s)
         self.ui.YT_StatWidget.show ()
         s = 'Получение информации о потоке ... (swGetInfo)'
         self.YOUTUBEwidgetSignals.signal_YT_StatWidget.emit (s)
-
         self.run_GetInfoStream_01()
-
         self.StartWidget ()
-
         self.FGetInfoStream_YOUTUBE.start ()
     #endfunction
 
