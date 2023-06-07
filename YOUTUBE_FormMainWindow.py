@@ -405,6 +405,32 @@ class FormMainWindow(QMainWindow):
         ss = 'color: rgba(0, 0, 0, .5); background-color: rgb(157, 157, 157); font-weight: bold; font-size: 10px; font: 10pt "Courier New"'
         self.ui.Memo_Log.setStyleSheet (ss)
     #endfunction
+
+    #--------------------------------------------------
+    # 00.__SetParams
+    #--------------------------------------------------
+    def __SetParams (self):
+        """__SetParams"""
+    #beginfunction
+        s = '00.__SetParams...'
+        LULog.LoggerAPPS.info (s)
+
+        LULog.LoggerAPPS.log (LULog.TEXT, self.Params.FileNameINI)
+        # [GENERAL]
+        LULog.LoggerAPPS.log (LULog.TEXT, 'PathStore='+self.Params.PathStore)
+        LULog.LoggerAPPS.log (LULog.TEXT, 'PathStoreOut='+self.Params.PathStoreOut)
+        LULog.LoggerAPPS.log (LULog.TEXT, 'PathStoreError='+self.Params.PathStoreError)
+        LULog.LoggerAPPS.log (LULog.TEXT, 'Sheduler='+self.Params.Sheduler)
+        # [Youtube]
+        LULog.LoggerAPPS.log (LULog.TEXT, 'PathYoutubeLoad='+self.Params.PathYoutubeLoad)
+        LULog.LoggerAPPS.log (LULog.TEXT, 'CheckBoxCliboard='+str(self.Params.CheckBoxCliboard))
+        LULog.LoggerAPPS.log (LULog.TEXT, 'CheckBoxAutoDownload='+str(self.Params.CheckBoxAutoDownload))
+        LULog.LoggerAPPS.log (LULog.TEXT, 'CheckBoxAutoDelete='+str(self.Params.CheckBoxAutoDelete))
+        LULog.LoggerAPPS.log (LULog.TEXT, 'CheckBoxSkipExists='+str(self.Params.CheckBoxSkipExists))
+        LULog.LoggerAPPS.log (LULog.TEXT, 'Stop='+str(self.Params.Stop))
+        LULog.LoggerAPPS.log (LULog.TEXT, 'Chunck=' + str(self.Params.Chunck))
+    #endfunction
+
     #--------------------------------------------------
     # 01.__SetLogs
     #--------------------------------------------------
@@ -422,9 +448,7 @@ class FormMainWindow(QMainWindow):
 
         # self.ui.Memo_Log.appendPlainText ('mhsdkjhfkjhsakjh'+'\n')
 
-        LULog.LoggerAPPS.log (LULog.TEXT, self.__FParams.FileMemoLog.FileName)
-        LULog.LoggerAPPS.log (LULog.TEXT, self.__FParams.FileNameINI)
-
+        # LULog.LoggerAPPS.log (LULog.TEXT, self.Params.FileMemoLog.FileName)
     #endfunction
 
     #-------------------------------
@@ -505,7 +529,7 @@ class FormMainWindow(QMainWindow):
         # Sheduler
         #-------------------------------
         self.__FSheduler = LUSheduler.TSheduler ()
-        LEvent = self.__FSheduler.AddEvent ('ShedulerTEST1', '0 * * * *')
+        LEvent = self.__FSheduler.AddEvent ('ShedulerTEST1', self.Params.Sheduler)
         self.__FSheduler.OnSheduler = self.__Action_Sheduler
         # if LEvent is not None:
         #     self.__FSheduler.PrintEvent (LEvent)
@@ -690,6 +714,9 @@ class FormMainWindow(QMainWindow):
         s = '__FormCreate...'
         LULog.LoggerAPPS.info (s)
         self.setWindowTitle(YOUTUBE_Consts.cProjectNAME)
+
+        # 00.__SetParams
+        self.__SetParams()
         # 01.__SetLogs
         self.__SetLogs ()
         # 02.__SetStatusBar_PN
@@ -903,11 +930,13 @@ class FormMainWindow(QMainWindow):
         LWidget_X.StatWidgetObject = YOUTUBE_widgetYT.TStatWidgetObject.swNew
         self.__ChangeCountStatWidgetObject (LWidget_X.StatWidgetObject, 1)
 
+        if self.__FStatApplication == LUProc.TStatApplication.saBreak:
+            LWidget_X.StopWidget()
+        #endif
+
         # сигналы
         LWidget_X.YOUTUBEwidgetSignals.signal_DownloadedURL.connect (self.signalHandler_DownloadedURL)
         LWidget_X.YOUTUBEwidgetSignals.signal_ChangeStatWidgetObject.connect (self.signalHandler_ChangeStatWidgetObject)
-
-
 
         self.ui.verticalLayout_3.insertWidget (0, LWidget_X)
         # self.ui.verticalLayout_3.addWidget(LWidget_X, stretch = 0)
@@ -973,8 +1002,9 @@ class FormMainWindow(QMainWindow):
         s = LUDateTime.GenerateObjectIDStr (LObjectID)
         # LULog.LoggerTOOLS.log (LULog.PROCESS, s)
 
-        CPATH = 'd:\\work'
-        LYouTubeObject = LUObjectsYT.TYouTubeObject (CPATH)
+        LPATH = self.Params.PathYoutubeLoad
+
+        LYouTubeObject = LUObjectsYT.TYouTubeObject (LPATH)
         LYouTubeObject.ID = LObjectID
         LMaxRes = LUObjectsYT.cMaxRes480p
         LYouTubeObject.SetURL (AURL, LMaxRes, value ['PlayListName'], value ['NN'], value ['N'])
@@ -1116,6 +1146,8 @@ class FormMainWindow(QMainWindow):
                 if self.__GetListYouTubeObject (LURL) is None:
                     # Добавить LURL в self.__FListYouTubeObject
                     LYouTubeObject = self.__AddListYouTubeObject (LURL, Lvalue)
+                    LYouTubeObject.PathDownload = self.Params.PathYoutubeLoad
+
                     # Добавить LURL в self.__FModel
                     self.__AddModel (LURL)
                     # Добавить виджет в self.__FWidgets
@@ -1236,7 +1268,6 @@ class FormMainWindow(QMainWindow):
             self.StartApplication()
             self.Main()
         else:
-            # self.StopApplication_event.emit (True)
             self.__FAPPSignals.StopApplication_event.emit (True)
             self.StopApplication()
         #endif
@@ -1300,22 +1331,65 @@ class FormMainWindow(QMainWindow):
         LULog.LoggerAPPS.info (s)
         LSaveStatApplication = self.__FStatApplication
 
-        self.__SetStatApplication (LUProc.TStatApplication.saBreak)
+        if LSaveStatApplication == LUProc.TStatApplication.saRunning:
+            self.__SetStatApplication (LUProc.TStatApplication.saBreak)
 
-        # self.StatApplication_event.emit(LUProc.cProcessDeleteAll)
-        self.__FAPPSignals.StatApplication_event.emit(LUProc.cProcessDeleteAll)
-        # Удалить незапущенные потоки
-        # Остановить запущенные потоки
-        # Удалить остановленные потоки
-        for LItem in self.__FListYouTubeObject:
-            LYouTubeObject:LUObjectsYT.TYouTubeObject = LItem
-            LURL = LYouTubeObject.URL
-            self.__DelModel (LURL)
-            self.__DelListWidget (LURL)
-        #endfor
-        self.__ClearListYouTubeObject()
+        LCountWidget = len(self.__FListWidgets)
+        while LCountWidget > 0:
+            # swNew
+            LWidget_X = self.__GetListWidgetStat (YOUTUBE_widgetYT.TStatWidgetObject.swNew)
+            if not LWidget_X is None:
+                LURL = LWidget_X.YouTubeObject.URL
+                self.signalHandler_ChangeStatWidgetObject (YOUTUBE_widgetYT.TStatWidgetObject.swNew, -1)
+                self.signalHandler_DownloadedURL (LURL)
+            else:
+                # swQueue
+                LWidget_X = self.__GetListWidgetStat (YOUTUBE_widgetYT.TStatWidgetObject.swQueue)
+                if not LWidget_X is None:
+                    LURL = LWidget_X.YouTubeObject.URL
+                    # swQueue - 1
+                    self.signalHandler_ChangeStatWidgetObject (YOUTUBE_widgetYT.TStatWidgetObject.swQueue, -1)
+                    self.signalHandler_DownloadedURL (LURL)
+                else:
+                    # swGetInfo
+                    LWidget_X = self.__GetListWidgetStat (YOUTUBE_widgetYT.TStatWidgetObject.swGetInfo)
+                    if not LWidget_X is None:
+                        ...
+                    else:
+                        # swDownload
+                        LWidget_X = self.__GetListWidgetStat (YOUTUBE_widgetYT.TStatWidgetObject.swDownload)
+                        if not LWidget_X is None and LWidget_X.YouTubeObject.FChunk:
+                            LWidget_X.YouTubeObject.Fis_cancelled = True
+                            # LWidget_X.qthreadFinished_Downloader_YOUTUBE ()
+                            ...
+                        #endif
+                    #endif
+                #endif
+            #endif
+            LCountWidget = len(self.__FListWidgets)
+            QCoreApplication.processEvents ()
+        #endwhile
 
-        self.__SetStatApplication (LSaveStatApplication)
+        if LSaveStatApplication == LUProc.TStatApplication.saRunning:
+            self.__SetStatApplication (LUProc.TStatApplication.saRunning)
+
+
+        # if self.__FStatApplication == LUProc.TStatApplication.saBreak:
+        #     # Удалить незапущенные потоки
+        #     # Остановить запущенные потоки
+        #     # Удалить остановленные потоки
+        #     for LItem in self.__FListYouTubeObject:
+        #         LYouTubeObject:LUObjectsYT.TYouTubeObject = LItem
+        #         LURL = LYouTubeObject.URL
+        #         self.__DelModel (LURL)
+        #         self.__DelListWidget (LURL)
+        #     #endfor
+        #     self.__ClearListYouTubeObject()
+        # else:
+        #     # self.StatApplication_event.emit(LUProc.cProcessDeleteAll)
+        #     self.__FAPPSignals.StatApplication_event.emit (LUProc.cProcessDeleteAll)
+        #     self.__SetStatApplication (LUProc.TStatApplication.saDeleteAll)
+        # #endif
     #endfunction
 
     #--------------------------------------------------
@@ -1365,44 +1439,30 @@ class FormMainWindow(QMainWindow):
     def __runProcess(self):
         """__runProcess"""
     #beginfunction
-        # swNew
-        LWidget_X = self.__GetListWidgetStat (YOUTUBE_widgetYT.TStatWidgetObject.swNew)
-        if not LWidget_X is None:
-            NswGetInfo = self.__GetListWidgetCount (YOUTUBE_widgetYT.TStatWidgetObject.swGetInfo)
-            NswDownload = self.__GetListWidgetCount (YOUTUBE_widgetYT.TStatWidgetObject.swDownload)
-            if (NswGetInfo+NswDownload) < self.__FMaxThread:
+        if self.__FStatApplication == LUProc.TStatApplication.saDeleteAll:
+            ...
+        else:
+            # swNew
+            LWidget_X = self.__GetListWidgetStat (YOUTUBE_widgetYT.TStatWidgetObject.swNew)
+            if not LWidget_X is None:
+                NswGetInfo = self.__GetListWidgetCount (YOUTUBE_widgetYT.TStatWidgetObject.swGetInfo)
+                NswDownload = self.__GetListWidgetCount (YOUTUBE_widgetYT.TStatWidgetObject.swDownload)
+                if (NswGetInfo+NswDownload) < self.__FMaxThread:
+                    LWidget_X.run_GetInfoStream ()
+                #endif
+            #endif
 
-                # # swNew - 1
-                # self.__ChangeCountStatWidgetObject (LWidget_X.StatWidgetObject, -1)
-                # # swGetInfo + 1
-                # LWidget_X.StatWidgetObject = YOUTUBE_widgetYT.TStatWidgetObject.swGetInfo
-                # self.__ChangeCountStatWidgetObject (LWidget_X.StatWidgetObject, 1)
-
-                # LWidget_X.StartWidget()
-
-                LWidget_X.run_GetInfoStream ()
+            # swQueue
+            LWidget_X = self.__GetListWidgetStat (YOUTUBE_widgetYT.TStatWidgetObject.swQueue)
+            if not LWidget_X is None:
+                NswGetInfo = self.__GetListWidgetCount (YOUTUBE_widgetYT.TStatWidgetObject.swGetInfo)
+                NswDownload = self.__GetListWidgetCount (YOUTUBE_widgetYT.TStatWidgetObject.swDownload)
+                if (NswGetInfo+NswDownload) < self.__FMaxThread:
+                    LWidget_X.run_Downloader ()
+                #endif
             #endif
         #endif
-
-        # swQueue
-        LWidget_X = self.__GetListWidgetStat (YOUTUBE_widgetYT.TStatWidgetObject.swQueue)
-        if not LWidget_X is None:
-            NswGetInfo = self.__GetListWidgetCount (YOUTUBE_widgetYT.TStatWidgetObject.swGetInfo)
-            NswDownload = self.__GetListWidgetCount (YOUTUBE_widgetYT.TStatWidgetObject.swDownload)
-            if (NswGetInfo+NswDownload) < self.__FMaxThread:
-
-                # swQueue - 1
-                # self.__ChangeCountStatWidgetObject (LWidget_X.StatWidgetObject, -1)
-                # # swDownload + 1
-                # LWidget_X.StatWidgetObject = YOUTUBE_widgetYT.TStatWidgetObject.swDownload
-                # self.__ChangeCountStatWidgetObject (LWidget_X.StatWidgetObject, 1)
-
-                # LWidget_X.StartWidget()
-
-                LWidget_X.run_Downloader ()
-
-            #endif
-        #endif
+    #endif
     #endfunction
 
     #--------------------------------------------------
@@ -1413,8 +1473,8 @@ class FormMainWindow(QMainWindow):
         """__run_idle"""
     #beginfunction
         while self.__Fidle:
+            self.__runProcess ()
             if self.__FStatApplication == LUProc.TStatApplication.saRunning:
-                self.__runProcess()
                 self.__FSheduler.run_Function ()
             #endif
             if len (self.__FListWidgets) > 0:

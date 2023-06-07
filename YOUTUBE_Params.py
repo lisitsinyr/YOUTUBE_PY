@@ -76,14 +76,15 @@ rpPathStore: str = 'PathStore'
 rpPathStoreOut: str = 'PathStoreOut'
 rpPathStoreError: str = 'PathStoreError'
 rpSheduler: str = 'Sheduler'
-# [Yuoutube]
+# [Youtube]
 rkYoutube: str = 'Youtube'
-rpStop: str = 'Stop'
 rpPathYoutubeLoad: str = 'PathYoutubeLoad'
 rpCheckBoxCliboard: str = 'CheckBoxCliboard'
 rpCheckBoxAutoDownload: str = 'CheckBoxAutoDownload'
 rpCheckBoxAutoDelete: str = 'CheckBoxAutoDelete'
 rpCheckBoxSkipExists: str = 'CheckBoxSkipExists'
+rpStop: str = 'Stop'
+rpChunck: str = 'Chunck'
 
 class TParams(object):
     """TParams"""
@@ -102,10 +103,10 @@ class TParams(object):
         super ().__init__ (**kwargs)
         self.__FFileNameINI: str = ''
         self.__FIniFile = LUParserINI.TINIFile()
-        self.__FFileMemoLog: LULog.TFileMemoLog  = LULog.TFileMemoLog ()
+        # self.__FFileMemoLog: LULog.TFileMemoLog  = LULog.TFileMemoLog ()
 
-        YOUTUBE_Consts.APPWorkDir = LUos.APPWorkDir ()
-        YOUTUBE_Consts.APPWorkDir = LUos.GetCurrentDir ()
+        # YOUTUBE_Consts.APPWorkDir = LUos.APPWorkDir ()
+        # YOUTUBE_Consts.APPWorkDir = LUos.GetCurrentDir ()
         YOUTUBE_Consts.APPWorkDir = LUFile.ExtractFileDir(sys.argv[0])
 
         # Параметры
@@ -124,16 +125,16 @@ class TParams(object):
         LFileNameINI = LUFile.IncludeTrailingBackslash(LDirINI)+YOUTUBE_Consts.cProjectINIFileName
         self.FileNameINI = LFileNameINI
 
-        # Журнал
-        LLogDir = LUParserARG.GArgParser.Args.log
-        if len (LLogDir) == 0:
-            LLogDir = LUFile.IncludeTrailingBackslash(YOUTUBE_Consts.APPWorkDir) + 'LOG'
-        else:
-            LLogDir = LUFile.ExpandFileName (LLogDir)
-        #endif
-        LLogDir = LUFile.GetDirNameYYMM (LLogDir, LUDateTime.Now())
-        self.__FFileMemoLog.FileName = LUFile.IncludeTrailingBackslash (LLogDir) +\
-                                       YOUTUBE_Consts.cProjectNAME + '_' + LULog.GetLogFileName ()
+        # # Журнал
+        # LLogDir = LUParserARG.GArgParser.Args.log
+        # if len (LLogDir) == 0:
+        #     LLogDir = LUFile.IncludeTrailingBackslash(YOUTUBE_Consts.APPWorkDir) + 'LOG'
+        # else:
+        #     LLogDir = LUFile.ExpandFileName (LLogDir)
+        # #endif
+        # LLogDir = LUFile.GetDirNameYYMM (LLogDir, LUDateTime.Now())
+        # self.__FFileMemoLog.FileName = LUFile.IncludeTrailingBackslash (LLogDir) +\
+        #                                YOUTUBE_Consts.cProjectNAME + '_' + LULog.GetLogFileName ()
     #endfunction
 
     #--------------------------------------------------
@@ -170,15 +171,15 @@ class TParams(object):
 
     #endfunction
 
-    #--------------------------------------------------
-    # @property FileMemoLog
-    #--------------------------------------------------
-    # getter
-    @property
-    def FileMemoLog (self) -> LULog.TFileMemoLog:
-    #beginfunction
-        return self.__FFileMemoLog
-    #endfunction
+    # #--------------------------------------------------
+    # # @property FileMemoLog
+    # #--------------------------------------------------
+    # # getter
+    # @property
+    # def FileMemoLog (self) -> LULog.TFileMemoLog:
+    # #beginfunction
+    #     return self.__FFileMemoLog
+    # #endfunction
 
     #--------------------------------------------------
     # @property FileNameINI
@@ -258,6 +259,21 @@ class TParams(object):
     def Stop (self, AValue: bool):
     #beginfunction
         self.__FIniFile.SetOption (rkYoutube, rpStop, str(AValue))
+    #endfunction
+
+    #--------------------------------------------------
+    # @property Chunck
+    #--------------------------------------------------
+    # getter
+    @property
+    def Chunck (self) -> bool:
+    #beginfunction
+        return LUStrUtils.strtobool (self.__FIniFile.GetOption (rkYoutube, rpChunck, str(False)))
+    #endfunction
+    @Chunck.setter
+    def Chunck (self, AValue: bool):
+    #beginfunction
+        self.__FIniFile.SetOption (rkYoutube, rpChunck, str(AValue))
     #endfunction
 
     #--------------------------------------------------
