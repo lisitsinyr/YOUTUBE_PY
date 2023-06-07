@@ -39,7 +39,7 @@ from PySide6.QtGui import (QAction, QBrush, QColor, QConicalGradient,
 
 from PySide6.QtWidgets import (
     QAbstractScrollArea, QApplication, QFrame, QHBoxLayout, QVBoxLayout,
-    QListView, QMainWindow, QMenu, QMenuBar,
+    QListView, QMainWindow, QMenu, QMenuBar, QDialog,
     QPlainTextEdit, QScrollArea, QSizePolicy, QSplitter,
     QStatusBar, QTextEdit, QToolBar, QVBoxLayout,
     QSizePolicy, QPushButton,
@@ -69,8 +69,14 @@ import YOUTUBE_Consts
 import YOUTUBE_widgetYT
 
 from ui_YOUTUBE_FormMain import Ui_FormMainWindow
+
 from ui_YOUTUBE_widget import Ui_YT_widget
 from YOUTUBE_widgetYT import YOUTUBEwidget
+from ui_YOUTUBE_About import Ui_FormAbout
+from ui_YOUTUBE_Setup import Ui_FormSetup
+
+import YOUTUBE_FormAboutWindow
+import YOUTUBE_FormSetupWindow
 
 class CustomButton_01 (QPushButton):
     def mousePressEvent (self, event):
@@ -119,6 +125,63 @@ class TAPPSignals(QObject):
     StopApplication_event = QtCore.Signal(bool)
     StatApplication_event = QtCore.Signal(str)
     closed_event = QtCore.Signal (bool)
+#endclass
+
+# ------------------------------------
+# FormSetup(QDialog)
+# ------------------------------------
+class FormSetup(QDialog):
+    """FormAbout"""
+    luClassName = 'FormSetup'
+    def __init__(self, parent=None):
+    #beginfunction
+        super().__init__(parent=parent)
+        self.ui = Ui_FormSetup()
+        self.ui.setupUi(self)
+    #endfunction
+    #--------------------------------------------------
+    # destructor
+    #--------------------------------------------------
+    def __del__ (self):
+        """__del__"""
+    #beginfunction
+        LClassName = self.__class__.__name__
+        s = '{} уничтожен'.format(LClassName)
+        #print (s)
+    #endfunction
+
+#endclass
+
+# ------------------------------------
+# FormAbout(QDialog)
+# ------------------------------------
+class FormAbout (QDialog):
+    """FormAbout"""
+    luClassName = 'FormAbout'
+    def __init__(self, parent=None):
+    #beginfunction
+        super().__init__(parent=parent)
+        self.ui = Ui_FormAbout()
+        self.ui.setupUi(self)
+
+        # self.buttonBox.accepted.connect (FormAbout.accept)
+        # self.buttonBox.rejected.connect (FormAbout.reject)
+
+    #endfunction
+    #--------------------------------------------------
+    # destructor
+    #--------------------------------------------------
+    def __del__ (self):
+        """__del__"""
+    #beginfunction
+        LClassName = self.__class__.__name__
+        s = '{} уничтожен'.format(LClassName)
+        #print (s)
+    #endfunction
+
+    def submitclose(self):
+        #do whatever you need with self.roiGroups
+        self.accept()
 #endclass
 
 # ------------------------------------
@@ -952,6 +1015,8 @@ class FormMainWindow(QMainWindow):
         #     LWidget_X.StartWidget()
         # #endif
 
+        LWidget_X.SetStatWidgetObject()
+
         QCoreApplication.processEvents ()
         return LWidget_X
     #endfunction
@@ -1291,10 +1356,14 @@ class FormMainWindow(QMainWindow):
         self.__SetStatApplication (LUProc.TStatApplication.saBreak)
         # self.StatApplication_event.emit(LUProc.cProcessSetup)
         self.__FAPPSignals.StatApplication_event.emit(LUProc.cProcessSetup)
-        # if ExecSetup = mrOk then
-        #    FSheduler.DeleteEvent (ShedulerName)
-        #    FSheduler.AddEvent (ShedulerName, TEMPLATE_RegIni.ShedulerTEMPLATE)
-        # end
+
+        LFormSetup = YOUTUBE_FormSetupWindow.FormSetup ()
+        LResult = LFormSetup.exec()
+        if LResult == LUProc.mrOk:
+            print (LResult)
+            # FSheduler.DeleteEvent (ShedulerName)
+            # FSheduler.AddEvent (ShedulerName, TEMPLATE_RegIni.ShedulerTEMPLATE)
+        #endif
 
         os.chdir(LSaveCurrentDir)
         self.__SetStatApplication (LSaveStatApplication)
@@ -1310,7 +1379,9 @@ class FormMainWindow(QMainWindow):
         self.__SetStatApplication (LUProc.TStatApplication.saBreak)
         # self.StatApplication_event.emit(LUProc.cProcessAbout)
         self.__FAPPSignals.StatApplication_event.emit(LUProc.cProcessAbout)
-        # ExecAbout
+
+        LFormAbout = YOUTUBE_FormAboutWindow.FormAbout ()
+        LResult = LFormAbout.exec()
 
         self.__SetStatApplication (LSaveStatApplication)
     #endfunction

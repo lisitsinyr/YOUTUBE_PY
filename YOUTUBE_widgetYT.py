@@ -291,11 +291,7 @@ class YOUTUBEwidget(QWidget):
         self.ui.setupUi(self)
         #
         self.__FYOUTUBEwidgetSignals = TYOUTUBEwidgetSignals()
-
         self.__FStatWidgetObject: TStatWidgetObject = TStatWidgetObject.swNew
-        # swNew + 1
-        # self.YOUTUBEwidgetSignals.signal_ChangeStatWidgetObject.emit (self.__FStatWidgetObject, 1)
-
         # Состояние Widget
         self.__FStatWidget: LUProc.TStatWidget = LUProc.TStatWidget.swRunning
         # FYouTubeObject
@@ -305,7 +301,8 @@ class YOUTUBEwidget(QWidget):
         s = AYouTubeObject.URLInfo ['thumbnail_url']
         s = AYouTubeObject.URLInfo ['author']
         self.__FMaxRes = AMaxRes
-        # self.setObjectName (u"widget_X")
+        self.setObjectName (u"Widget_X")
+        """
         # self.setMinimumSize (QSize (400, 40))
         # self.setMaximumSize (QSize (400, 40))
         # self.setMinimumSize (QSize (0, 40))
@@ -313,7 +310,7 @@ class YOUTUBEwidget(QWidget):
         # self.setMaximumSize (QSize (16777215, 16777215))
         # self.setStyleSheet (u"background-color: rgb(0, 0, 255);")
         # self.setSizePolicy(QSizePolicy.Maximum, QSizePolicy.Maximum)
-
+        """
         #----------------------------------------------
         # 2 вариант
         #----------------------------------------------
@@ -389,38 +386,45 @@ class YOUTUBEwidget(QWidget):
         self.__SetActions()
     #endfunction
 
+    def SetStatWidgetObject (self):
+        """SetStatWidgetObject"""
+    #beginfunction
+        if self.__FStatWidgetObject == TStatWidgetObject.swNew:
+            self.ui.pushButton_Start_Stop.setEnabled (False)
+            self.ui.pushButton_Delete.setEnabled (True)
+        #endif
+        if self.__FStatWidgetObject == TStatWidgetObject.swQueue:
+            self.ui.pushButton_Start_Stop.setEnabled (False)
+            self.ui.pushButton_Delete.setEnabled (True)
+        #endif
+        if self.__FStatWidgetObject == TStatWidgetObject.swGetInfo:
+            self.ui.action_Start_Stop.setEnabled (False)
+            # self.ui.pushButton_Start_Stop.hide()
+            self.ui.pushButton_Start_Stop.setEnabled (False)
+            self.ui.pushButton_Delete.setEnabled (False)
+        #endif
+        if self.__FStatWidgetObject == TStatWidgetObject.swDownload:
+            self.ui.action_Start_Stop.setEnabled (True)
+            # self.ui.pushButton_Start_Stop.show()
+            self.ui.pushButton_Start_Stop.setEnabled (True)
+            self.ui.pushButton_Delete.setEnabled (True)
+        #endif
+    #endfunction
+
     def __SetStatWidget (self, AStatWidget: LUProc.TStatWidget):
         """__SetStatWidget"""
     #beginfunction
         self.__FStatWidget = AStatWidget
         self.ui.action_Start_Stop.setEnabled(True)
         if self.__FStatWidget == LUProc.TStatWidget.swRunning:
-
-            if self.__FStatWidgetObject == TStatWidgetObject.swGetInfo:
-                self.ui.action_Start_Stop.setEnabled(False)
-                self.ui.pushButton_Start_Stop.hide()
-            #endif
-            if self.__FStatWidgetObject == TStatWidgetObject.swDownload:
-                self.ui.action_Start_Stop.setEnabled(True)
-                self.ui.pushButton_Start_Stop.show()
-            #endif
-
             self.ui.action_Start_Stop.setIcon (self.__FiconStop)
             self.ui.pushButton_Start_Stop.setIcon (self.__FiconStop)
+            self.SetStatWidgetObject()
         #endif
         if self.__FStatWidget == LUProc.TStatWidget.swBreak:
-
-            if self.__FStatWidgetObject == TStatWidgetObject.swGetInfo:
-                self.ui.action_Start_Stop.setEnabled(False)
-                self.ui.pushButton_Start_Stop.hide()
-            #endif
-            if self.__FStatWidgetObject == TStatWidgetObject.swDownload:
-                self.ui.action_Start_Stop.setEnabled(True)
-                self.ui.pushButton_Start_Stop.show()
-            #endif
-
             self.ui.action_Start_Stop.setIcon (self.__FiconStart)
             self.ui.pushButton_Start_Stop.setIcon (self.__FiconStart)
+            self.SetStatWidgetObject()
         #endif
     #endfunction
 
@@ -632,6 +636,9 @@ class YOUTUBEwidget(QWidget):
     #beginfunction
         s = 'YOUTUBEwidget.run_Downloader...'
         LULog.LoggerTOOLS.debug (s)
+
+        self.SetStatWidgetObject()
+
         self.ui.YT_StatWidget.hide ()
         self.ui.YT_ProgressBar.show()
         s = 'Загрузка потока ... (swDownload)'
@@ -654,6 +661,9 @@ class YOUTUBEwidget(QWidget):
         self.YOUTUBEwidgetSignals.signal_ChangeStatWidgetObject.emit (self.__FStatWidgetObject, 1)
         s = 'Получена информация... (swQueue)'
         self.YOUTUBEwidgetSignals.signal_YT_StatWidget.emit (s)
+
+        self.SetStatWidgetObject ()
+
         # Удаление потока, после его использования.
         del self.FGetInfoStream_YOUTUBE
     #endfunction
@@ -673,6 +683,9 @@ class YOUTUBEwidget(QWidget):
     #beginfunction
         s = 'YOUTUBEwidget.run_GetInfoStream...'
         LULog.LoggerTOOLS.debug (s)
+
+        self.SetStatWidgetObject()
+
         self.ui.YT_StatWidget.show ()
         s = 'Получение информации о потоке ... (swGetInfo)'
         self.YOUTUBEwidgetSignals.signal_YT_StatWidget.emit (s)
