@@ -59,12 +59,7 @@ class Ui_FormMainWindow(object):
         self.action_Setup = QAction(FormMainWindow)
         self.action_Setup.setObjectName(u"action_Setup")
         icon4 = QIcon()
-        iconThemeName = u"applications-engineering"
-        if QIcon.hasThemeIcon(iconThemeName):
-            icon4 = QIcon.fromTheme(iconThemeName)
-        else:
-            icon4.addFile(u":/ICONS/settings-5-xl.png", QSize(), QIcon.Normal, QIcon.On)
-
+        icon4.addFile(u":/ICONS/icons8-\u043e\u0431\u0441\u043b\u0443\u0436\u0438\u0432\u0430\u043d\u0438\u0435-48.png", QSize(), QIcon.Normal, QIcon.Off)
         self.action_Setup.setIcon(icon4)
         self.action_Setup.setVisible(True)
         self.action_DeleteAll = QAction(FormMainWindow)
@@ -84,6 +79,11 @@ class Ui_FormMainWindow(object):
         self.action_ExitProgram = QAction(FormMainWindow)
         self.action_ExitProgram.setObjectName(u"action_ExitProgram")
         self.action_ExitProgram.setCheckable(True)
+        self.action_TestFunction = QAction(FormMainWindow)
+        self.action_TestFunction.setObjectName(u"action_TestFunction")
+        icon7 = QIcon()
+        icon7.addFile(u":/ICONS/sign_out_32px.png", QSize(), QIcon.Normal, QIcon.Off)
+        self.action_TestFunction.setIcon(icon7)
         self.centralwidget = QWidget(FormMainWindow)
         self.centralwidget.setObjectName(u"centralwidget")
         self.layoutWidget = QWidget(self.centralwidget)
@@ -290,6 +290,7 @@ class Ui_FormMainWindow(object):
         self.toolBar.addAction(self.action_Help)
         self.toolBar.addSeparator()
         self.toolBar.addAction(self.action_ExitProgram)
+        self.toolBar.addAction(self.action_TestFunction)
 
         self.retranslateUi(FormMainWindow)
         self.action_ExitProgram.triggered.connect(FormMainWindow.close)
@@ -317,6 +318,10 @@ class Ui_FormMainWindow(object):
         self.action_About.setText(QCoreApplication.translate("FormMainWindow", u"\u041e \u043f\u0440\u043e\u0433\u0440\u0430\u043c\u043c\u0435", None))
         self.action_Help.setText(QCoreApplication.translate("FormMainWindow", u"\u041f\u043e\u043c\u043e\u0449\u044c", None))
         self.action_ExitProgram.setText(QCoreApplication.translate("FormMainWindow", u"\u0412\u044b\u0445\u043e\u0434 \u0438\u0437 \u043f\u0440\u043e\u0433\u0440\u0430\u043c\u043c\u044b", None))
+        self.action_TestFunction.setText(QCoreApplication.translate("FormMainWindow", u"TestFunction", None))
+#if QT_CONFIG(tooltip)
+        self.action_TestFunction.setToolTip(QCoreApplication.translate("FormMainWindow", u"\u0422\u0435\u0441\u0442\u0438\u0440\u043e\u0432\u0430\u043d\u0438\u0435 \u0444\u0443\u043d\u043a\u0446\u0438\u0439", None))
+#endif // QT_CONFIG(tooltip)
         self.menu_File.setTitle(QCoreApplication.translate("FormMainWindow", u"File", None))
         self.menu_Edit.setTitle(QCoreApplication.translate("FormMainWindow", u"Edit", None))
         self.menu.setTitle(QCoreApplication.translate("FormMainWindow", u"\u041d\u0430\u0441\u0442\u0440\u043e\u0439\u043a\u0430", None))

@@ -476,6 +476,7 @@
    <addaction name="action_Help"/>
    <addaction name="separator"/>
    <addaction name="action_ExitProgram"/>
+   <addaction name="action_TestFunction"/>
   </widget>
   <action name="action_CreateYoutube">
    <property name="checked">
@@ -530,9 +531,8 @@
   </action>
   <action name="action_Setup">
    <property name="icon">
-    <iconset theme="applications-engineering">
-     <normalon>:/ICONS/settings-5-xl.png</normalon>
-    </iconset>
+    <iconset resource="YOUTUBE_images.qrc">
+     <normaloff>:/ICONS/icons8-обслуживание-48.png</normaloff>:/ICONS/icons8-обслуживание-48.png</iconset>
    </property>
    <property name="text">
     <string>Настройка</string>
@@ -581,6 +581,18 @@
    </property>
    <property name="text">
     <string>Выход из программы</string>
+   </property>
+  </action>
+  <action name="action_TestFunction">
+   <property name="icon">
+    <iconset resource="YOUTUBE_images.qrc">
+     <normaloff>:/ICONS/sign_out_32px.png</normaloff>:/ICONS/sign_out_32px.png</iconset>
+   </property>
+   <property name="text">
+    <string>TestFunction</string>
+   </property>
+   <property name="toolTip">
+    <string>Тестирование функций</string>
    </property>
   </action>
  </widget>
