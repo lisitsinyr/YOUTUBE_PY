@@ -139,7 +139,7 @@ class TParams(object):
         self.__FPathStoreOut: str = ''
         self.__FPathStoreError: str = ''
         self.__FStop: bool = False
-        self.__FChunk = False
+        self.__FChunk: bool = False
         self.__FSheduler: str = ''
         self.__FPathYoutubeLoad: str = ''
         self.__FCheckBoxCliboard: bool = False
@@ -295,37 +295,6 @@ class TParams(object):
     #endfunction
 
     #--------------------------------------------------
-    # @property Stop
-    #--------------------------------------------------
-    # getter
-    @property
-    def Stop (self) -> bool:
-    #beginfunction
-        # return distutils.util.strtobool(self.__FIniFile.GetOption(rkGENERAL, rpStop, False)
-        return LUStrUtils.strtobool (self.__FIniFile.GetOption (rkYoutube, rpStop, str (False)))
-    #endfunction
-    @Stop.setter
-    def Stop (self, AValue: bool):
-    #beginfunction
-        self.__FIniFile.SetOption (rkYoutube, rpStop, str(AValue))
-    #endfunction
-
-    #--------------------------------------------------
-    # @property Chunk
-    #--------------------------------------------------
-    # getter
-    @property
-    def Chunk (self) -> bool:
-    #beginfunction
-        return LUStrUtils.strtobool (self.__FIniFile.GetOption (rkYoutube, rpChunk, str(False)))
-    #endfunction
-    @Chunk.setter
-    def Chunk (self, AValue: bool):
-    #beginfunction
-        self.__FIniFile.SetOption (rkYoutube, rpChunk, str(AValue))
-    #endfunction
-
-    #--------------------------------------------------
     # @property Sheduler
     #--------------------------------------------------
     # getter
@@ -364,12 +333,13 @@ class TParams(object):
     @property
     def CheckBoxCliboard (self) -> bool:
     #beginfunction
-        return LUStrUtils.strtobool (self.__FIniFile.GetOption (rkYoutube, rpCheckBoxCliboard, str(False)))
+        b = self.__FIniFile.GetOption (rkYoutube, rpCheckBoxCliboard, False)
+        return b
     #endfunction
     @CheckBoxCliboard.setter
     def CheckBoxCliboard (self, AValue: bool):
     #beginfunction
-        self.__FIniFile.SetOption (rkYoutube, rpCheckBoxCliboard, int (AValue))
+        self.__FIniFile.SetOption (rkYoutube, rpCheckBoxCliboard, AValue)
     #endfunction
 
     #--------------------------------------------------
@@ -379,12 +349,13 @@ class TParams(object):
     @property
     def CheckBoxAutoDownload (self) -> bool:
     #beginfunction
-        return LUStrUtils.strtobool (self.__FIniFile.GetOption (rkYoutube, rpCheckBoxAutoDownload, str(False)))
+        b = self.__FIniFile.GetOption (rkYoutube, rpCheckBoxAutoDownload, False)
+        return b
     #endfunction
     @CheckBoxAutoDownload.setter
     def CheckBoxAutoDownload (self, AValue: bool):
     #beginfunction
-        self.__FIniFile.SetOption (rkYoutube, rpCheckBoxAutoDownload, int(AValue))
+        self.__FIniFile.SetOption (rkYoutube, rpCheckBoxAutoDownload, AValue)
     #endfunction
 
     #--------------------------------------------------
@@ -394,12 +365,13 @@ class TParams(object):
     @property
     def CheckBoxAutoDelete (self) -> bool:
     #beginfunction
-        return LUStrUtils.strtobool (self.__FIniFile.GetOption (rkYoutube, rpCheckBoxAutoDelete, str(False)))
+        b = self.__FIniFile.GetOption (rkYoutube, rpCheckBoxAutoDelete, False)
+        return b
     #endfunction
     @CheckBoxAutoDelete.setter
     def CheckBoxAutoDelete (self, AValue: bool):
     #beginfunction
-        self.__FIniFile.SetOption (rkYoutube, rpCheckBoxAutoDelete, int(AValue))
+        self.__FIniFile.SetOption (rkYoutube, rpCheckBoxAutoDelete, bool(AValue))
     #endfunction
 
     #--------------------------------------------------
@@ -409,13 +381,47 @@ class TParams(object):
     @property
     def CheckBoxSkipExists (self) -> bool:
     #beginfunction
-        return LUStrUtils.strtobool (self.__FIniFile.GetOption (rkYoutube, rpCheckBoxSkipExists, str(False)))
+        b = self.__FIniFile.GetOption (rkYoutube, rpCheckBoxSkipExists, False)
+        return b
     #endfunction
     @CheckBoxSkipExists.setter
     def CheckBoxSkipExists (self, AValue: bool):
     #beginfunction
-        self.__FIniFile.SetOption (rkYoutube, rpCheckBoxSkipExists, int(AValue))
+        self.__FIniFile.SetOption (rkYoutube, rpCheckBoxSkipExists, AValue)
     #endfunction
+
+    #--------------------------------------------------
+    # @property Stop
+    #--------------------------------------------------
+    # getter
+    @property
+    def Stop (self) -> bool:
+    #beginfunction
+        b = self.__FIniFile.GetOption (rkYoutube, rpStop, False)
+        return b
+    #endfunction
+    @Stop.setter
+    def Stop (self, AValue: bool):
+    #beginfunction
+        self.__FIniFile.SetOption (rkYoutube, rpStop, AValue)
+    #endfunction
+
+    #--------------------------------------------------
+    # @property Chunk
+    #--------------------------------------------------
+    # getter
+    @property
+    def Chunk (self) -> bool:
+    #beginfunction
+        b = self.__FIniFile.GetOption (rkYoutube, rpChunk, False)
+        return b
+    #endfunction
+    @Chunk.setter
+    def Chunk (self, AValue: bool):
+    #beginfunction
+        self.__FIniFile.SetOption (rkYoutube, rpChunk, AValue)
+    #endfunction
+
 #endclass
 
 # ------------------------------------------

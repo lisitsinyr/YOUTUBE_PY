@@ -39,7 +39,7 @@ class Ui_FormSetup(object):
         self.tab_1.setObjectName(u"tab_1")
         self.groupBox_Sheduler = QGroupBox(self.tab_1)
         self.groupBox_Sheduler.setObjectName(u"groupBox_Sheduler")
-        self.groupBox_Sheduler.setGeometry(QRect(0, 230, 225, 170))
+        self.groupBox_Sheduler.setGeometry(QRect(0, 210, 225, 170))
         self.gridLayout_3 = QGridLayout(self.groupBox_Sheduler)
         self.gridLayout_3.setObjectName(u"gridLayout_3")
         self.formLayout = QFormLayout()
@@ -114,14 +114,14 @@ class Ui_FormSetup(object):
 
         self.groupBox_Checkbox = QGroupBox(self.tab_1)
         self.groupBox_Checkbox.setObjectName(u"groupBox_Checkbox")
-        self.groupBox_Checkbox.setGeometry(QRect(240, 230, 230, 170))
-        self.widget = QWidget(self.groupBox_Checkbox)
-        self.widget.setObjectName(u"widget")
-        self.widget.setGeometry(QRect(20, 20, 202, 136))
-        self.verticalLayout = QVBoxLayout(self.widget)
+        self.groupBox_Checkbox.setGeometry(QRect(240, 210, 230, 191))
+        self.layoutWidget = QWidget(self.groupBox_Checkbox)
+        self.layoutWidget.setObjectName(u"layoutWidget")
+        self.layoutWidget.setGeometry(QRect(20, 20, 202, 136))
+        self.verticalLayout = QVBoxLayout(self.layoutWidget)
         self.verticalLayout.setObjectName(u"verticalLayout")
         self.verticalLayout.setContentsMargins(0, 0, 0, 0)
-        self.checkBox_CheckBoxCliboard = QCheckBox(self.widget)
+        self.checkBox_CheckBoxCliboard = QCheckBox(self.layoutWidget)
         self.checkBox_CheckBoxCliboard.setObjectName(u"checkBox_CheckBoxCliboard")
         self.checkBox_CheckBoxCliboard.setMinimumSize(QSize(200, 22))
         self.checkBox_CheckBoxCliboard.setMaximumSize(QSize(200, 22))
@@ -129,7 +129,7 @@ class Ui_FormSetup(object):
 
         self.verticalLayout.addWidget(self.checkBox_CheckBoxCliboard)
 
-        self.checkBox_CheckBoxAutoDownload = QCheckBox(self.widget)
+        self.checkBox_CheckBoxAutoDownload = QCheckBox(self.layoutWidget)
         self.checkBox_CheckBoxAutoDownload.setObjectName(u"checkBox_CheckBoxAutoDownload")
         self.checkBox_CheckBoxAutoDownload.setMinimumSize(QSize(200, 22))
         self.checkBox_CheckBoxAutoDownload.setMaximumSize(QSize(200, 22))
@@ -137,7 +137,7 @@ class Ui_FormSetup(object):
 
         self.verticalLayout.addWidget(self.checkBox_CheckBoxAutoDownload)
 
-        self.checkBox_CheckBoxAutoDelete = QCheckBox(self.widget)
+        self.checkBox_CheckBoxAutoDelete = QCheckBox(self.layoutWidget)
         self.checkBox_CheckBoxAutoDelete.setObjectName(u"checkBox_CheckBoxAutoDelete")
         self.checkBox_CheckBoxAutoDelete.setMinimumSize(QSize(200, 22))
         self.checkBox_CheckBoxAutoDelete.setMaximumSize(QSize(200, 22))
@@ -145,7 +145,7 @@ class Ui_FormSetup(object):
 
         self.verticalLayout.addWidget(self.checkBox_CheckBoxAutoDelete)
 
-        self.checkBox_CheckBoxSkipExists = QCheckBox(self.widget)
+        self.checkBox_CheckBoxSkipExists = QCheckBox(self.layoutWidget)
         self.checkBox_CheckBoxSkipExists.setObjectName(u"checkBox_CheckBoxSkipExists")
         self.checkBox_CheckBoxSkipExists.setMinimumSize(QSize(200, 22))
         self.checkBox_CheckBoxSkipExists.setMaximumSize(QSize(200, 22))
@@ -153,7 +153,7 @@ class Ui_FormSetup(object):
 
         self.verticalLayout.addWidget(self.checkBox_CheckBoxSkipExists)
 
-        self.checkBox_CheckBoxChunk = QCheckBox(self.widget)
+        self.checkBox_CheckBoxChunk = QCheckBox(self.layoutWidget)
         self.checkBox_CheckBoxChunk.setObjectName(u"checkBox_CheckBoxChunk")
         self.checkBox_CheckBoxChunk.setMinimumSize(QSize(200, 22))
         self.checkBox_CheckBoxChunk.setMaximumSize(QSize(200, 22))
@@ -161,25 +161,31 @@ class Ui_FormSetup(object):
 
         self.verticalLayout.addWidget(self.checkBox_CheckBoxChunk)
 
-        self.layoutWidget = QWidget(self.tab_1)
-        self.layoutWidget.setObjectName(u"layoutWidget")
-        self.layoutWidget.setGeometry(QRect(10, 160, 551, 48))
-        self.verticalLayout_4 = QVBoxLayout(self.layoutWidget)
+        self.checkBox_CheckBoxStop = QCheckBox(self.groupBox_Checkbox)
+        self.checkBox_CheckBoxStop.setObjectName(u"checkBox_CheckBoxStop")
+        self.checkBox_CheckBoxStop.setGeometry(QRect(20, 160, 200, 22))
+        self.checkBox_CheckBoxStop.setMinimumSize(QSize(200, 22))
+        self.checkBox_CheckBoxStop.setMaximumSize(QSize(200, 22))
+        self.checkBox_CheckBoxStop.setChecked(True)
+        self.layoutWidget1 = QWidget(self.tab_1)
+        self.layoutWidget1.setObjectName(u"layoutWidget1")
+        self.layoutWidget1.setGeometry(QRect(10, 160, 551, 48))
+        self.verticalLayout_4 = QVBoxLayout(self.layoutWidget1)
         self.verticalLayout_4.setObjectName(u"verticalLayout_4")
         self.verticalLayout_4.setContentsMargins(0, 0, 0, 0)
-        self.label_PathYoutubeLoad = QLabel(self.layoutWidget)
+        self.label_PathYoutubeLoad = QLabel(self.layoutWidget1)
         self.label_PathYoutubeLoad.setObjectName(u"label_PathYoutubeLoad")
 
         self.verticalLayout_4.addWidget(self.label_PathYoutubeLoad)
 
         self.gridLayout_4 = QGridLayout()
         self.gridLayout_4.setObjectName(u"gridLayout_4")
-        self.toolButton_PathYoutubeLoad = QToolButton(self.layoutWidget)
+        self.toolButton_PathYoutubeLoad = QToolButton(self.layoutWidget1)
         self.toolButton_PathYoutubeLoad.setObjectName(u"toolButton_PathYoutubeLoad")
 
         self.gridLayout_4.addWidget(self.toolButton_PathYoutubeLoad, 0, 1, 1, 1)
 
-        self.lineEdit_PathYoutubeLoad = QLineEdit(self.layoutWidget)
+        self.lineEdit_PathYoutubeLoad = QLineEdit(self.layoutWidget1)
         self.lineEdit_PathYoutubeLoad.setObjectName(u"lineEdit_PathYoutubeLoad")
 
         self.gridLayout_4.addWidget(self.lineEdit_PathYoutubeLoad, 0, 0, 1, 1)
@@ -187,25 +193,25 @@ class Ui_FormSetup(object):
 
         self.verticalLayout_4.addLayout(self.gridLayout_4)
 
-        self.widget1 = QWidget(self.tab_1)
-        self.widget1.setObjectName(u"widget1")
-        self.widget1.setGeometry(QRect(11, 111, 551, 48))
-        self.verticalLayout_3 = QVBoxLayout(self.widget1)
+        self.layoutWidget2 = QWidget(self.tab_1)
+        self.layoutWidget2.setObjectName(u"layoutWidget2")
+        self.layoutWidget2.setGeometry(QRect(11, 111, 551, 48))
+        self.verticalLayout_3 = QVBoxLayout(self.layoutWidget2)
         self.verticalLayout_3.setObjectName(u"verticalLayout_3")
         self.verticalLayout_3.setContentsMargins(0, 0, 0, 0)
-        self.label_PathStoreError = QLabel(self.widget1)
+        self.label_PathStoreError = QLabel(self.layoutWidget2)
         self.label_PathStoreError.setObjectName(u"label_PathStoreError")
 
         self.verticalLayout_3.addWidget(self.label_PathStoreError)
 
         self.gridLayout_03 = QGridLayout()
         self.gridLayout_03.setObjectName(u"gridLayout_03")
-        self.toolButton_PathStoreError = QToolButton(self.widget1)
+        self.toolButton_PathStoreError = QToolButton(self.layoutWidget2)
         self.toolButton_PathStoreError.setObjectName(u"toolButton_PathStoreError")
 
         self.gridLayout_03.addWidget(self.toolButton_PathStoreError, 0, 1, 1, 1)
 
-        self.lineEdit_PathStoreError = QLineEdit(self.widget1)
+        self.lineEdit_PathStoreError = QLineEdit(self.layoutWidget2)
         self.lineEdit_PathStoreError.setObjectName(u"lineEdit_PathStoreError")
 
         self.gridLayout_03.addWidget(self.lineEdit_PathStoreError, 0, 0, 1, 1)
@@ -213,25 +219,25 @@ class Ui_FormSetup(object):
 
         self.verticalLayout_3.addLayout(self.gridLayout_03)
 
-        self.widget2 = QWidget(self.tab_1)
-        self.widget2.setObjectName(u"widget2")
-        self.widget2.setGeometry(QRect(10, 60, 551, 48))
-        self.verticalLayout_2 = QVBoxLayout(self.widget2)
+        self.layoutWidget3 = QWidget(self.tab_1)
+        self.layoutWidget3.setObjectName(u"layoutWidget3")
+        self.layoutWidget3.setGeometry(QRect(10, 60, 551, 48))
+        self.verticalLayout_2 = QVBoxLayout(self.layoutWidget3)
         self.verticalLayout_2.setObjectName(u"verticalLayout_2")
         self.verticalLayout_2.setContentsMargins(0, 0, 0, 0)
-        self.label_PathStoreOut = QLabel(self.widget2)
+        self.label_PathStoreOut = QLabel(self.layoutWidget3)
         self.label_PathStoreOut.setObjectName(u"label_PathStoreOut")
 
         self.verticalLayout_2.addWidget(self.label_PathStoreOut)
 
         self.gridLayout_02 = QGridLayout()
         self.gridLayout_02.setObjectName(u"gridLayout_02")
-        self.toolButton_PathStoreOut = QToolButton(self.widget2)
+        self.toolButton_PathStoreOut = QToolButton(self.layoutWidget3)
         self.toolButton_PathStoreOut.setObjectName(u"toolButton_PathStoreOut")
 
         self.gridLayout_02.addWidget(self.toolButton_PathStoreOut, 0, 1, 1, 1)
 
-        self.lineEdit_PathStoreOut = QLineEdit(self.widget2)
+        self.lineEdit_PathStoreOut = QLineEdit(self.layoutWidget3)
         self.lineEdit_PathStoreOut.setObjectName(u"lineEdit_PathStoreOut")
 
         self.gridLayout_02.addWidget(self.lineEdit_PathStoreOut, 0, 0, 1, 1)
@@ -239,13 +245,13 @@ class Ui_FormSetup(object):
 
         self.verticalLayout_2.addLayout(self.gridLayout_02)
 
-        self.widget3 = QWidget(self.tab_1)
-        self.widget3.setObjectName(u"widget3")
-        self.widget3.setGeometry(QRect(11, 11, 551, 48))
-        self.verticalLayout_1 = QVBoxLayout(self.widget3)
+        self.layoutWidget4 = QWidget(self.tab_1)
+        self.layoutWidget4.setObjectName(u"layoutWidget4")
+        self.layoutWidget4.setGeometry(QRect(11, 11, 551, 48))
+        self.verticalLayout_1 = QVBoxLayout(self.layoutWidget4)
         self.verticalLayout_1.setObjectName(u"verticalLayout_1")
         self.verticalLayout_1.setContentsMargins(0, 0, 0, 0)
-        self.label_PathStore = QLabel(self.widget3)
+        self.label_PathStore = QLabel(self.layoutWidget4)
         self.label_PathStore.setObjectName(u"label_PathStore")
 
         self.verticalLayout_1.addWidget(self.label_PathStore)
@@ -253,7 +259,7 @@ class Ui_FormSetup(object):
         self.gridLayout_01 = QGridLayout()
         self.gridLayout_01.setObjectName(u"gridLayout_01")
         self.gridLayout_01.setSizeConstraint(QLayout.SetMinAndMaxSize)
-        self.lineEdit_PathStore = QLineEdit(self.widget3)
+        self.lineEdit_PathStore = QLineEdit(self.layoutWidget4)
         self.lineEdit_PathStore.setObjectName(u"lineEdit_PathStore")
         sizePolicy.setHeightForWidth(self.lineEdit_PathStore.sizePolicy().hasHeightForWidth())
         self.lineEdit_PathStore.setSizePolicy(sizePolicy)
@@ -261,7 +267,7 @@ class Ui_FormSetup(object):
 
         self.gridLayout_01.addWidget(self.lineEdit_PathStore, 0, 0, 1, 1)
 
-        self.toolButton_PathStore = QToolButton(self.widget3)
+        self.toolButton_PathStore = QToolButton(self.layoutWidget4)
         self.toolButton_PathStore.setObjectName(u"toolButton_PathStore")
 
         self.gridLayout_01.addWidget(self.toolButton_PathStore, 0, 1, 1, 1)
@@ -275,41 +281,41 @@ class Ui_FormSetup(object):
         self.groupBox_3 = QGroupBox(self.tab_2)
         self.groupBox_3.setObjectName(u"groupBox_3")
         self.groupBox_3.setGeometry(QRect(20, 20, 341, 321))
-        self.widget4 = QWidget(self.groupBox_3)
-        self.widget4.setObjectName(u"widget4")
-        self.widget4.setGeometry(QRect(51, 71, 202, 126))
-        self.gridLayout = QGridLayout(self.widget4)
+        self.layoutWidget5 = QWidget(self.groupBox_3)
+        self.layoutWidget5.setObjectName(u"layoutWidget5")
+        self.layoutWidget5.setGeometry(QRect(51, 71, 202, 126))
+        self.gridLayout = QGridLayout(self.layoutWidget5)
         self.gridLayout.setObjectName(u"gridLayout")
         self.gridLayout.setContentsMargins(0, 0, 0, 0)
-        self.checkBox_CheckBoxCliboard_2 = QCheckBox(self.widget4)
+        self.checkBox_CheckBoxCliboard_2 = QCheckBox(self.layoutWidget5)
         self.checkBox_CheckBoxCliboard_2.setObjectName(u"checkBox_CheckBoxCliboard_2")
         self.checkBox_CheckBoxCliboard_2.setMinimumSize(QSize(200, 0))
         self.checkBox_CheckBoxCliboard_2.setMaximumSize(QSize(200, 16777215))
 
         self.gridLayout.addWidget(self.checkBox_CheckBoxCliboard_2, 0, 0, 1, 1)
 
-        self.checkBox_CheckBoxAutoDownload_2 = QCheckBox(self.widget4)
+        self.checkBox_CheckBoxAutoDownload_2 = QCheckBox(self.layoutWidget5)
         self.checkBox_CheckBoxAutoDownload_2.setObjectName(u"checkBox_CheckBoxAutoDownload_2")
         self.checkBox_CheckBoxAutoDownload_2.setMinimumSize(QSize(200, 0))
         self.checkBox_CheckBoxAutoDownload_2.setMaximumSize(QSize(200, 16777215))
 
         self.gridLayout.addWidget(self.checkBox_CheckBoxAutoDownload_2, 1, 0, 1, 1)
 
-        self.checkBox_CheckBoxAutoDelete_2 = QCheckBox(self.widget4)
+        self.checkBox_CheckBoxAutoDelete_2 = QCheckBox(self.layoutWidget5)
         self.checkBox_CheckBoxAutoDelete_2.setObjectName(u"checkBox_CheckBoxAutoDelete_2")
         self.checkBox_CheckBoxAutoDelete_2.setMinimumSize(QSize(200, 0))
         self.checkBox_CheckBoxAutoDelete_2.setMaximumSize(QSize(200, 16777215))
 
         self.gridLayout.addWidget(self.checkBox_CheckBoxAutoDelete_2, 2, 0, 1, 1)
 
-        self.checkBox_CheckBoxSkipExists_2 = QCheckBox(self.widget4)
+        self.checkBox_CheckBoxSkipExists_2 = QCheckBox(self.layoutWidget5)
         self.checkBox_CheckBoxSkipExists_2.setObjectName(u"checkBox_CheckBoxSkipExists_2")
         self.checkBox_CheckBoxSkipExists_2.setMinimumSize(QSize(200, 0))
         self.checkBox_CheckBoxSkipExists_2.setMaximumSize(QSize(200, 16777215))
 
         self.gridLayout.addWidget(self.checkBox_CheckBoxSkipExists_2, 3, 0, 1, 1)
 
-        self.checkBox_CheckBoxChunk_2 = QCheckBox(self.widget4)
+        self.checkBox_CheckBoxChunk_2 = QCheckBox(self.layoutWidget5)
         self.checkBox_CheckBoxChunk_2.setObjectName(u"checkBox_CheckBoxChunk_2")
         self.checkBox_CheckBoxChunk_2.setMinimumSize(QSize(200, 0))
         self.checkBox_CheckBoxChunk_2.setMaximumSize(QSize(200, 16777215))
@@ -342,6 +348,7 @@ class Ui_FormSetup(object):
         self.checkBox_CheckBoxAutoDelete.setText(QCoreApplication.translate("FormSetup", u"CheckBoxAutoDelete", None))
         self.checkBox_CheckBoxSkipExists.setText(QCoreApplication.translate("FormSetup", u"CheckBoxSkipExists", None))
         self.checkBox_CheckBoxChunk.setText(QCoreApplication.translate("FormSetup", u"CheckBoxChunk", None))
+        self.checkBox_CheckBoxStop.setText(QCoreApplication.translate("FormSetup", u"CheckBoxStop", None))
         self.label_PathYoutubeLoad.setText(QCoreApplication.translate("FormSetup", u"PathYoutubeLoad", None))
         self.toolButton_PathYoutubeLoad.setText(QCoreApplication.translate("FormSetup", u"...", None))
         self.label_PathStoreError.setText(QCoreApplication.translate("FormSetup", u"PathStoreError", None))

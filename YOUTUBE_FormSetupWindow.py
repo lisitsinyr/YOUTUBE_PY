@@ -105,7 +105,7 @@ class FormSetup(QDialog):
         self.__FPathStoreError: str = ''
         self.__FPathYoutubeLoad: str = ''
         self.__FStop: bool = False
-        self.__FChunck = False
+        self.__FChunck: bool = False
         self.__FSheduler: str = ''
         self.__FMIN: str = ''
         self.__FHH: str = ''
@@ -358,7 +358,8 @@ class FormSetup(QDialog):
         self.ui.checkBox_CheckBoxAutoDownload.setChecked (self.__FParams.CheckBoxAutoDownload)
         self.ui.checkBox_CheckBoxAutoDelete.setChecked (self.__FParams.CheckBoxAutoDelete)
         self.ui.checkBox_CheckBoxSkipExists.setChecked (self.__FParams.CheckBoxSkipExists)
-        self.ui.checkBox_CheckBoxChunk.setChecked (self.__FParams.Chunck)
+        self.ui.checkBox_CheckBoxChunk.setChecked (self.__FParams.Chunk)
+        self.ui.checkBox_CheckBoxStop.setChecked (self.__FParams.Stop)
     #endfunction
     def CheckSetup (self) -> bool:
         """CheckSetup"""
@@ -400,7 +401,8 @@ class FormSetup(QDialog):
             self.__FParams.CheckBoxAutoDownload = self.ui.checkBox_CheckBoxAutoDownload.isChecked()
             self.__FParams.CheckBoxAutoDelete = self.ui.checkBox_CheckBoxAutoDelete.isChecked()
             self.__FParams.CheckBoxSkipExists = self.ui.checkBox_CheckBoxSkipExists.isChecked()
-            self.__FParams.Chunck = self.ui.checkBox_CheckBoxChunk.isChecked ()
+            self.__FParams.Chunk = self.ui.checkBox_CheckBoxChunk.isChecked ()
+            self.__FParams.Stop = self.ui.checkBox_CheckBoxStop.isChecked ()
         #endif
     #endfunction
 #endclass
