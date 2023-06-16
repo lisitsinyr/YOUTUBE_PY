@@ -15,10 +15,11 @@ from PySide6.QtGui import (QBrush, QColor, QConicalGradient, QCursor,
     QFont, QFontDatabase, QGradient, QIcon,
     QImage, QKeySequence, QLinearGradient, QPainter,
     QPalette, QPixmap, QRadialGradient, QTransform)
-from PySide6.QtWidgets import (QAbstractButton, QApplication, QCheckBox, QDialog,
-    QDialogButtonBox, QFormLayout, QGridLayout, QGroupBox,
-    QLabel, QLayout, QLineEdit, QSizePolicy,
-    QTabWidget, QToolButton, QVBoxLayout, QWidget)
+from PySide6.QtWidgets import (QAbstractButton, QApplication, QCheckBox, QComboBox,
+    QDialog, QDialogButtonBox, QFormLayout, QGridLayout,
+    QGroupBox, QLabel, QLayout, QLineEdit,
+    QSizePolicy, QTabWidget, QToolButton, QVBoxLayout,
+    QWidget)
 
 class Ui_FormSetup(object):
     def setupUi(self, FormSetup):
@@ -275,6 +276,15 @@ class Ui_FormSetup(object):
 
         self.verticalLayout_1.addLayout(self.gridLayout_01)
 
+        self.comboBox_MaxRes = QComboBox(self.tab_1)
+        self.comboBox_MaxRes.setObjectName(u"comboBox_MaxRes")
+        self.comboBox_MaxRes.setGeometry(QRect(490, 230, 111, 22))
+        self.checkBox_CheckBoxDownload = QCheckBox(self.tab_1)
+        self.checkBox_CheckBoxDownload.setObjectName(u"checkBox_CheckBoxDownload")
+        self.checkBox_CheckBoxDownload.setGeometry(QRect(480, 370, 100, 22))
+        self.checkBox_CheckBoxDownload.setMinimumSize(QSize(100, 22))
+        self.checkBox_CheckBoxDownload.setMaximumSize(QSize(100, 22))
+        self.checkBox_CheckBoxDownload.setChecked(True)
         self.tabWidget.addTab(self.tab_1, "")
         self.tab_2 = QWidget()
         self.tab_2.setObjectName(u"tab_2")
@@ -357,6 +367,7 @@ class Ui_FormSetup(object):
         self.toolButton_PathStoreOut.setText(QCoreApplication.translate("FormSetup", u"...", None))
         self.label_PathStore.setText(QCoreApplication.translate("FormSetup", u"PathStore", None))
         self.toolButton_PathStore.setText(QCoreApplication.translate("FormSetup", u"...", None))
+        self.checkBox_CheckBoxDownload.setText(QCoreApplication.translate("FormSetup", u"CheckBoxDownload", None))
         self.tabWidget.setTabText(self.tabWidget.indexOf(self.tab_1), QCoreApplication.translate("FormSetup", u"\u0423\u0441\u0442\u0430\u043d\u043e\u0432\u043e\u0447\u043d\u044b\u0435 \u043f\u0430\u0440\u0430\u043c\u0435\u0442\u0440\u044b", None))
         self.groupBox_3.setTitle(QCoreApplication.translate("FormSetup", u"GroupBox", None))
         self.checkBox_CheckBoxCliboard_2.setText(QCoreApplication.translate("FormSetup", u"CheckBoxCliboard", None))

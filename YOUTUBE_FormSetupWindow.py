@@ -122,6 +122,8 @@ class FormSetup(QDialog):
         self.ui.toolButton_PathStoreError.clicked.connect (self.__toolButton_PathStoreError)
         self.ui.toolButton_PathYoutubeLoad.clicked.connect (self.__toolButton_PathYoutubeLoad)
 
+        self.ui.comboBox_MaxRes.addItems(['1','2','3'])
+
         # Сигнал, который активируется при любом изменении текста в виджете QLineEdit.
         # self.ui.lineEdit_PathStore.textChanged[str].connect(self.__lineEdit_PathStore)
 
