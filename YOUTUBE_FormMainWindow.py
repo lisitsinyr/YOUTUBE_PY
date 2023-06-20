@@ -708,7 +708,7 @@ class FormMainWindow(QMainWindow):
 
         self.__FListWidgets = list()
 
-        LFileName = os.path.join (LUos.GetCurrentDir(), 'YOUTUBE.txt')
+        LFileName = os.path.join (LUos.GetCurrentDir(), 'README.md')
 
         # self.ui.TextEditR.setText ('self.ui.TextEditR.setText')
         self.ui.TextEditR.setText (LoadFile (LFileName))
@@ -1077,7 +1077,10 @@ class FormMainWindow(QMainWindow):
         # LULog.LoggerAPPS.debug (s)
 
         LMaxRes = LUObjectsYT.cMaxRes480p
-        LWidget_X = YOUTUBEwidget(AYouTubeObject, LMaxRes, self.ui.scrollAreaWidgetContents)
+
+        LWidget_X = YOUTUBEwidget(AYouTubeObject, LMaxRes,
+                                  self.__FParams.CheckBoxDownload,
+                                  self.ui.scrollAreaWidgetContents)
         if self.__FStatApplication == LUProc.TStatApplication.saBreak:
             LWidget_X.StopWidget()
         #endif
@@ -1165,7 +1168,7 @@ class FormMainWindow(QMainWindow):
         LYouTubeObject.ID = LObjectID
         LMaxRes = LUObjectsYT.cMaxRes480p
         LYouTubeObject.SetURL (AURL, LMaxRes, value ['PlayListName'], value ['NN'], value ['N'])
-        LYouTubeObject.FChunk = self.__FParams.Chunk
+        LYouTubeObject.FChunk = self.__FParams.CheckBoxChunk
         LYouTubeObject.Fskip_existing = self.__FParams.CheckBoxSkipExists
         self.__FListYouTubeObject.append(LYouTubeObject)
         return LYouTubeObject
@@ -1277,7 +1280,7 @@ class FormMainWindow(QMainWindow):
         self.P_StatMain.setText(LUProc.cProcessWork)
 
         self.__FStopApplicationMain = False
-        if self.Params.Stop:
+        if self.Params.CheckBoxStop:
             self.__Procedure_01()
         #endif
         i = 0
@@ -1686,7 +1689,8 @@ class FormMainWindow(QMainWindow):
             if not LWidget_X is None:
                 NswGetInfo = self.__GetListWidgetCount (YOUTUBE_widgetYT.TStatWidgetObject.swGetInfo)
                 NswDownload = self.__GetListWidgetCount (YOUTUBE_widgetYT.TStatWidgetObject.swDownload)
-                if (NswGetInfo+NswDownload) < self.__FMaxThread:
+                if (NswGetInfo + NswDownload) < self.__FParams.NumberThread:
+                # if (NswGetInfo+NswDownload) < self.__FMaxThread:
                     LWidget_X.run_GetInfoStream ()
                 #endif
             #endif
@@ -1696,7 +1700,7 @@ class FormMainWindow(QMainWindow):
             if not LWidget_X is None:
                 NswGetInfo = self.__GetListWidgetCount (YOUTUBE_widgetYT.TStatWidgetObject.swGetInfo)
                 NswDownload = self.__GetListWidgetCount (YOUTUBE_widgetYT.TStatWidgetObject.swDownload)
-                if (NswGetInfo+NswDownload) < self.__FMaxThread:
+                if (NswGetInfo+NswDownload) < self.__FParams.NumberThread:
                     LFileName = LWidget_X.YouTubeObject.FileNameDownload
                     if not LUFile.FileExists (LFileName):
                         LWidget_X.run_Downloader ()
@@ -1768,12 +1772,12 @@ class FormMainWindow(QMainWindow):
 
         self.__FParams.RefreashOption()
         if self.__FStatApplication == LUProc.TStatApplication.saRunning:
-            if self.__FParams.Stop:
+            if self.__FParams.CheckBoxStop:
                 self.StopApplication()
             #endif
         #endif
         if self.__FStatApplication == LUProc.TStatApplication.saBreak:
-            if not self.__FParams.Stop:
+            if not self.__FParams.CheckBoxStop:
                 self.StartApplication()
             #endif
         #endif

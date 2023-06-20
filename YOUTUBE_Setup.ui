@@ -41,11 +41,11 @@
      <x>0</x>
      <y>0</y>
      <width>631</width>
-     <height>431</height>
+     <height>411</height>
     </rect>
    </property>
    <property name="currentIndex">
-    <number>0</number>
+    <number>1</number>
    </property>
    <widget class="QWidget" name="tab_1">
     <attribute name="title">
@@ -190,169 +190,6 @@
        </layout>
       </item>
      </layout>
-    </widget>
-    <widget class="QGroupBox" name="groupBox_Checkbox">
-     <property name="geometry">
-      <rect>
-       <x>240</x>
-       <y>210</y>
-       <width>230</width>
-       <height>191</height>
-      </rect>
-     </property>
-     <property name="title">
-      <string>Checkbox</string>
-     </property>
-     <widget class="QWidget" name="layoutWidget">
-      <property name="geometry">
-       <rect>
-        <x>20</x>
-        <y>20</y>
-        <width>202</width>
-        <height>136</height>
-       </rect>
-      </property>
-      <layout class="QVBoxLayout" name="verticalLayout">
-       <item>
-        <widget class="QCheckBox" name="checkBox_CheckBoxCliboard">
-         <property name="minimumSize">
-          <size>
-           <width>200</width>
-           <height>22</height>
-          </size>
-         </property>
-         <property name="maximumSize">
-          <size>
-           <width>200</width>
-           <height>22</height>
-          </size>
-         </property>
-         <property name="text">
-          <string>CheckBoxCliboard</string>
-         </property>
-         <property name="checked">
-          <bool>true</bool>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <widget class="QCheckBox" name="checkBox_CheckBoxAutoDownload">
-         <property name="minimumSize">
-          <size>
-           <width>200</width>
-           <height>22</height>
-          </size>
-         </property>
-         <property name="maximumSize">
-          <size>
-           <width>200</width>
-           <height>22</height>
-          </size>
-         </property>
-         <property name="text">
-          <string>CheckBoxAutoDownload</string>
-         </property>
-         <property name="checked">
-          <bool>true</bool>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <widget class="QCheckBox" name="checkBox_CheckBoxAutoDelete">
-         <property name="minimumSize">
-          <size>
-           <width>200</width>
-           <height>22</height>
-          </size>
-         </property>
-         <property name="maximumSize">
-          <size>
-           <width>200</width>
-           <height>22</height>
-          </size>
-         </property>
-         <property name="text">
-          <string>CheckBoxAutoDelete</string>
-         </property>
-         <property name="checked">
-          <bool>true</bool>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <widget class="QCheckBox" name="checkBox_CheckBoxSkipExists">
-         <property name="minimumSize">
-          <size>
-           <width>200</width>
-           <height>22</height>
-          </size>
-         </property>
-         <property name="maximumSize">
-          <size>
-           <width>200</width>
-           <height>22</height>
-          </size>
-         </property>
-         <property name="text">
-          <string>CheckBoxSkipExists</string>
-         </property>
-         <property name="checked">
-          <bool>true</bool>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <widget class="QCheckBox" name="checkBox_CheckBoxChunk">
-         <property name="minimumSize">
-          <size>
-           <width>200</width>
-           <height>22</height>
-          </size>
-         </property>
-         <property name="maximumSize">
-          <size>
-           <width>200</width>
-           <height>22</height>
-          </size>
-         </property>
-         <property name="text">
-          <string>CheckBoxChunk</string>
-         </property>
-         <property name="checked">
-          <bool>true</bool>
-         </property>
-        </widget>
-       </item>
-      </layout>
-     </widget>
-     <widget class="QCheckBox" name="checkBox_CheckBoxStop">
-      <property name="geometry">
-       <rect>
-        <x>20</x>
-        <y>160</y>
-        <width>200</width>
-        <height>22</height>
-       </rect>
-      </property>
-      <property name="minimumSize">
-       <size>
-        <width>200</width>
-        <height>22</height>
-       </size>
-      </property>
-      <property name="maximumSize">
-       <size>
-        <width>200</width>
-        <height>22</height>
-       </size>
-      </property>
-      <property name="text">
-       <string>CheckBoxStop</string>
-      </property>
-      <property name="checked">
-       <bool>true</bool>
-      </property>
-     </widget>
     </widget>
     <widget class="QWidget" name="layoutWidget">
      <property name="geometry">
@@ -502,168 +339,244 @@
       </item>
      </layout>
     </widget>
-    <widget class="QComboBox" name="comboBox_MaxRes">
-     <property name="geometry">
-      <rect>
-       <x>490</x>
-       <y>230</y>
-       <width>111</width>
-       <height>22</height>
-      </rect>
-     </property>
-    </widget>
-    <widget class="QCheckBox" name="checkBox_CheckBoxDownload">
-     <property name="geometry">
-      <rect>
-       <x>480</x>
-       <y>370</y>
-       <width>100</width>
-       <height>22</height>
-      </rect>
-     </property>
-     <property name="minimumSize">
-      <size>
-       <width>100</width>
-       <height>22</height>
-      </size>
-     </property>
-     <property name="maximumSize">
-      <size>
-       <width>100</width>
-       <height>22</height>
-      </size>
-     </property>
-     <property name="text">
-      <string>CheckBoxDownload</string>
-     </property>
-     <property name="checked">
-      <bool>true</bool>
-     </property>
-    </widget>
    </widget>
    <widget class="QWidget" name="tab_2">
     <attribute name="title">
      <string>Настройка YOUTUBE</string>
     </attribute>
-    <widget class="QGroupBox" name="groupBox_3">
+    <widget class="QComboBox" name="comboBox_MaxRes">
+     <property name="geometry">
+      <rect>
+       <x>330</x>
+       <y>180</y>
+       <width>131</width>
+       <height>22</height>
+      </rect>
+     </property>
+    </widget>
+    <widget class="QGroupBox" name="groupBox_Checkbox">
      <property name="geometry">
       <rect>
        <x>20</x>
-       <y>20</y>
-       <width>341</width>
-       <height>321</height>
+       <y>150</y>
+       <width>281</width>
+       <height>221</height>
       </rect>
      </property>
      <property name="title">
-      <string>GroupBox</string>
+      <string>Checkbox</string>
      </property>
      <widget class="QWidget" name="layoutWidget">
       <property name="geometry">
        <rect>
-        <x>51</x>
-        <y>71</y>
-        <width>202</width>
-        <height>126</height>
+        <x>20</x>
+        <y>21</y>
+        <width>245</width>
+        <height>192</height>
        </rect>
       </property>
-      <layout class="QGridLayout" name="gridLayout">
-       <item row="0" column="0">
-        <widget class="QCheckBox" name="checkBox_CheckBoxCliboard_2">
+      <layout class="QVBoxLayout" name="verticalLayout">
+       <item>
+        <widget class="QCheckBox" name="checkBox_CheckBoxCliboard">
          <property name="minimumSize">
           <size>
            <width>200</width>
-           <height>0</height>
+           <height>22</height>
           </size>
          </property>
          <property name="maximumSize">
           <size>
-           <width>200</width>
-           <height>16777215</height>
+           <width>300</width>
+           <height>22</height>
           </size>
          </property>
          <property name="text">
-          <string>CheckBoxCliboard</string>
+          <string>Использовать Cliboard</string>
+         </property>
+         <property name="checked">
+          <bool>true</bool>
          </property>
         </widget>
        </item>
-       <item row="1" column="0">
-        <widget class="QCheckBox" name="checkBox_CheckBoxAutoDownload_2">
+       <item>
+        <widget class="QCheckBox" name="checkBox_CheckBoxAutoDownload">
          <property name="minimumSize">
           <size>
            <width>200</width>
-           <height>0</height>
+           <height>22</height>
           </size>
          </property>
          <property name="maximumSize">
           <size>
-           <width>200</width>
-           <height>16777215</height>
+           <width>300</width>
+           <height>22</height>
           </size>
          </property>
          <property name="text">
-          <string>CheckBoxAutoDownload</string>
+          <string>Автоматическая загрузка</string>
+         </property>
+         <property name="checked">
+          <bool>true</bool>
          </property>
         </widget>
        </item>
-       <item row="2" column="0">
-        <widget class="QCheckBox" name="checkBox_CheckBoxAutoDelete_2">
+       <item>
+        <widget class="QCheckBox" name="checkBox_CheckBoxAutoDelete">
          <property name="minimumSize">
           <size>
            <width>200</width>
-           <height>0</height>
+           <height>22</height>
           </size>
          </property>
          <property name="maximumSize">
           <size>
-           <width>200</width>
-           <height>16777215</height>
+           <width>300</width>
+           <height>22</height>
           </size>
          </property>
          <property name="text">
-          <string>CheckBoxAutoDelete</string>
+          <string>Автоматическое удаление из списка</string>
+         </property>
+         <property name="checked">
+          <bool>true</bool>
          </property>
         </widget>
        </item>
-       <item row="3" column="0">
-        <widget class="QCheckBox" name="checkBox_CheckBoxSkipExists_2">
+       <item>
+        <widget class="QCheckBox" name="checkBox_CheckBoxSkipExists">
          <property name="minimumSize">
           <size>
            <width>200</width>
-           <height>0</height>
+           <height>22</height>
           </size>
          </property>
          <property name="maximumSize">
           <size>
-           <width>200</width>
-           <height>16777215</height>
+           <width>300</width>
+           <height>22</height>
           </size>
          </property>
          <property name="text">
-          <string>CheckBoxSkipExists</string>
+          <string>Пропускать загруженные видео</string>
+         </property>
+         <property name="checked">
+          <bool>true</bool>
          </property>
         </widget>
        </item>
-       <item row="4" column="0">
-        <widget class="QCheckBox" name="checkBox_CheckBoxChunk_2">
+       <item>
+        <widget class="QCheckBox" name="checkBox_CheckBoxChunk">
          <property name="minimumSize">
           <size>
            <width>200</width>
-           <height>0</height>
+           <height>22</height>
           </size>
          </property>
          <property name="maximumSize">
           <size>
-           <width>200</width>
-           <height>16777215</height>
+           <width>300</width>
+           <height>22</height>
           </size>
          </property>
          <property name="text">
-          <string>CheckBoxChunk</string>
+          <string>Использовать pyTube chunk</string>
+         </property>
+         <property name="checked">
+          <bool>true</bool>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QCheckBox" name="checkBox_CheckBoxStop">
+         <property name="minimumSize">
+          <size>
+           <width>200</width>
+           <height>22</height>
+          </size>
+         </property>
+         <property name="maximumSize">
+          <size>
+           <width>300</width>
+           <height>22</height>
+          </size>
+         </property>
+         <property name="text">
+          <string>Остановить основной цикл программы</string>
+         </property>
+         <property name="checked">
+          <bool>true</bool>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QCheckBox" name="checkBox_CheckBoxDownload">
+         <property name="minimumSize">
+          <size>
+           <width>200</width>
+           <height>22</height>
+          </size>
+         </property>
+         <property name="maximumSize">
+          <size>
+           <width>300</width>
+           <height>22</height>
+          </size>
+         </property>
+         <property name="text">
+          <string>Эмуляция загрузки </string>
+         </property>
+         <property name="checked">
+          <bool>true</bool>
          </property>
         </widget>
        </item>
       </layout>
      </widget>
+    </widget>
+    <widget class="QLabel" name="label_MaxRes">
+     <property name="geometry">
+      <rect>
+       <x>330</x>
+       <y>160</y>
+       <width>261</width>
+       <height>16</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>Максимальное разрешение</string>
+     </property>
+    </widget>
+    <widget class="QSpinBox" name="spinBox_NumberThread">
+     <property name="geometry">
+      <rect>
+       <x>330</x>
+       <y>230</y>
+       <width>42</width>
+       <height>22</height>
+      </rect>
+     </property>
+     <property name="minimum">
+      <number>1</number>
+     </property>
+     <property name="maximum">
+      <number>5</number>
+     </property>
+     <property name="value">
+      <number>5</number>
+     </property>
+    </widget>
+    <widget class="QLabel" name="label_NumberThread">
+     <property name="geometry">
+      <rect>
+       <x>330</x>
+       <y>210</y>
+       <width>261</width>
+       <height>16</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>Количество потоков</string>
+     </property>
     </widget>
    </widget>
   </widget>

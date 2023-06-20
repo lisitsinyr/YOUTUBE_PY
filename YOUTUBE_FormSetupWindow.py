@@ -104,25 +104,36 @@ class FormSetup(QDialog):
         self.__FPathStoreOut: str = ''
         self.__FPathStoreError: str = ''
         self.__FPathYoutubeLoad: str = ''
-        self.__FStop: bool = False
-        self.__FChunck: bool = False
         self.__FSheduler: str = ''
         self.__FMIN: str = ''
         self.__FHH: str = ''
         self.__FDD: str = ''
         self.__FDN: str = ''
         self.__FMM: str = ''
+
         self.__FCheckBoxCliboard: bool = False
         self.__FCheckBoxAutoDownload: bool = False
         self.__FCheckBoxAutoDelete: bool = False
         self.__FCheckBoxSkipExists: bool = False
+        self.__FCheckBoxChunck: bool = False
+        self.__FCheckBoxStop: bool = False
+        self.__FCheckBoxDownload: bool = False
+
+        self.__FMaxRes: str = ''
+        self.__FNumberThread: int = 0
 
         self.ui.toolButton_PathStore.clicked.connect(self.__toolButton_PathStore)
         self.ui.toolButton_PathStoreOut.clicked.connect (self.__toolButton_PathStoreOut)
         self.ui.toolButton_PathStoreError.clicked.connect (self.__toolButton_PathStoreError)
         self.ui.toolButton_PathYoutubeLoad.clicked.connect (self.__toolButton_PathYoutubeLoad)
 
-        self.ui.comboBox_MaxRes.addItems(['1','2','3'])
+        # self.ui.comboBox_MaxRes.addItems(['1','2','3'])
+        self.ui.comboBox_MaxRes.addItems (LUObjectsYT.cMaxRes1080p)
+        # Set initial selected item
+        self.ui.comboBox_MaxRes.setCurrentIndex (0)
+        # Connect ComboBox to method that will handle the user's selection
+        self.ui.comboBox_MaxRes.activated.connect (self.__comboBox_MaxRes_selection)
+        # self.ui.comboBox_MaxRes.connect (self.__comboBox_MaxRes)
 
         # Сигнал, который активируется при любом изменении текста в виджете QLineEdit.
         # self.ui.lineEdit_PathStore.textChanged[str].connect(self.__lineEdit_PathStore)
@@ -147,6 +158,7 @@ class FormSetup(QDialog):
         self.ui.lineEdit_PathStoreOut.textChanged.connect (self.__lineEdit_PathStoreOut)
         self.ui.lineEdit_PathStoreError.textChanged.connect (self.__lineEdit_PathStoreError)
         self.ui.lineEdit_PathYoutubeLoad.textChanged.connect (self.__lineEdit_PathYoutubeLoad)
+
         # MIN - //0-59
         self.__FMIN_re = QRegularExpression (
             '^(((([0-5]?[0-9]|60)(-([0-5]?[0-9]|60)){0,1}?)|\*)(,([0-5]?[0-9]|60)((-([0-5]?[0-9]|60)){0,1}?))*?)$')
@@ -165,15 +177,15 @@ class FormSetup(QDialog):
         self.__FDD_validator = QRegularExpressionValidator (self.__FDD_re, self.ui.lineEdit_DD)
         self.ui.lineEdit_DD.setValidator (self.__FDD_validator)
         self.ui.lineEdit_DD.textChanged.connect (self.__lineEdit_DD)
-        # DN //0-6
+        # DN //1-7
         self.__FDN_re = QRegularExpression (
-            '^(((([0]?[[0-7])(-([0]?[0-7])){0,1}?)|\*)(,([0]?[0-7])((-([0]?[0-7])){0,1}?))*?)$')
+            '^(((([1]?[1-7])(-([1]?[1-7])){0,1}?)|\*)(,([1]?[1-7])((-([1]?[1-7])){0,1}?))*?)$')
         self.__FDN_validator = QRegularExpressionValidator (self.__FDN_re, self.ui.lineEdit_DN)
         self.ui.lineEdit_DN.setValidator (self.__FDN_validator)
         self.ui.lineEdit_DN.textChanged.connect (self.__lineEdit_DN)
-        # MM - //0-12
+        # MM - //1-12
         self.__FMM_re = QRegularExpression (
-            '^(((([0]?[0-9]|1[0-2])(-([0]?[0-9]|1[0-2])){0,1}?)|\*)(,([0]?[0-9]|1[0-2])((-([0]?[0-9]|1[0-2])){0,1}?))*?)$')
+            '^(((([1]?[1-9]|1[0-2])(-([0]?[0-9]|1[0-2])){0,1}?)|\*)(,([0]?[0-9]|1[0-2])((-([0]?[0-9]|1[0-2])){0,1}?))*?)$')
         self.__FMM_validator = QRegularExpressionValidator (self.__FMM_re, self.ui.lineEdit_MM)
         self.ui.lineEdit_MM.setValidator (self.__FMM_validator)
         self.ui.lineEdit_MM.textChanged.connect (self.__lineEdit_MM)
@@ -182,17 +194,17 @@ class FormSetup(QDialog):
 
         """
         QLineEdit Methods
-        setAlignment()	Decides the Alignment of the text. Takes 4 possible values, Qt.AlignLeft, Qt.AlignRight, Qt.AlignCenter and Qt.AlignJustify.
-        clear()	        Deletes the contents within the QLineEdit widget.
-        setEchoMode()	Controls the mode for text appearance in the widget. Values are QLineEdit.Normal, QLineEdit.NoEcho, QLineEdit.Password, QLineEdit.PasswordEchoOnEdit.
-        setMaxLength()	Defines the maximum number of characters that can be typed into the widget.
-        setReadOnly()	Makes the widget non-editable
-        setText()	    The text passed to this method will appear in the widget.
-        text()	        Returns the text currently in the widget.
-        setValidator()	Defines the validation rules.
-        setInputMask()	Applies mask of combination of characters for input
-        setFont()	    Sets the font for the widget.
-        setFixedWidth(width)	Sets the maximum width for the Widget in pixels.
+        setAlignment()  Decides the Alignment of the text. Takes 4 possible values, Qt.AlignLeft, Qt.AlignRight, Qt.AlignCenter and Qt.AlignJustify.
+        clear()         Deletes the contents within the QLineEdit widget.
+        setEchoMode()   Controls the mode for text appearance in the widget. Values are QLineEdit.Normal, QLineEdit.NoEcho, QLineEdit.Password, QLineEdit.PasswordEchoOnEdit.
+        setMaxLength()  Defines the maximum number of characters that can be typed into the widget.
+        setReadOnly()   Makes the widget non-editable
+        setText()       The text passed to this method will appear in the widget.
+        text()          Returns the text currently in the widget.
+        setValidator()  Defines the validation rules.
+        setInputMask()  Applies mask of combination of characters for input
+        setFont()       Sets the font for the widget.
+        setFixedWidth(width)    Sets the maximum width for the Widget in pixels.
         """
     #endfunction
 
@@ -205,6 +217,15 @@ class FormSetup(QDialog):
         LClassName = self.__class__.__name__
         s = '{} уничтожен'.format(LClassName)
         #print (s)
+    #endfunction
+
+    def __comboBox_MaxRes_selection (self, index):
+        """__comboBox_MaxRes_selection"""
+    #beginfunction
+        # Get the selected item from the ComboBox and display it in the console
+        LMaxRes = self.ui.comboBox_MaxRes.currentText()
+        # print(f'Selected item: {selected_item}')
+        self.__FMaxRes = LMaxRes
     #endfunction
 
     def __toolButton_PathStore (self, text):
@@ -360,8 +381,16 @@ class FormSetup(QDialog):
         self.ui.checkBox_CheckBoxAutoDownload.setChecked (self.__FParams.CheckBoxAutoDownload)
         self.ui.checkBox_CheckBoxAutoDelete.setChecked (self.__FParams.CheckBoxAutoDelete)
         self.ui.checkBox_CheckBoxSkipExists.setChecked (self.__FParams.CheckBoxSkipExists)
-        self.ui.checkBox_CheckBoxChunk.setChecked (self.__FParams.Chunk)
-        self.ui.checkBox_CheckBoxStop.setChecked (self.__FParams.Stop)
+        self.ui.checkBox_CheckBoxChunk.setChecked (self.__FParams.CheckBoxChunk)
+        self.ui.checkBox_CheckBoxStop.setChecked (self.__FParams.CheckBoxStop)
+        self.ui.checkBox_CheckBoxDownload.setChecked (self.__FParams.CheckBoxDownload)
+
+        i = self.ui.comboBox_MaxRes.findText(self.__FParams.ComboboxMaxRes)
+        self.ui.comboBox_MaxRes.setCurrentIndex(i)
+
+        self.ui.spinBox_NumberThread.setValue(self.__FParams.NumberThread)
+
+
     #endfunction
     def CheckSetup (self) -> bool:
         """CheckSetup"""
@@ -381,7 +410,17 @@ class FormSetup(QDialog):
         LResult: tuple = self.__FMM_validator.validate(self.__FMM,0)
         bMM = LResult [0] == QValidator.State.Acceptable
         bSheduler = bMIN and bHH and bDD and bDN and bMM
-        return bPathStore and bPathStoreOut and bPathStoreError and bPathYoutubeLoad and bSheduler
+
+        # Проверить self.__FParams.ComboboxMaxRes
+        bComboboxMaxRes = True
+
+        # Проверить self.__FParams.NumberThread
+        if self.__FParams.NumberThread > 0 and self.__FParams.NumberThread < 6:
+            bNumberThread = True
+        else:
+            bNumberThread = False
+        return bPathStore and bPathStoreOut and bPathStoreError and bPathYoutubeLoad and \
+               bSheduler and bComboboxMaxRes and bNumberThread
     #endfunction
 
     def SaveSetup (self):
@@ -392,6 +431,7 @@ class FormSetup(QDialog):
             self.__FParams.PathStoreOut = self.ui.lineEdit_PathStoreOut.text()
             self.__FParams.PathStoreError = self.ui.lineEdit_PathStoreError.text()
             self.__FParams.PathYoutubeLoad = self.ui.lineEdit_PathYoutubeLoad.text()
+
             LMIN = self.ui.lineEdit_MIN.text ()
             LHH = self.ui.lineEdit_HH.text ()
             LDD = self.ui.lineEdit_DD.text ()
@@ -399,12 +439,17 @@ class FormSetup(QDialog):
             LMM = self.ui.lineEdit_MM.text ()
             s = LMIN+' '+LHH+' '+LDD+' '+LDN+' '+LMM
             self.__FParams.Sheduler = s
+
             self.__FParams.CheckBoxCliboard = self.ui.checkBox_CheckBoxCliboard.isChecked()
             self.__FParams.CheckBoxAutoDownload = self.ui.checkBox_CheckBoxAutoDownload.isChecked()
             self.__FParams.CheckBoxAutoDelete = self.ui.checkBox_CheckBoxAutoDelete.isChecked()
             self.__FParams.CheckBoxSkipExists = self.ui.checkBox_CheckBoxSkipExists.isChecked()
-            self.__FParams.Chunk = self.ui.checkBox_CheckBoxChunk.isChecked ()
-            self.__FParams.Stop = self.ui.checkBox_CheckBoxStop.isChecked ()
+            self.__FParams.CheckBoxChunk = self.ui.checkBox_CheckBoxChunk.isChecked ()
+            self.__FParams.CheckBoxStop = self.ui.checkBox_CheckBoxStop.isChecked ()
+            self.__FParams.CheckBoxDownload = self.ui.checkBox_CheckBoxDownload.isChecked ()
+
+            self.__FParams.ComboboxMaxRes = self.__FMaxRes
+            self.__FParams.NumberThread = int(self.ui.spinBox_NumberThread.text())
         #endif
     #endfunction
 #endclass

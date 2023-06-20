@@ -83,9 +83,11 @@ rpCheckBoxCliboard: str = 'CheckBoxCliboard'
 rpCheckBoxAutoDownload: str = 'CheckBoxAutoDownload'
 rpCheckBoxAutoDelete: str = 'CheckBoxAutoDelete'
 rpCheckBoxSkipExists: str = 'CheckBoxSkipExists'
-rpStop: str = 'Stop'
-rpChunk: str = 'Chunk'
-
+rpCheckBoxStop: str = 'CheckBoxStop'
+rpCheckBoxChunk: str = 'CheckBoxChunk'
+rpCheckBoxDownload: str = 'CheckBoxDownload'
+rpComboboxMaxRes: str = 'ComboboxMaxRes'
+rpNumberThread: str = 'NumberThread'
 class TParams(object):
     """TParams"""
     __annotations__ = \
@@ -138,14 +140,19 @@ class TParams(object):
         self.__FPathStore: str = ''
         self.__FPathStoreOut: str = ''
         self.__FPathStoreError: str = ''
-        self.__FStop: bool = False
-        self.__FChunk: bool = False
-        self.__FSheduler: str = ''
         self.__FPathYoutubeLoad: str = ''
+        self.__FSheduler: str = ''
+
         self.__FCheckBoxCliboard: bool = False
         self.__FCheckBoxAutoDownload: bool = False
         self.__FCheckBoxAutoDelete: bool = False
         self.__FCheckBoxSkipExists: bool = False
+        self.__FCheckBoxStop: bool = False
+        self.__FCheckBoxChunk: bool = False
+        self.__FCheckBoxDownload: bool = False
+
+        self.__FComboboxMaxRes: str = ''
+        self.__FNumberTread: int = 5
 
         self.GetParams ()
     #endfunction
@@ -195,14 +202,19 @@ class TParams(object):
         self.__FPathStore = self.__FIniFile.GetOption (rkGENERAL, rpPathStore, '')
         self.__FPathStoreOut = self.__FIniFile.GetOption(rkGENERAL, rpPathStoreOut, '')
         self.__FPathStoreError = self.__FIniFile.GetOption(rkGENERAL, rpPathStoreError, '')
-        self.__FStop =  LUStrUtils.strtobool (self.__FIniFile.GetOption (rkYoutube, rpStop, str(False)))
-        self.__FChunk = LUStrUtils.strtobool (self.__FIniFile.GetOption (rkYoutube, rpChunk, str(False)))
-        self.__FSheduler = self.__FIniFile.GetOption(rkGENERAL, rpSheduler, '')
         self.__FPathYoutubeLoad = self.__FIniFile.GetOption(rkYoutube, rpPathYoutubeLoad, '')
+        self.__FSheduler = self.__FIniFile.GetOption(rkGENERAL, rpSheduler, '')
+
         self.__FCheckBoxCliboard = LUStrUtils.strtobool (self.__FIniFile.GetOption (rkYoutube, rpCheckBoxCliboard, str(False)))
         self.__FCheckBoxAutoDownload = LUStrUtils.strtobool (self.__FIniFile.GetOption (rkYoutube, rpCheckBoxAutoDownload, str(False)))
         self.__FCheckBoxAutoDelete = LUStrUtils.strtobool (self.__FIniFile.GetOption (rkYoutube, rpCheckBoxAutoDelete, str(False)))
         self.__FCheckBoxSkipExists = LUStrUtils.strtobool (self.__FIniFile.GetOption (rkYoutube, rpCheckBoxSkipExists, str(False)))
+        self.__FCheckBoxStop = LUStrUtils.strtobool (self.__FIniFile.GetOption (rkYoutube, rpCheckBoxStop, str (False)))
+        self.__FCheckBoxChunk = LUStrUtils.strtobool (self.__FIniFile.GetOption (rkYoutube, rpCheckBoxChunk, str (False)))
+        self.__FCheckBoxDownload = LUStrUtils.strtobool (self.__FIniFile.GetOption (rkYoutube, rpCheckBoxDownload, str(False)))
+
+        self.__FComboboxMaxRes = self.__FIniFile.GetOption (rkYoutube, rpComboboxMaxRes, '')
+        self.__FNumberThread = self.__FIniFile.GetOption (rkYoutube, rpNumberThread, 5)
     #endfunction
     def SetParams (self):
         """SetParams"""
@@ -210,14 +222,20 @@ class TParams(object):
         self.__FIniFile.SetOption (rkGENERAL, rpPathStore, self.__FPathStore)
         self.__FIniFile.SetOption (rkGENERAL, rpPathStoreOut, self.__FPathStoreOut)
         self.__FIniFile.SetOption (rkGENERAL, rpPathStoreError, self.__FPathStoreError)
-        self.__FIniFile.SetOption (rkYoutube, rpStop, str (self.__FStop))
-        self.__FIniFile.SetOption (rkYoutube, rpChunk, str (self.__FChunk))
-        self.__FIniFile.SetOption (rkGENERAL, rpSheduler, self.__FSheduler)
         self.__FIniFile.SetOption (rkYoutube, rpPathYoutubeLoad, self.__FPathYoutubeLoad)
+        self.__FIniFile.SetOption (rkGENERAL, rpSheduler, self.__FSheduler)
+
         self.__FIniFile.SetOption (rkYoutube, rpCheckBoxCliboard, str(self.__FCheckBoxCliboard))
         self.__FIniFile.SetOption (rkYoutube, rpCheckBoxAutoDownload, str(self.__FCheckBoxAutoDownload))
         self.__FIniFile.SetOption (rkYoutube, rpCheckBoxAutoDelete, str(self.__FCheckBoxAutoDelete))
         self.__FIniFile.SetOption (rkYoutube, rpCheckBoxSkipExists, str(self.__FCheckBoxSkipExists))
+        self.__FIniFile.SetOption (rkYoutube, rpCheckBoxStop, str (self.__FCheckBoxStop))
+        self.__FIniFile.SetOption (rkYoutube, rpCheckBoxChunk, str (self.__FCheckBoxChunk))
+        self.__FIniFile.SetOption (rkYoutube, rpCheckBoxDownload, str (self.__FCheckBoxDownload))
+
+        self.__FIniFile.SetOption (rkYoutube, rpComboboxMaxRes, self.__FComboboxMaxRes)
+        self.__FIniFile.SetOption (rkYoutube, rpNumberThread, self.__FNumberThread)
+
     #endfunction
 
     # #--------------------------------------------------
@@ -391,36 +409,86 @@ class TParams(object):
     #endfunction
 
     #--------------------------------------------------
-    # @property Stop
+    # @property CheckBoxStop
     #--------------------------------------------------
     # getter
     @property
-    def Stop (self) -> bool:
+    def CheckBoxStop (self) -> bool:
     #beginfunction
-        b = self.__FIniFile.GetOption (rkYoutube, rpStop, False)
+        b = self.__FIniFile.GetOption (rkYoutube, rpCheckBoxStop, False)
         return b
     #endfunction
-    @Stop.setter
-    def Stop (self, AValue: bool):
+    @CheckBoxStop.setter
+    def CheckBoxStop (self, AValue: bool):
     #beginfunction
-        self.__FIniFile.SetOption (rkYoutube, rpStop, AValue)
+        self.__FIniFile.SetOption (rkYoutube, rpCheckBoxStop, AValue)
     #endfunction
 
     #--------------------------------------------------
-    # @property Chunk
+    # @property CheckBoxChunk
     #--------------------------------------------------
     # getter
     @property
-    def Chunk (self) -> bool:
+    def CheckBoxChunk (self) -> bool:
     #beginfunction
-        b = self.__FIniFile.GetOption (rkYoutube, rpChunk, False)
+        b = self.__FIniFile.GetOption (rkYoutube, rpCheckBoxChunk, False)
         return b
     #endfunction
-    @Chunk.setter
-    def Chunk (self, AValue: bool):
+    @CheckBoxChunk.setter
+    def CheckBoxChunk (self, AValue: bool):
     #beginfunction
-        self.__FIniFile.SetOption (rkYoutube, rpChunk, AValue)
+        self.__FIniFile.SetOption (rkYoutube, rpCheckBoxChunk, AValue)
     #endfunction
+
+    #--------------------------------------------------
+    # @property CheckBoxDownload
+    #--------------------------------------------------
+    # getter
+    @property
+    def CheckBoxDownload (self) -> bool:
+    #beginfunction
+        b = self.__FIniFile.GetOption (rkYoutube, rpCheckBoxDownload, False)
+        return b
+    #endfunction
+    @CheckBoxDownload.setter
+    def CheckBoxDownload (self, AValue: bool):
+    #beginfunction
+        self.__FIniFile.SetOption (rkYoutube, rpCheckBoxDownload, AValue)
+    #endfunction
+
+    #--------------------------------------------------
+    # @property ComboboxMaxRes
+    #--------------------------------------------------
+    # getter
+    @property
+    def ComboboxMaxRes (self) -> str:
+    #beginfunction
+        return self.__FIniFile.GetOption(rkYoutube, rpComboboxMaxRes, '')
+    #endfunction
+    # setter
+    @ComboboxMaxRes.setter
+    def ComboboxMaxRes (self, AValue: str):
+    #beginfunction
+        self.__FIniFile.SetOption (rkYoutube, rpComboboxMaxRes, AValue)
+    #endfunction
+
+    #--------------------------------------------------
+    # @property NumberThread
+    #--------------------------------------------------
+    # getter
+    @property
+    def NumberThread (self) -> int:
+    #beginfunction
+        return self.__FIniFile.GetOption(rkYoutube, rpNumberThread, 5)
+    #endfunction
+    # setter
+    @NumberThread.setter
+    def NumberThread (self, AValue: int):
+    #beginfunction
+        self.__FIniFile.SetOption (rkYoutube, rpNumberThread, AValue)
+    #endfunction
+
+
 
 #endclass
 

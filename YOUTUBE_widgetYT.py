@@ -157,7 +157,7 @@ class Downloader_YOUTUBE (QThread):
     #--------------------------------------------------
     # constructor
     #--------------------------------------------------
-    def __init__ (self, AYouTubeObject: LUObjectsYT.TYouTubeObject, AMaxRes, parent = None):
+    def __init__ (self, AYouTubeObject: LUObjectsYT.TYouTubeObject, AMaxRes, ADownload: bool, parent = None):
     #beginfunction
         QThread.__init__ (self, parent = parent)
         self.__FYouTubeObject = AYouTubeObject
@@ -166,6 +166,7 @@ class Downloader_YOUTUBE (QThread):
         # self.__FYouTubeObject.ONcomplete = self.ONcomplete
         self.__FStartDownload_01 = False
         self.__FDownloader_YOUTUBE_Signals = TDownloader_YOUTUBE_Signals()
+        self.__FDownload = ADownload
     #endfunction
 
     #--------------------------------------------------
@@ -231,7 +232,7 @@ class Downloader_YOUTUBE (QThread):
         except:
             self.Downloader_YOUTUBE_Signals.signal_ProgressMax.emit (0)
         #endtry
-        self.__FYouTubeObject.DownloadURL (ADownload = True, skip_existing = self.__FYouTubeObject.Fskip_existing)
+        self.__FYouTubeObject.DownloadURL (ADownload = self.__FDownload, skip_existing = self.__FYouTubeObject.Fskip_existing)
     #endfunction
 #endclass
 
@@ -284,7 +285,7 @@ class YOUTUBEwidget(QWidget):
         #     self.ui.YT_ProgressBar.setStyleSheet(self.danger)
     #endfunction
 
-    def __init__(self, AYouTubeObject: LUObjectsYT.TYouTubeObject, AMaxRes, parent):
+    def __init__(self, AYouTubeObject: LUObjectsYT.TYouTubeObject, AMaxRes, ADownload: bool, parent):
     #beginfunction
         super().__init__(parent)
         self.ui = Ui_YT_widget()
@@ -314,7 +315,7 @@ class YOUTUBEwidget(QWidget):
         #----------------------------------------------
         # 2 вариант
         #----------------------------------------------
-        self.FDownloader_YOUTUBE = Downloader_YOUTUBE (AYouTubeObject, AMaxRes)
+        self.FDownloader_YOUTUBE = Downloader_YOUTUBE (AYouTubeObject, AMaxRes, ADownload)
         # сигналы
         self.FDownloader_YOUTUBE.Downloader_YOUTUBE_Signals.signal_YT_Caption.connect(self.signalHandler_YT_Caption)
         self.FDownloader_YOUTUBE.Downloader_YOUTUBE_Signals.signal_ProgressMax.connect (self.signalHandler_ProgressMax)
