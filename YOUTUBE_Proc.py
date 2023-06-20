@@ -16,13 +16,12 @@
 # БИБЛИОТЕКИ python
 #------------------------------------------
 from pathlib import Path, WindowsPath
+from pathlib import WindowsPath
 
 #------------------------------------------
 # БИБЛИОТЕКИ сторонние
 #------------------------------------------
-
 # from ManageHD import ProcessMovies, Progress, FileManip
-from pathlib import WindowsPath
 
 from PySide6.QtCore import (
     QCoreApplication, QDate, QDateTime, QLocale,
