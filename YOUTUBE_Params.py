@@ -26,7 +26,6 @@ import sys
 #------------------------------------------
 import LULog
 import LUParserINI
-import LUParserREG
 import LUParserARG
 import LUFile
 import LUDateTime
