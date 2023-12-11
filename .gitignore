@@ -1,5 +1,50 @@
+# ----------------------------------------------------------------
 # Byte-compiled / optimized / DLL files
+
+# GIT
+.gitignore
+.gitmodules
+CreateGIT.bat
+
+# Environments
+.env
+.env/
+.env.bak/
+
+.venv
+.venv/
+.venv.bak/
+
+# Каталоги
+EXE
+EXE/
+LOG
+LOG/
+WORK
+WORK/
+out
+out/
+!DOC
+!DOC/
+# Файлы
+*.exe
+*.spec
+*.log
+GIT_CONFIG
+
+# VS Code
+*.code-workspace
+.vscode
+.vscode/
+
+# PyCharm
+.idea
+.idea/
+
 __pycache__/
+
+# ----------------------------------------------------------------
+
 *.py[cod]
 *$py.class
 
@@ -101,15 +146,6 @@ celerybeat.pid
 # SageMath parsed files
 *.sage.py
 
-# Environments
-.env
-.venv
-env/
-venv/
-ENV/
-env.bak/
-venv.bak/
-
 # Spyder project settings
 .spyderproject
 .spyproject
@@ -127,18 +163,3 @@ dmypy.json
 
 # Pyre type checker
 .pyre/
-
-# PyCharm
-.idea
-.idea/
-
-EXE
-LOG
-WORK
-
-GIT_CONFIG
-
-.gitmodules
-
-*.exe
-*.spec
