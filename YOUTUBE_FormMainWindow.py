@@ -322,13 +322,13 @@ class FormMainWindow(QMainWindow):
     mouseReleaseEvent       Кнопка мыши отпущена
     mouseDoubleClickEvent   Обнаружен двойной клик
 
-    # События управления мышью    
+    # События управления мышью
     Метод                   Возвращает
     .button()               Конкретную кнопку, вызвавшую данное событие
     .buttons()              Состояние всех кнопок мыши (флаги OR)
     .position()             Относительную позицию виджета в виде целого QPoint .
 
-    # Идентификаторы кнопок определяются в пространстве имён Qt:    
+    # Идентификаторы кнопок определяются в пространстве имён Qt:
     Код             Бинарное значение   Описание
     Qt.NoButton     0 (000)             Кнопка не нажата, или событие не связано с нажатием кнопки
     Qt.LeftButton   1 (001)             Левая кнопка нажата
@@ -426,7 +426,7 @@ class FormMainWindow(QMainWindow):
             """
         # Create Stylesheets
         self.style_dark = """
-            * {font-family: 'Noto Sans';} 
+            * {font-family: 'Noto Sans';}
             QMainWindow {background-color: gray;}
             """
         # Create Stylesheets
