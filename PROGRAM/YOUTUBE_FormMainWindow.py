@@ -234,7 +234,7 @@ class FormMainWindow(QMainWindow):
         """signalHandler_DownloadedURL"""
     #beginfunction
         s = 'signalHandler_DownloadedURL...'
-        # LULog.LoggerAPPS.debug (s)
+        # LULog.LoggerAPPSAdd_debug (s)
         LURL = text
         self.__DelModel (LURL)
         self.__DelListWidget (LURL)
@@ -248,7 +248,7 @@ class FormMainWindow(QMainWindow):
         """signalHandler_DownloadedURL"""
     #beginfunction
         s = 'signalHandler_ChangeStatWidgetObject...'
-        # LULog.LoggerAPPS.debug (s)
+        # LULog.LoggerAPPSAdd_debug (s)
         self.__ChangeCountStatWidgetObject(AStatWidgetObject, ACount)
     #endfunction
 
@@ -397,7 +397,7 @@ class FormMainWindow(QMainWindow):
         """__SetColorGroup"""
     #beginfunction
         s = '__SetColorGroup...'
-        # LULog.LoggerAPPS.debug (s)
+        # LULog.LoggerAPPSAdd_debug (s)
 
         Lpalette = self.ui.Memo_Log.palette ()
         Lpalette.setCurrentColorGroup (QPalette.Normal)
@@ -417,7 +417,7 @@ class FormMainWindow(QMainWindow):
         """__SetStylesheetsFor_ALL"""
     #beginfunction
         s = '__SetStylesheetsFor_ALL...'
-        # LULog.LoggerAPPS.debug (s)
+        # LULog.LoggerAPPSAdd_debug (s)
 
         # Create Stylesheets
         self.style_light = """
@@ -443,7 +443,7 @@ class FormMainWindow(QMainWindow):
         """__SetupColorFor_Memo_Log"""
     #beginfunction
         s = '__SetColorFor_Memo_Log...'
-        # LULog.LoggerAPPS.debug (s)
+        # LULog.LoggerAPPSAdd_debug (s)
 
         cg = QPalette.ColorGroup (QPalette.Active)
         cg = QPalette.ColorGroup (QPalette.Disabled)
@@ -474,7 +474,7 @@ class FormMainWindow(QMainWindow):
         """__SetupStylesheetsFor_Memo_Log"""
     #beginfunction
         s = '__SetStylesheetsFor_Memo_Log...'
-        # LULog.LoggerAPPS.debug (s)
+        # LULog.LoggerAPPSAdd_debug (s)
 
         # stylesheet
         # color: rgb (0, 0, 0); background-color: rgb (157, 157, 157)
@@ -497,22 +497,22 @@ class FormMainWindow(QMainWindow):
         """__SetParams"""
     #beginfunction
         s = '00.__SetParams...'
-        # LULog.LoggerAPPS.info (s)
+        # LULog.LoggerAPPSAdd_info (s)
 
-        LULog.LoggerAPPS.log (LULog.TEXT, self.Params.FileNameINI)
+        LULog.LoggerAPPSAdd (LULog.TEXT, self.Params.FileNameINI)
         # # [GENERAL]
-        # LULog.LoggerAPPS.log (LULog.TEXT, 'PathStore='+self.Params.PathStore)
-        # LULog.LoggerAPPS.log (LULog.TEXT, 'PathStoreOut='+self.Params.PathStoreOut)
-        # LULog.LoggerAPPS.log (LULog.TEXT, 'PathStoreError='+self.Params.PathStoreError)
-        # LULog.LoggerAPPS.log (LULog.TEXT, 'Sheduler='+self.Params.Sheduler)
+        # LULog.LoggerAPPSAdd (LULog.TEXT, 'PathStore='+self.Params.PathStore)
+        # LULog.LoggerAPPSAdd (LULog.TEXT, 'PathStoreOut='+self.Params.PathStoreOut)
+        # LULog.LoggerAPPSAdd (LULog.TEXT, 'PathStoreError='+self.Params.PathStoreError)
+        # LULog.LoggerAPPSAdd (LULog.TEXT, 'Sheduler='+self.Params.Sheduler)
         # # [Youtube]
-        # LULog.LoggerAPPS.log (LULog.TEXT, 'PathYoutubeLoad='+self.Params.PathYoutubeLoad)
-        # LULog.LoggerAPPS.log (LULog.TEXT, 'CheckBoxCliboard='+str(self.Params.CheckBoxCliboard))
-        # LULog.LoggerAPPS.log (LULog.TEXT, 'CheckBoxAutoDownload='+str(self.Params.CheckBoxAutoDownload))
-        # LULog.LoggerAPPS.log (LULog.TEXT, 'CheckBoxAutoDelete='+str(self.Params.CheckBoxAutoDelete))
-        # LULog.LoggerAPPS.log (LULog.TEXT, 'CheckBoxSkipExists='+str(self.Params.CheckBoxSkipExists))
-        # LULog.LoggerAPPS.log (LULog.TEXT, 'Stop='+str(self.Params.Stop))
-        # LULog.LoggerAPPS.log (LULog.TEXT, 'Chunk=' + str(self.Params.Chunk))
+        # LULog.LoggerAPPSAdd (LULog.TEXT, 'PathYoutubeLoad='+self.Params.PathYoutubeLoad)
+        # LULog.LoggerAPPSAdd (LULog.TEXT, 'CheckBoxCliboard='+str(self.Params.CheckBoxCliboard))
+        # LULog.LoggerAPPSAdd (LULog.TEXT, 'CheckBoxAutoDownload='+str(self.Params.CheckBoxAutoDownload))
+        # LULog.LoggerAPPSAdd (LULog.TEXT, 'CheckBoxAutoDelete='+str(self.Params.CheckBoxAutoDelete))
+        # LULog.LoggerAPPSAdd (LULog.TEXT, 'CheckBoxSkipExists='+str(self.Params.CheckBoxSkipExists))
+        # LULog.LoggerAPPSAdd (LULog.TEXT, 'Stop='+str(self.Params.Stop))
+        # LULog.LoggerAPPSAdd (LULog.TEXT, 'Chunk=' + str(self.Params.Chunk))
     #endfunction
 
     #--------------------------------------------------
@@ -522,7 +522,7 @@ class FormMainWindow(QMainWindow):
         """__SetLogs"""
     #beginfunction
         s = '01.__SetLogs...'
-        # LULog.LoggerAPPS.info (s)
+        # LULog.LoggerAPPSAdd_info (s)
 
         # self.APPLog: LULog.TFileMemoLog = LULog.FileMemoLog
         #----------------- Memo_Log --------------------------
@@ -533,7 +533,7 @@ class FormMainWindow(QMainWindow):
 
         # self.ui.Memo_Log.appendPlainText ('mhsdkjhfkjhsakjh'+'\n')
 
-        # LULog.LoggerAPPS.log (LULog.TEXT, self.Params.FileMemoLog.FileName)
+        # LULog.LoggerAPPSAdd (LULog.TEXT, self.Params.FileMemoLog.FileName)
     #endfunction
 
     #-------------------------------
@@ -543,7 +543,7 @@ class FormMainWindow(QMainWindow):
         """__SetStatusBar_PN"""
     #beginfunction
         s = '02.__SetStatusBar_PN...'
-        # LULog.LoggerAPPS.info (s)
+        # LULog.LoggerAPPSAdd_info (s)
 
         # self.ui.StatusBar_PN.stasetStyleSheet (
         #     "QStatusBar{padding-left:8px;background:rgba(255,0,0,255);color:black;font-weight:bold;}")
@@ -621,7 +621,7 @@ class FormMainWindow(QMainWindow):
         """__SetSheduler"""
     #beginfunction
         s = '03.__SetSheduler...'
-        # LULog.LoggerAPPS.info (s)
+        # LULog.LoggerAPPSAdd_info (s)
 
         #-------------------------------
         # Sheduler
@@ -641,7 +641,7 @@ class FormMainWindow(QMainWindow):
         """__SetClipboard"""
     #beginfunction
         s = '04.__SetClipboard...'
-        # LULog.LoggerAPPS.info (s)
+        # LULog.LoggerAPPSAdd_info (s)
 
         self.__FClipboard = QApplication.clipboard ()
         # Slots & Signals
@@ -660,7 +660,7 @@ class FormMainWindow(QMainWindow):
         """__SetListViewL"""
     #beginfunction
         s = '05.__SetListViewL...'
-        # LULog.LoggerAPPS.info (s)
+        # LULog.LoggerAPPSAdd_info (s)
 
         self.__FModel = QStringListModel ()
 
@@ -704,7 +704,7 @@ class FormMainWindow(QMainWindow):
 
     #beginfunction
         s = '06.__SetScrollAreaR...'
-        # LULog.LoggerAPPS.info (s)
+        # LULog.LoggerAPPSAdd_info (s)
 
         self.__FListWidgets = list()
 
@@ -728,7 +728,7 @@ class FormMainWindow(QMainWindow):
         """__SetListYouTubeObject"""
     #beginfunction
         s = '07.__SetListYouTubeObject...'
-        # LULog.LoggerAPPS.info (s)
+        # LULog.LoggerAPPSAdd_info (s)
 
         self.__FListYouTubeObject = list()
         self.__ClearListYouTubeObject()
@@ -753,7 +753,7 @@ class FormMainWindow(QMainWindow):
         """__SetTimerApplication"""
     #beginfunction
         s = '08.__SetTimerApplication...'
-        # LULog.LoggerAPPS.info (s)
+        # LULog.LoggerAPPSAdd_info (s)
 
         self.__FQTimerApplication = LUQTimer.TQTimer(parent = self)
         self.__FQTimerApplication.FQTimerName = 'Таймер Application'
@@ -768,7 +768,7 @@ class FormMainWindow(QMainWindow):
         """__SetTimerParams"""
     #beginfunction
         s = '081.__SetTimerParams...'
-        # LULog.LoggerAPPS.info (s)
+        # LULog.LoggerAPPSAdd_info (s)
 
         self.__FQTimerParams = LUQTimer.TQTimer(parent = self)
         self.__FQTimerParams.FQTimerName = 'Таймер Params'
@@ -782,7 +782,7 @@ class FormMainWindow(QMainWindow):
         """__SetTimerClock"""
     #beginfunction
         s = '082.__SetTimerClock...'
-        # LULog.LoggerAPPS.info (s)
+        # LULog.LoggerAPPSAdd_info (s)
 
         self.__FQTimerClock = LUQTimer.TQTimer(parent = self)
         self.__FQTimerClock.FQTimerName = 'Таймер Clock'
@@ -796,7 +796,7 @@ class FormMainWindow(QMainWindow):
         """__SetActions"""
     #beginfunction
         s = '09.__SetActions...'
-        # LULog.LoggerAPPS.info (s)
+        # LULog.LoggerAPPSAdd_info (s)
 
         self.ui.action_CreateYoutube.triggered.connect (self.__Action_CreateYoutube)
         self.ui.action_Exit.triggered.connect(self.__Action_Exit)
@@ -829,7 +829,7 @@ class FormMainWindow(QMainWindow):
         """__FormCreate"""
     #beginfunction
         s = '__FormCreate...'
-        # LULog.LoggerAPPS.info (s)
+        # LULog.LoggerAPPSAdd_info (s)
 
         # LULog.PrintHandlers (LULog.LoggerTOOLS)
         LHandler: LULog.TStreamHandler = LULog.GetHandler (LULog.LoggerTOOLS, 'CONSOLE')
@@ -841,7 +841,7 @@ class FormMainWindow(QMainWindow):
         LHandler: LULog.TStreamHandler = LULog.GetHandler (LULog.LoggerAPPS, 'CONSOLE')
         LHandler.FAPPGUI = True
         LHandler.Widget = self.ui.Memo_Log
-        # LULog.LoggerAPPS.info ('LULog.LoggerAPPS-> '+'TEST...')
+        # LULog.LoggerAPPSAdd_info ('LULog.LoggerAPPS-> '+'TEST...')
 
         self.setWindowTitle(YOUTUBE_Consts.cProjectNAME)
 
@@ -871,7 +871,7 @@ class FormMainWindow(QMainWindow):
         self.__SetActions()
         #----------------- VersionInfo --------------------------
         # VersionInfo = CreateVersion (ParamStr(0))
-        # LULog.LoggerAPPS.log (LULog.TEXT, ParamStr (0) + ' ' + VersionInfo.FileVersion+ ' ' + VersionInfo.FileDate)
+        # LULog.LoggerAPPSAdd (LULog.TEXT, ParamStr (0) + ' ' + VersionInfo.FileVersion+ ' ' + VersionInfo.FileDate)
         # VersionInfo.Free
         #-----------------------------------------------------------
     #endfunction
@@ -890,7 +890,7 @@ class FormMainWindow(QMainWindow):
         """__FormActivate"""
     #beginfunction
         s = '__FormActivate...'
-        # LULog.LoggerAPPS.info (s)
+        # LULog.LoggerAPPSAdd_info (s)
 
         self.ui.TEST_widget.hide()
         self.__StartFQTimerApplication ()
@@ -902,7 +902,7 @@ class FormMainWindow(QMainWindow):
         """__FormClose"""
     #beginfunction
         s = '__FormClose...'
-        # LULog.LoggerAPPS.info (s)
+        # LULog.LoggerAPPSAdd_info (s)
 
         self.__StopFQTimerApplication ()
         self.__StopFQTimerParams ()
@@ -913,7 +913,7 @@ class FormMainWindow(QMainWindow):
         """__SetStatApplication"""
     #beginfunction
         s = '__SetStatApplication...'
-        # LULog.LoggerAPPS.info (s)
+        # LULog.LoggerAPPSAdd_info (s)
 
         self.__FStatApplication = AStatApplication
 
@@ -948,48 +948,48 @@ class FormMainWindow(QMainWindow):
     def cliboard_changed(self, mode):
     #beginfunction
         s = 'cliboard_changed...'
-        # LULog.LoggerAPPS.info (s)
+        # LULog.LoggerAPPSAdd_info (s)
     #endfunction
     def cliboard_findBufferChanged (self):
     #beginfunction
         s = 'cliboard_findBufferChanged...'
-        # LULog.LoggerAPPS.info (s)
+        # LULog.LoggerAPPSAdd_info (s)
     #endfunction
     def cliboard_selectionChanged (self):
     #beginfunction
         s = 'cliboard_selectionChanged...'
-        # LULog.LoggerAPPS.info (s)
+        # LULog.LoggerAPPSAdd_info (s)
     #endfunction
 
     def cliboard_dataChanged(self):
     #beginfunction
         s = 'cliboard_dataChanged...'
-        # LULog.LoggerAPPS.debug (s)
+        # LULog.LoggerAPPSAdd_debug (s)
 
         mimeData = self.__FClipboard.mimeData()
         if mimeData.hasImage():
             s = ' '*4+'mimeData.hasImage...'
-            # LULog.LoggerAPPS.info (s)
+            # LULog.LoggerAPPSAdd_info (s)
             # setPixmap(QPixmap(mimeData.imageData()))
         elif mimeData.hasHtml():
             s = ' '*4+'mimeData.hasHtml...'
-            # LULog.LoggerAPPS.info (s)
+            # LULog.LoggerAPPSAdd_info (s)
             # setText(mimeData.html())
             # setTextFormat(Qt.RichText)
         elif mimeData.hasText():
             s = ' '*4+'mimeData.hasText...'
-            # LULog.LoggerAPPS.info (s)
+            # LULog.LoggerAPPSAdd_info (s)
             # setText(mimeData.text())
             # setTextFormat(Qt.PlainText)
 
             # LText = self.__FClipboard.text ()
             LText: str = mimeData.text()
             # self.ui.Memo_Log.insertPlainText (LText + '\n')
-            # LULog.LoggerAPPS.debug (LText)
+            # LULog.LoggerAPPSAdd_debug (LText)
             self.__CreateObjectsURL (LText)
         else:
             s = ' '*4+'Cannot display data...'
-            LULog.LoggerAPPS.info (s)
+            LULog.LoggerAPPSAdd_info (s)
             # QClipboard.Mode.Clipboard - указывает, что данные должны сохраняться и извлекаться из глобального буфера обмена.
             # QClipboard.Selection - ?????
             # QClipboard.FindBuffer - ?????
@@ -1000,7 +1000,7 @@ class FormMainWindow(QMainWindow):
     def __ClearWidgets (self):
     #beginfunction
         s = '__ClearWidgets...'
-        # LULog.LoggerAPPS.debug (s)
+        # LULog.LoggerAPPSAdd_debug (s)
 
         for i in reversed (range (self.ui.verticalLayout_3.count ())):
             item = self.ui.verticalLayout_3.itemAt (i).widget ()
@@ -1017,7 +1017,7 @@ class FormMainWindow(QMainWindow):
         """__DelListWidget"""
     #beginfunction
         s = '__DelListWidget...'
-        # LULog.LoggerAPPS.debug (s)
+        # LULog.LoggerAPPSAdd_debug (s)
 
         for LItem in self.__FListWidgets:
             LWidget_X: YOUTUBEwidget = LItem
@@ -1042,7 +1042,7 @@ class FormMainWindow(QMainWindow):
         """__GetListWidget"""
     #beginfunction
         s = '__GetListWidget...'
-        # LULog.LoggerAPPS.debug (s)
+        # LULog.LoggerAPPSAdd_debug (s)
 
         LResult = None
         for LItem in self.__FListWidgets:
@@ -1060,7 +1060,7 @@ class FormMainWindow(QMainWindow):
         """__GetListWidget"""
     #beginfunction
         s  = '__GetListWidget...'
-        # LULog.LoggerAPPS.debug (s)
+        # LULog.LoggerAPPSAdd_debug (s)
 
         LResult = None
         for LItem in self.__FListWidgets:
@@ -1074,7 +1074,7 @@ class FormMainWindow(QMainWindow):
     def __AddListWidget (self, AYouTubeObject: LUObjectsYT.TYouTubeObject) -> YOUTUBEwidget:
     #beginfunction
         s = '__AddWidget...'
-        # LULog.LoggerAPPS.debug (s)
+        # LULog.LoggerAPPSAdd_debug (s)
 
         LMaxRes = LUObjectsYT.cMaxRes480p
 
@@ -1115,7 +1115,7 @@ class FormMainWindow(QMainWindow):
     def __ClearListYouTubeObject (self):
     #beginfunction
         s = '__ClearListYouTubeObject...'
-        # LULog.LoggerAPPS.debug (s)
+        # LULog.LoggerAPPSAdd_debug (s)
 
         self.__FListYouTubeObject.clear()
     #endfunction
@@ -1126,7 +1126,7 @@ class FormMainWindow(QMainWindow):
         """__DelListYouTubeObject"""
     #beginfunction
         s = '__DelListYouTubeObject...'
-        # LULog.LoggerAPPS.debug (s)
+        # LULog.LoggerAPPSAdd_debug (s)
 
         for LItem in self.__FListYouTubeObject:
             LYouTubeObject:LUObjectsYT.TYouTubeObject = LItem
@@ -1142,7 +1142,7 @@ class FormMainWindow(QMainWindow):
         """__GetListYouTubeObject"""
     #beginfunction
         s = '__GetListYouTubeObject...'
-        # LULog.LoggerAPPS.debug (s)
+        # LULog.LoggerAPPSAdd_debug (s)
 
         LResult = None
         for LItem in self.__FListYouTubeObject:
@@ -1156,7 +1156,7 @@ class FormMainWindow(QMainWindow):
     def __AddListYouTubeObject (self, AURL: str, value: dict) -> LUObjectsYT.TYouTubeObject:
     #beginfunction
         s = '__AddListYouTubeObject...'
-        # LULog.LoggerAPPS.debug (s)
+        # LULog.LoggerAPPSAdd_debug (s)
 
         # LYouTubeObject
         LObjectID: datetime = LUDateTime.Now ()
@@ -1177,7 +1177,7 @@ class FormMainWindow(QMainWindow):
     def __ClearModel (self):
     #beginfunction
         s = '__ClearModel...'
-        # LULog.LoggerAPPS.debug (s)
+        # LULog.LoggerAPPSAdd_debug (s)
 
         # Вы можете либо использовать model.setStringList( QStringList{} )
         # либо вручную удалить строки с помощью model.removeRows( 0, model.rowCount() ).
@@ -1192,7 +1192,7 @@ class FormMainWindow(QMainWindow):
     def __AddModel (self, AURL: str):
     #beginfunction
         s = '__AddModel...'
-        # LULog.LoggerAPPS.debug (s)
+        # LULog.LoggerAPPSAdd_debug (s)
 
         Lindex = self.__FModel.rowCount ()
         self.__FModel.insertRow (Lindex)
@@ -1205,7 +1205,7 @@ class FormMainWindow(QMainWindow):
         """__DelModel"""
     #beginfunction
         s = '__DelModel...'
-        # LULog.LoggerAPPS.debug (s)
+        # LULog.LoggerAPPSAdd_debug (s)
 
         for i in reversed (range (self.__FModel.rowCount ())):
             # print (self.__FModel.stringList()[i])
@@ -1222,7 +1222,7 @@ class FormMainWindow(QMainWindow):
         """__GetModel"""
     #beginfunction
         s = '__GetModel...'
-        # LULog.LoggerAPPS.debug (s)
+        # LULog.LoggerAPPSAdd_debug (s)
 
         LResult = ''
         for i in reversed (range (self.__FModel.rowCount ())):
@@ -1241,7 +1241,7 @@ class FormMainWindow(QMainWindow):
         """__Action_TestFunction"""
     #beginfunction
         s = '__Action_TestFunction...'
-        LULog.LoggerAPPS.info (s)
+        LULog.LoggerAPPSAdd_info (s)
 
         # gives a single float value
         Lcpu_percent = psutil.cpu_percent ()
@@ -1264,19 +1264,19 @@ class FormMainWindow(QMainWindow):
         """__Procedure_01"""
     #beginfunction
         s = '__Procedure_01...'
-        LULog.LoggerAPPS.info (s)
+        LULog.LoggerAPPSAdd_info (s)
     #endfunction
 
     def Main(self):
         """Main"""
     #beginfunction
         s = 'Main...'
-        # LULog.LoggerAPPS.info (s)
+        # LULog.LoggerAPPSAdd_info (s)
 
         self.StopApplication()
         self.__SetStatApplication (LUProc.TStatApplication.saMain)
         LSaveCurrentDir = LUos.GetCurrentDir()
-        LULog.LoggerAPPS.log (LULog.BEGIN, LUProc.cProcessBegin)
+        LULog.LoggerAPPSAdd (LULog.BEGIN, LUProc.cProcessBegin)
         self.P_StatMain.setText(LUProc.cProcessWork)
 
         self.__FStopApplicationMain = False
@@ -1288,14 +1288,14 @@ class FormMainWindow(QMainWindow):
         while not self.__FStopApplicationMain and i < iMax:
             i += 1
             s = 'Main...'
-            LULog.LoggerAPPS.info (str(i)+'. '+s)
+            LULog.LoggerAPPSAdd_info (str(i)+'. '+s)
             # time.sleep(1)
             QCoreApplication.processEvents ()
         #endwhile
         self.__FStopApplicationMain = True
 
         self.P_StatMain.setText(LUProc.cProcessStop)
-        LULog.LoggerAPPS.log( LULog.END, LUProc.cProcessEnd)
+        LULog.LoggerAPPSAdd( LULog.END, LUProc.cProcessEnd)
         os.chdir(LSaveCurrentDir)
         self.StartApplication()
     #endfunction
@@ -1305,7 +1305,7 @@ class FormMainWindow(QMainWindow):
         """__CreateObjectsURL"""
     #beginfunction
         s = '__CreateObjectsURL...'
-        # LULog.LoggerAPPS.info (s)
+        # LULog.LoggerAPPSAdd_info (s)
 
         if self.Flast_copied == AURL:
             s = AURL + ' дубликат cliboard ...'
@@ -1347,7 +1347,7 @@ class FormMainWindow(QMainWindow):
         """__Action_CreateYoutube"""
     #beginfunction
         s = '__Action_CreateYoutube...'
-        # LULog.LoggerAPPS.info (s)
+        # LULog.LoggerAPPSAdd_info (s)
 
         LSaveStatApplication = self.__FStatApplication
         self.__SetStatApplication (LUProc.TStatApplication.saBreak)
@@ -1361,7 +1361,7 @@ class FormMainWindow(QMainWindow):
         """__Action_Exit"""
     #beginfunction
         s = '__Action_Exit...'
-        # LULog.LoggerAPPS.info (s)
+        # LULog.LoggerAPPSAdd_info (s)
 
         self.__FormClose()
 
@@ -1372,27 +1372,27 @@ class FormMainWindow(QMainWindow):
         """__Action_Cut"""
     #beginfunction
         s = '__Action_Cut...'
-        LULog.LoggerAPPS.info (s)
+        LULog.LoggerAPPSAdd_info (s)
     #endfunction
     @QtCore.Slot (name = '__Action_Copy')
     def __Action_Copy (self):
         """__Action_Copy"""
     #beginfunction
         s = '__Action_Copy...'
-        LULog.LoggerAPPS.info (s)
+        LULog.LoggerAPPSAdd_info (s)
     #endfunction
     @QtCore.Slot (name = '__Action_Paste')
     def __Action_Paste (self):
         """__Action_Paste"""
     #beginfunction
         s = '__Action_Paste...'
-        LULog.LoggerAPPS.info (s)
+        LULog.LoggerAPPSAdd_info (s)
     #endfunction
     def __Action_Sheduler (self, A):
         """__Action_Sheduler"""
     #beginfunction
         s = '__Action_Sheduler...'
-        # LULog.LoggerAPPS.info (s)
+        # LULog.LoggerAPPSAdd_info (s)
 
         self.StartApplication ()
         self.Main ()
@@ -1402,7 +1402,7 @@ class FormMainWindow(QMainWindow):
         """__StartFQTimerApplication"""
     #beginfunction
         s = '__StartFQTimerApplication...'
-        # LULog.LoggerAPPS.debug (s)
+        # LULog.LoggerAPPSAdd_debug (s)
 
         # self.__FidleApplication = True
         self.__FQTimerApplication.timeout.connect (self.__run_idleApplication)
@@ -1412,7 +1412,7 @@ class FormMainWindow(QMainWindow):
         """__StopFQTimerApplication"""
     #beginfunction
         s = '__StopFQTimerApplication...'
-        # LULog.LoggerAPPS.debug (s)
+        # LULog.LoggerAPPSAdd_debug (s)
 
         # self.__FidleApplication = False
         self.__FQTimerApplication.stop()
@@ -1422,7 +1422,7 @@ class FormMainWindow(QMainWindow):
         """__StartFQTimerParams"""
     #beginfunction
         s = '__StartFQTimerParams...'
-        # LULog.LoggerAPPS.debug (s)
+        # LULog.LoggerAPPSAdd_debug (s)
 
         # self.__FidleParams = True
         self.__FQTimerParams.timeout.connect (self.__run_idleParams)
@@ -1432,7 +1432,7 @@ class FormMainWindow(QMainWindow):
         """__StopFQTimerParams"""
     #beginfunction
         s = '__StopFQTimerParams...'
-        # LULog.LoggerAPPS.debug (s)
+        # LULog.LoggerAPPSAdd_debug (s)
 
         # self.__FidleParams = False
         self.__FQTimerParams.stop()
@@ -1442,7 +1442,7 @@ class FormMainWindow(QMainWindow):
         """__StartFQTimerClock"""
     #beginfunction
         s = '__StartFQTimerClock...'
-        # LULog.LoggerAPPS.debug (s)
+        # LULog.LoggerAPPSAdd_debug (s)
 
         # self.__FidleParams = True
         self.__FQTimerClock.timeout.connect (self.__run_idleClock)
@@ -1452,7 +1452,7 @@ class FormMainWindow(QMainWindow):
         """__StopFQTimerClock"""
     #beginfunction
         s = '__StopFQTimerClock...'
-        # LULog.LoggerAPPS.debug (s)
+        # LULog.LoggerAPPSAdd_debug (s)
 
         # self.__FidleClock = False
         self.__FQTimerClock.stop()
@@ -1463,7 +1463,7 @@ class FormMainWindow(QMainWindow):
         """__StartFSheduler"""
     #beginfunction
         s = '__StartFSheduler...'
-        # LULog.LoggerAPPS.debug (s)
+        # LULog.LoggerAPPSAdd_debug (s)
 
         self.__FSheduler.Enable = True
         s = 'Следующий сеанс: ' + str (self.__FSheduler.DTEvents)
@@ -1473,7 +1473,7 @@ class FormMainWindow(QMainWindow):
         """__StartFSheduler"""
     #beginfunction
         s = '__StopFSheduler...'
-        # LULog.LoggerAPPS.debug (s)
+        # LULog.LoggerAPPSAdd_debug (s)
 
         self.__FSheduler.Enable = False
         s = 'Следующий сеанс:'
@@ -1484,7 +1484,7 @@ class FormMainWindow(QMainWindow):
         """StartApplication"""
     #beginfunction
         s = 'StartApplication...'
-        # LULog.LoggerAPPS.info (s)
+        # LULog.LoggerAPPSAdd_info (s)
 
         self.__StartFSheduler()
         self.__SetStatApplication (LUProc.TStatApplication.saRunning)
@@ -1493,7 +1493,7 @@ class FormMainWindow(QMainWindow):
         """StopApplication"""
     #beginfunction
         s = 'StopApplication...'
-        # LULog.LoggerAPPS.info (s)
+        # LULog.LoggerAPPSAdd_info (s)
 
         self.__StopFSheduler()
         self.__SetStatApplication (LUProc.TStatApplication.saBreak)
@@ -1504,7 +1504,7 @@ class FormMainWindow(QMainWindow):
         """__Action_Start"""
     #beginfunction
         s = '__Action_Start_Stop...'
-        # LULog.LoggerAPPS.info (s)
+        # LULog.LoggerAPPSAdd_info (s)
 
         if self.__FStatApplication == LUProc.TStatApplication.saBreak:
             self.StartApplication()
@@ -1519,7 +1519,7 @@ class FormMainWindow(QMainWindow):
         """__Action_Setup"""
     #beginfunction
         s = '__Action_Setup...'
-        # LULog.LoggerAPPS.info (s)
+        # LULog.LoggerAPPSAdd_info (s)
 
         LSaveStatApplication = self.__FStatApplication
 
@@ -1543,7 +1543,7 @@ class FormMainWindow(QMainWindow):
         """__Action_About"""
     #beginfunction
         s = '__Action_About...'
-        # LULog.LoggerAPPS.info (s)
+        # LULog.LoggerAPPSAdd_info (s)
 
         LSaveStatApplication = self.__FStatApplication
         # Остановить выполнение Application
@@ -1560,7 +1560,7 @@ class FormMainWindow(QMainWindow):
         """__Action_Help"""
     #beginfunction
         s = '__Action_Help...'
-        # LULog.LoggerAPPS.info (s)
+        # LULog.LoggerAPPSAdd_info (s)
 
         LSaveStatApplication = self.__FStatApplication
         # Остановить выполнение Application
@@ -1577,7 +1577,7 @@ class FormMainWindow(QMainWindow):
         """__Action_DeleteAll"""
     #beginfunction
         s = '__Action_DeleteAll...'
-        # LULog.LoggerAPPS.info (s)
+        # LULog.LoggerAPPSAdd_info (s)
         LSaveStatApplication = self.__FStatApplication
 
         if LSaveStatApplication == LUProc.TStatApplication.saRunning:
@@ -1637,7 +1637,7 @@ class FormMainWindow(QMainWindow):
         """__GetListWidgetCount"""
     #beginfunction
         s = '__ChangeCountStatWidgetObject...'
-        # LULog.LoggerAPPS.debug (s)
+        # LULog.LoggerAPPSAdd_debug (s)
         match AStatWidget:
             case YOUTUBE_widgetYT.TStatWidgetObject.swNew:
                 self.__FswNew += ACount
@@ -1663,7 +1663,7 @@ class FormMainWindow(QMainWindow):
         """__GetListWidgetCount"""
     #beginfunction
         s = '__GetListWidgetCount...'
-        # LULog.LoggerAPPS.debug (s)
+        # LULog.LoggerAPPSAdd_debug (s)
 
         LResult = 0
         for LItem in self.__FListWidgets:
@@ -1736,7 +1736,7 @@ class FormMainWindow(QMainWindow):
         """__run_idleApplication"""
     #beginfunction
         s = '__run_idleApplication'
-        # LULog.LoggerAPPS.debug (s)
+        # LULog.LoggerAPPSAdd_debug (s)
 
         # while self.__FidleApplication:
 
@@ -1768,7 +1768,7 @@ class FormMainWindow(QMainWindow):
         """__run_idleParams"""
     #beginfunction
         s = '__run_idleParams'
-        # LULog.LoggerAPPS.debug (s)
+        # LULog.LoggerAPPSAdd_debug (s)
 
         self.__FParams.RefreashOption()
         if self.__FStatApplication == LUProc.TStatApplication.saRunning:
@@ -1793,7 +1793,7 @@ class FormMainWindow(QMainWindow):
         """__run_idleClock"""
     #beginfunction
         s = '__run_idleClock'
-        # LULog.LoggerAPPS.debug (s)
+        # LULog.LoggerAPPSAdd_debug (s)
 
         Ltime = QTime.currentTime()
         Ltext = Ltime.toString("hh:mm:ss")
@@ -1820,7 +1820,7 @@ def main ():
 
     LResult = GAPP.exec ()
     s = 'ExitProgram...'
-    LULog.LoggerAPPS.info (s)
+    LULog.LoggerAPPSAdd_info (s)
     sys.exit(LResult)
 #endfunction
 

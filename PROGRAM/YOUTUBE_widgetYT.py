@@ -380,7 +380,7 @@ class YOUTUBEwidget(QWidget):
         """__WidgetCreate"""
     #beginfunction
         s = '__WidgetCreate...'
-        # LULog.LoggerAPPS.info (s)
+        # LULog.LoggerAPPSAdd_info (s)
         # 00.__SetYT_ProgressBar
         self.__SetYT_ProgressBar()
         # 00.__SetActions
@@ -433,7 +433,7 @@ class YOUTUBEwidget(QWidget):
         """StartWidget"""
     #beginfunction
         s = 'StartWidget...'
-        # LULog.LoggerAPPS.info (s)
+        # LULog.LoggerAPPSAdd_info (s)
         self.__SetStatWidget (LUProc.TStatWidget.swRunning)
         self.FDownloader_YOUTUBE.StartDownload_01 = True
     #endfunction
@@ -441,7 +441,7 @@ class YOUTUBEwidget(QWidget):
         """StopWidget"""
     #beginfunction
         s = 'StopWidget...'
-        # LULog.LoggerAPPS.info (s)
+        # LULog.LoggerAPPSAdd_info (s)
         self.__SetStatWidget (LUProc.TStatWidget.swBreak)
         self.FDownloader_YOUTUBE.StartDownload_01 = False
     #endfunction
@@ -451,7 +451,7 @@ class YOUTUBEwidget(QWidget):
         """__Action_Start_Stop"""
     #beginfunction
         s = '__Action_Start_Stop...'
-        LULog.LoggerAPPS.info (s)
+        LULog.LoggerAPPSAdd_info (s)
         if self.__FStatWidget == LUProc.TStatWidget.swBreak:
 
             if self.__FStatWidgetObject == TStatWidgetObject.swNew:
@@ -487,7 +487,7 @@ class YOUTUBEwidget(QWidget):
         """__Action_Delete"""
     #beginfunction
         s = '__Action_Delete...'
-        LULog.LoggerAPPS.info (s)
+        LULog.LoggerAPPSAdd_info (s)
 
         self.YOUTUBEwidgetSignals.signal_ChangeStatWidgetObject.emit (self.__FStatWidgetObject, -1)
 
@@ -507,7 +507,7 @@ class YOUTUBEwidget(QWidget):
         """__SetYT_ProgressBar"""
     #beginfunction
         s = '__SetYT_ProgressBar...'
-        # LULog.LoggerAPPS.info (s)
+        # LULog.LoggerAPPSAdd_info (s)
         #======================================================
         self.danger = 'QProgressBar::chunk {background: QLinearGradient(\
             x1: 0, y1: 0, x2: 1, y2: 0,stop: 0 #FF0350,stop: 0.4999 #00d920,stop: 0.5\
@@ -543,7 +543,7 @@ class YOUTUBEwidget(QWidget):
         """__SetActions"""
     #beginfunction
         s = '00.__SetActions...'
-        # LULog.LoggerAPPS.info (s)
+        # LULog.LoggerAPPSAdd_info (s)
 
         self.ui.pushButton_Start_Stop.addAction(self.ui.action_Start_Stop)
         self.ui.pushButton_Start_Stop.clicked.connect(self.__Action_Start_Stop)
@@ -568,7 +568,7 @@ class YOUTUBEwidget(QWidget):
         """__WidgetActivate"""
     #beginfunction
         s = '__WidgetActivate...'
-        # LULog.LoggerAPPS.info (s)
+        # LULog.LoggerAPPSAdd_info (s)
     #endfunction
 
     def ONcomplete (self, AStream: pytube.Stream, AFilePath: str):
