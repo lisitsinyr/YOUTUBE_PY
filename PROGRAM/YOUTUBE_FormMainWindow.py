@@ -1811,6 +1811,8 @@ class FormMainWindow(QMainWindow):
 #------------------------------------------
 def main ():
 #beginfunction
+    LULog.STARTLogging ('LOG', 'LOGGING_FILEINI.log', 'LOGGING_FILEINI_json.log')
+
     GAPP = QApplication (sys.argv)
     GFormMainWindow = FormMainWindow()
     GFormMainWindow.show()
