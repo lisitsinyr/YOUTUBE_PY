@@ -24,13 +24,13 @@ import sys
 #------------------------------------------
 # БИБЛИОТЕКИ LU
 #------------------------------------------
-import lyr.LULog as LULog
-import lyr.LUParserINI as LUParserINI
-import lyr.LUParserARG as LUParserARG
-import lyr.LUFile as LUFile
-import lyr.LUDateTime as LUDateTime
-import lyr.LUStrUtils as LUStrUtils
-import lyr.LUos as LUos
+import lyrpy.LULog as LULog
+import lyrpy.LUParserINI as LUParserINI
+import lyrpy.LUParserARG as LUParserARG
+import lyrpy.LUFile as LUFile
+import lyrpy.LUDateTime as LUDateTime
+import lyrpy.LUStrUtils as LUStrUtils
+import lyrpy.LUos as LUos
 
 #------------------------------------------
 # БИБЛИОТЕКИ PROJECT

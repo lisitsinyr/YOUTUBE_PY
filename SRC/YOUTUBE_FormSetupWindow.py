@@ -55,17 +55,17 @@ from PySide6.QtWidgets import (
 #------------------------------------------
 # БИБЛИОТЕКИ LU
 #------------------------------------------
-import lyr.LULog as LULog
-import lyr.LUFile as LUFile
-import lyr.LUProc as LUProc
-import lyr.LUos as LUos
-import lyr.LUObjectsYT as LUObjectsYT
-import lyr.LUDateTime as LUDateTime
-import lyr.LUStrUtils as LUStrUtils
-import lyr.LUDecotators as LUDecotators
-import lyr.LUSheduler as LUSheduler
-import lyr.LUConsole as LUConsole
-import lyr.LUQTimer as LUQTimer
+import lyrpy.LULog as LULog
+import lyrpy.LUFile as LUFile
+import lyrpy.LUProc as LUProc
+import lyrpy.LUos as LUos
+import lyrpy.LUObjectsYT as LUObjectsYT
+import lyrpy.LUDateTime as LUDateTime
+import lyrpy.LUStrUtils as LUStrUtils
+import lyrpy.LUDecotators as LUDecotators
+import lyrpy.LUSheduler as LUSheduler
+import lyrpy.LUConsole as LUConsole
+import lyrpy.LUQTimer as LUQTimer
 
 #------------------------------------------
 # БИБЛИОТЕКИ PROJECT

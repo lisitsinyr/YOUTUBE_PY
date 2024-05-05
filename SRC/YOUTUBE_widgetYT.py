@@ -55,15 +55,15 @@ import pytube.exceptions
 #------------------------------------------
 # БИБЛИОТЕКИ LU
 #------------------------------------------
-import lyr.LULog as LULog
-import lyr.LUFile as LUFile
-import lyr.LUProc as LUProc
-import lyr.LUos as LUos
-# import lyr.LUParserARG as LUParserARG
-import lyr.LUYouTube as LUYouTube
-import lyr.LUObjectsYT as LUObjectsYT
-import lyr.LUThread as LUThread
-import lyr.LUStrUtils as LUStrUtils
+import lyrpy.LULog as LULog
+import lyrpy.LUFile as LUFile
+import lyrpy.LUProc as LUProc
+import lyrpy.LUos as LUos
+# import lyrpy.LUParserARG as LUParserARG
+import lyrpy.LUYouTube as LUYouTube
+import lyrpy.LUObjectsYT as LUObjectsYT
+import lyrpy.LUThread as LUThread
+import lyrpy.LUStrUtils as LUStrUtils
 
 #------------------------------------------
 # БИБЛИОТЕКИ PROJECT
