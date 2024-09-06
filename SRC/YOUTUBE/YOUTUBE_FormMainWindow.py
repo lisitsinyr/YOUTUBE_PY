@@ -19,6 +19,7 @@ import os
 import sys
 import time
 import datetime
+import logging
 
 #------------------------------------------
 # БИБЛИОТЕКИ сторонние
@@ -68,6 +69,7 @@ import lyrpy.LUDecotators as LUDecotators
 import lyrpy.LUSheduler as LUSheduler
 import lyrpy.LUConsole as LUConsole
 import lyrpy.LUQTimer as LUQTimer
+from commctrl import INFOTIPSIZE
 
 #------------------------------------------
 # БИБЛИОТЕКИ PROJECT
@@ -499,7 +501,7 @@ class FormMainWindow(QMainWindow):
         s = '00.__SetParams...'
         # LULog.LoggerAPPS_AddInfo (s)
 
-        LULog.LoggerAPPS_AddLevel (LULog.TEXT, self.Params.FileNameINI)
+        LULog.LoggerAdd (LULog.LoggerAPPS, LULog.TEXT, self.Params.FileNameINI)
         # # [GENERAL]
         # LULog.LoggerAPPS_AddLevel (LULog.TEXT, 'PathStore='+self.Params.PathStore)
         # LULog.LoggerAPPS_AddLevel (LULog.TEXT, 'PathStoreOut='+self.Params.PathStoreOut)
@@ -1241,7 +1243,7 @@ class FormMainWindow(QMainWindow):
         """__Action_TestFunction"""
     #beginfunction
         s = '__Action_TestFunction...'
-        LULog.LoggerAPPS_AddInfo (s)
+        LULog.LoggerAdd (LULog.LoggerAPPS, logging.INFO, s)
 
         # gives a single float value
         Lcpu_percent = psutil.cpu_percent ()
@@ -1264,7 +1266,7 @@ class FormMainWindow(QMainWindow):
         """__Procedure_01"""
     #beginfunction
         s = '__Procedure_01...'
-        LULog.LoggerAPPS_AddInfo (s)
+        LULog.LoggerAdd (LULog.LoggerAPPS, logging.INFO, s)
     #endfunction
 
     def Main(self):
@@ -1276,7 +1278,7 @@ class FormMainWindow(QMainWindow):
         self.StopApplication()
         self.__SetStatApplication (LUProc.TStatApplication.saMain)
         LSaveCurrentDir = LUos.GetCurrentDir()
-        LULog.LoggerAPPS_AddLevel (LULog.BEGIN, LUProc.cProcessBegin)
+        LULog.LoggerAdd (LULog.LoggerAPPS, LULog.BEGIN, LUProc.cProcessBegin)
         self.P_StatMain.setText(LUProc.cProcessWork)
 
         self.__FStopApplicationMain = False
@@ -1288,14 +1290,14 @@ class FormMainWindow(QMainWindow):
         while not self.__FStopApplicationMain and i < iMax:
             i += 1
             s = 'Main...'
-            LULog.LoggerAPPS_AddInfo (str(i)+'. '+s)
+            LULog.LoggerAdd (LULog.LoggerAPPS, logging.INFO, str(i)+'. '+s)
             # time.sleep(1)
             QCoreApplication.processEvents ()
         #endwhile
         self.__FStopApplicationMain = True
 
         self.P_StatMain.setText(LUProc.cProcessStop)
-        LULog.LoggerAPPS_AddLevel( LULog.END, LUProc.cProcessEnd)
+        LULog.LoggerAdd (LULog.LoggerAPPS, LULog.END, LUProc.cProcessEnd)
         os.chdir(LSaveCurrentDir)
         self.StartApplication()
     #endfunction
@@ -1372,21 +1374,21 @@ class FormMainWindow(QMainWindow):
         """__Action_Cut"""
     #beginfunction
         s = '__Action_Cut...'
-        LULog.LoggerAPPS_AddInfo (s)
+        LULog.LoggerAdd (LULog.LoggerAPPS, logging.INFO, s)
     #endfunction
     @QtCore.Slot (name = '__Action_Copy')
     def __Action_Copy (self):
         """__Action_Copy"""
     #beginfunction
         s = '__Action_Copy...'
-        LULog.LoggerAPPS_AddInfo (s)
+        LULog.LoggerAdd (LULog.LoggerAPPS, logging.INFO, s)
     #endfunction
     @QtCore.Slot (name = '__Action_Paste')
     def __Action_Paste (self):
         """__Action_Paste"""
     #beginfunction
         s = '__Action_Paste...'
-        LULog.LoggerAPPS_AddInfo (s)
+        LULog.LoggerAdd (LULog.LoggerAPPS, logging.INFO, s)
     #endfunction
     def __Action_Sheduler (self, A):
         """__Action_Sheduler"""
@@ -1824,7 +1826,7 @@ def main ():
 
     LResult = GAPP.exec ()
     s = 'ExitProgram...'
-    LULog.LoggerAPPS_AddInfo (s)
+    LULog.LoggerAdd (LULog.LoggerAPPS, logging.INFO, s)
     sys.exit(LResult)
 #endfunction
 
